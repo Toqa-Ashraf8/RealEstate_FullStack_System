@@ -1,0 +1,172 @@
+import { createSlice ,createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import { variables } from "../variables";
+const initialState={
+        error:false,
+        loading:false,
+        negotiationNo:"",
+        Allnegotiations:[],
+        rejectmodal:false,
+        detailsOfRow:{},
+        negotiationRow:{ClientID:"",NegotiationCondition:0,SuggestedPrice:0,ReasonOfReject:"",CheckedDate:new Date().toISOString()},
+        confirmModal:false,
+        savedRequest:false,
+        rejected_neg:0,
+        accepted_neg:0,
+        rejectReq:false,
+        acceptedRequests:[],
+        rejectedRequests:[],
+        Re_confirmModal:false,
+}
+export const negotiationCount=createAsyncThunk("negotiationCount/negotiaion",async()=>{
+    const resp=await axios.get(variables.URL_API_N+"GetNegotationsCount")
+    .then((res)=>res.data);
+    return resp;
+})
+export const GetAllnegotiations=createAsyncThunk("GetAllnegotiations/negotiaion",async()=>{
+    const resp=await axios.get(variables.URL_API_N+"GetNegotiations")
+    .then((res)=>res.data);
+    return resp;
+})
+export const SaveRequestByAdmin=createAsyncThunk("SaveRequestByAdmin/negotiaion",async(request)=>{
+    const resp=await axios.post(variables.URL_API_N+"saveNegotiations_ByAdmin",request)
+    .then((res)=>res.data);
+    return resp;
+})
+export const rejectedCount=createAsyncThunk("rejectedCount/negotiaion",async()=>{
+    const resp=await axios.get(variables.URL_API_N+"rejected_Requests")
+    .then((res)=>res.data);
+    return resp;
+})
+export const acceptedCount=createAsyncThunk("acceptedCount/negotiaion",async()=>{
+    const resp=await axios.get(variables.URL_API_N+"accepted_Requests")
+    .then((res)=>res.data);
+    return resp;
+})
+const negotiationSlice=createSlice({
+    name:'negotiation',
+    initialState,
+    reducers:{
+        showModal_reject:(state,action)=>{
+            state.rejectmodal=action.payload;
+        },
+        GetClientDetails:(state,action)=>{
+            state.detailsOfRow=state.Allnegotiations[action.payload];
+            const id=state.Allnegotiations[action.payload].ClientID;
+            state.negotiationRow.ClientID=id;
+            
+        },
+        RejectModal_values:(state,action)=>{
+            state.negotiationRow={...state.negotiationRow,...action.payload};
+        },
+        ChangeConditionOfRequest:(state,action)=>{
+            if(action.payload===1){
+                state.negotiationRow.NegotiationCondition=1
+            }
+            else if(action.payload===0){
+                state.negotiationRow.NegotiationCondition=0
+            }
+        },
+        clearValuesOfRow:(state,action)=>{
+            state.negotiationRow=initialState.negotiationRow;
+        },
+        showconfirmModal:(state,action)=>{
+            state.confirmModal=action.payload;
+        },
+         rejectedRequests_show:(state,action)=>{
+            state.rejectReq=action.payload;
+        },
+        showModal_reconfrim:(state,action)=>{
+            state.Re_confirmModal=action.payload;
+        },
+    
+    },
+    //****************************************************************************** */
+    extraReducers:(builder)=>{
+        builder
+        .addCase(negotiationCount.pending,(state)=>{
+            state.loading=true;
+        })
+        .addCase(negotiationCount.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.negotiationNo=action.payload;
+        })
+        .addCase(negotiationCount.rejected,(state)=>{
+            state.loading=false;
+            state.error=true;
+         })
+         //-------------------------------------------
+          .addCase(GetAllnegotiations.pending,(state)=>{
+            state.loading=true;
+        })
+        .addCase(GetAllnegotiations.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.Allnegotiations=action.payload;
+        })
+        .addCase(GetAllnegotiations.rejected,(state)=>{
+            state.loading=false;
+            state.error=true;
+         })
+        //-------------------------------------------
+         .addCase(SaveRequestByAdmin.pending,(state)=>{
+            state.loading=true;
+        })
+        .addCase(SaveRequestByAdmin.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.savedRequest=action.payload.saved;
+            if(state.savedRequest){
+                const idd=state.negotiationRow.ClientID
+                state.Allnegotiations = state.Allnegotiations.filter(neg => neg.ClientID !== idd);
+                if (state.negotiationNo > 0) {
+                   state.negotiationNo -= 1;
+                   
+                 }
+                 if (state.negotiationRow.NegotiationCondition === 1) {
+                   state.accepted_neg = (Number(state.accepted_neg) || 0) + 1;
+                 } else if (state.negotiationRow.NegotiationCondition === 0) {
+                    state.rejected_neg = (Number(state.rejected_neg) || 0) + 1;
+                  }   
+                   state.negotiationRow = initialState.negotiationRow;
+               
+             }
+        
+        })
+        .addCase(SaveRequestByAdmin.rejected,(state)=>{
+            state.loading=false;
+            state.error=true;
+         })
+          //--------------------------------------------------------------------------------
+        .addCase(rejectedCount.pending,(state)=>{
+            state.loading=true;
+        })
+        .addCase(rejectedCount.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.rejected_neg=action.payload.count;
+            state.rejectedRequests=action.payload.dt;
+        })
+        .addCase(rejectedCount.rejected,(state)=>{
+            state.loading=false;
+            state.error=true;
+         })
+          //--------------------------------------------
+          .addCase(acceptedCount.pending,(state)=>{
+            state.loading=true;
+        })
+        .addCase(acceptedCount.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.accepted_neg=action.payload.count_a;
+            state.acceptedRequests=action.payload.dt;
+        })
+        .addCase(acceptedCount.rejected,(state)=>{
+            state.loading=false;
+            state.error=true;
+         })
+         
+
+    }
+})
+export const{showModal_reject,GetClientDetails,RejectModal_values,ChangeConditionOfRequest,clearValuesOfRow,
+            showconfirmModal,rejectedRequests_show,showModal_reconfrim
+}=negotiationSlice.actions;
+const negotiationReducer=negotiationSlice.reducer;
+export default negotiationReducer;

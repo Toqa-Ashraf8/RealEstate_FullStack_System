@@ -1,0 +1,78 @@
+.modals{
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    padding-top: 110px;
+}
+.modalcnt_s{
+    width: 60%;
+    height: 800px;
+    margin: auto;
+    overflow: hidden;
+    border: 1px solid grey;
+    border-top-right-radius: 10%;
+    border-bottom-left-radius: 10%;
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+    background-color: #d0d0d0;
+     font-family: "AdvertisingBold";
+    font-weight: 400; 
+    animation-name: zzoommm;
+    animation-duration: 0.7s;
+}
+@keyframes zzoommm {
+    from{
+         transform: scale(0);
+    }
+    to{
+        transform: scale(1);
+    }
+}
+.bodys{
+    height:660px;
+    overflow: scroll;
+    padding: 25px 30px;
+}
+.footer_s,.hdr_s{
+    height: 70px;
+    padding: 25px 20px;
+    background-color: #1e293b;
+    color: #fff;
+}
+.tbl_ss{
+    width: 100%;
+    border-radius: 30px;
+    background-color: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+   
+}
+.tbl-srch{
+    cursor: pointer;
+    margin-bottom: 0; 
+       
+}
+.tbl-srch th{
+
+    background-color: teal!important;
+    color:#fff!important;
+    padding: 20px!important;
+    text-align: center;
+  
+}
+.btn_closes{
+position: relative;
+left:45px;
+bottom: 10px;
+}
+.hrdtitles{
+    display: flex;
+    justify-content: space-between;
+ 
+}
+.hds_title{
+    position: relative;
+    left:  45%
+}
