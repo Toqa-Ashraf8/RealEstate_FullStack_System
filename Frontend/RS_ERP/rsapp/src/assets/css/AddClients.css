@@ -27,7 +27,7 @@ body {
 .btns_toc {
     position: fixed;
     right: 30px;
-    top: 54%;
+    top: 59%;
     transform: translateY(-50%);
     display: flex;
     flex-direction: column;
@@ -52,9 +52,8 @@ body {
     transform: scale(1.2);
 }
 
-/* تحسين الحاوية الرئيسية */
 .main_crm {
-    width: 85%; /* وسعنا المساحة شوية */
+    width: 85%; 
     max-width: 1100px;
     margin: 30px auto;
     padding: 40px;
@@ -96,7 +95,7 @@ body {
 }
 
 .crm_inp, .crm_select {
-    width: 100% !important; /* الإنبوت يملأ المساحة المتاحة */
+    width: 100% !important;
     margin-right: 0 !important;
     padding: 12px 15px !important;
     border-radius: 12px !important;

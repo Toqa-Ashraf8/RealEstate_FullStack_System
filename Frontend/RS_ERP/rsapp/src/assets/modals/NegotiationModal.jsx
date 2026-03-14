@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../css/NegotiationModal.css";
+import {Building2,Ungroup}from 'lucide-react'
 import { useDispatch, useSelector } from "react-redux";
-import { AddToNegotiationTable, calculateDiscount, changeNegotiation_values, showNegotiationModal } from "../redux/clientSlice";
+import { AddToNegotiationTable, calculateDiscount, changeNegotiation_values, getpriceByunit, getprojects, getunitsByproject, showNegotiationModal } from "../redux/clientSlice";
 const NegotiationModal = () => {
 const db = useSelector((state) => state.clients);
 const dispatch = useDispatch();
@@ -9,12 +10,33 @@ const dispatch = useDispatch();
 //-------------------------------------------------------------
 const HandleChange=(e)=>{
     const{name,value}=e.target;
+     if (e.target.name === "ProjectName") {
+      const selectedValue = e.target.value;
+      if (e.target.value !== "-1") dispatch(getunitsByproject(selectedValue));
+    }
+     if(e.target.name === "Unit"){
+          const unitvalue=e.target.value;
+        if (e.target.value !== "-1") dispatch(getpriceByunit(unitvalue));
+      }
     dispatch(changeNegotiation_values({[name]:value}));
 }
+console.log(db.negotiation);
 //**************************************************************************/
 const AddToTable=()=>{
   dispatch(AddToNegotiationTable())
 }
+//--------------------------------------------
+  useEffect(() => {
+  
+    const loadProjects = async () => {
+      try {
+        await dispatch(getprojects());
+      } catch (error) {
+        console.error("فشل في جلب البيانات:", error);
+      }
+    };
+    loadProjects();
+  }, [dispatch]);
 
   return (
     <div dir="rtl">
@@ -31,7 +53,7 @@ const AddToTable=()=>{
           </div>
           <div className="bodyn">
             <div className="row">
-              <div className="col-8">
+              <div className="col-7">
                 <div className="input-group-modern data_cntu">
                   <label className="data_lbl">كود الطلب</label>
                   <input
@@ -81,6 +103,24 @@ const AddToTable=()=>{
                   />
                 </div> 
                
+              </div>
+              <div className="project-unit-section col-5">
+                 <div className="data_crm"style={{marginBottom:'15px'}}>
+                      <label className="lbl_crm"><Building2 size={18} /> إسم المشروع</label>
+                      <select className="crm_select" name="ProjectName" value={db.negotiation.ProjectName || ""} onChange={HandleChange}>
+                        <option value="-1">-إختر-</option>
+                        {db.projects.map((project, index) => <option key={index} value={project.ProjectName}>{project.ProjectName}</option>)}
+                      </select>
+                     </div>
+                   {db.negotiation.ProjectName && db.negotiation.ProjectName !== "-1" && (
+                    <div>
+                      <label className="lbl_crm"><Ungroup size={18} /> الوحدة</label>
+                      <select className="crm_select" name="Unit" value={db.negotiation.Unit || ""} onChange={HandleChange}>
+                        <option value="-1">-إختر-</option>
+                        {db.units.map((unit, index) => <option key={index} value={unit.UnitName}>{unit.UnitName}</option>)}
+                      </select>
+                    </div>
+                  )}
               </div>
             </div>
           </div>

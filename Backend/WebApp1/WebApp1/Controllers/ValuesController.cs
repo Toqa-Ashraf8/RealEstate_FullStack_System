@@ -45,7 +45,7 @@ namespace WebApp1.Controllers
         {
             var postedFile = imgu.fileu;
             string fileName = postedFile.FileName;
-            var physicalPath = _env.ContentRootPath + "/Photos_units/" + fileName;
+            var physicalPath = _env.ContentRootPath + "/Photos_Units/" + fileName;
             using (var stream = new FileStream(physicalPath, FileMode.Create))
             {
                 postedFile.CopyTo(stream);
@@ -147,13 +147,13 @@ namespace WebApp1.Controllers
                     if (conn.State != ConnectionState.Closed) conn.Close();
                 }
 
-                if(prj.units_ !=null && prj.units_.Count > 0) { 
-                string sqlin_u = @"insert into Units (serial,unitName,Floor,TotalArea,MeterPrice,TotalPrice,unitStatus,unitImage,ProjectCode,ProjectName)
-                              values(@serial,@unitName,@Floor,@TotalArea,@MeterPrice,@TotalPrice,@unitStatus,@unitImage,@ProjectCode,@ProjectName)";
+                if(prj.Units !=null && prj.Units.Count > 0) { 
+                string sqlin_u = @"insert into Units (serial,unitName,Floor,TotalArea,MeterPrice,TotalPrice,Unitstatus,unitImage,ProjectCode,ProjectName)
+                              values(@serial,@unitName,@Floor,@TotalArea,@MeterPrice,@TotalPrice,@Unitstatus,@unitImage,@ProjectCode,@ProjectName)";
                     if (conn.State != ConnectionState.Open) conn.Open();
                     using (SqlCommand cmd = new SqlCommand(sqlin_u, conn))
                     {
-                        foreach (var unit in prj.units_)
+                        foreach (var unit in prj.Units)
                         {
                             cmd.Parameters.Clear();
 
@@ -164,7 +164,7 @@ namespace WebApp1.Controllers
                             cmd.Parameters.Add("@TotalArea", SqlDbType.Decimal).Value =  Convert.ToDecimal(unit.TotalArea) ;                         
                             cmd.Parameters.Add("@MeterPrice", SqlDbType.Int).Value =  Convert.ToInt32(unit.MeterPrice) ;                        
                             cmd.Parameters.Add("@TotalPrice", SqlDbType.Float).Value =  Convert.ToDouble(unit.TotalPrice);
-                            cmd.Parameters.Add("@unitStatus", SqlDbType.NVarChar).Value = unit.unitStatus;
+                            cmd.Parameters.Add("@Unitstatus", SqlDbType.NVarChar).Value = unit.Unitstatus;
                             cmd.Parameters.AddWithValue("@unitImage", string.IsNullOrEmpty(unit.unitImage) ? DBNull.Value : unit.unitImage);
                             cmd.Parameters.Add("@ProjectCode", SqlDbType.Int).Value = id;                          
                             cmd.Parameters.Add("@ProjectName", SqlDbType.NVarChar).Value =prj.ProjectName ;
@@ -194,7 +194,7 @@ namespace WebApp1.Controllers
             try
             {
                 
-                string sqldel_u = @"delete Units where projectCode=@projectCode";
+                string sqldel_u = @"delete Units where ProjectCode=@projectCode";
                 using (SqlCommand cmd = new SqlCommand(sqldel_u, conn))
                 {
                     cmd.Parameters.Clear();
@@ -205,7 +205,7 @@ namespace WebApp1.Controllers
 
                 }
 
-                string sqldel = @"delete Projects where projectCode=@projectCode";
+                string sqldel = @"delete Projects where ProjectCode=@projectCode";
                 using (SqlCommand cmd = new SqlCommand(sqldel, conn))
                 {
                     cmd.Parameters.Clear();

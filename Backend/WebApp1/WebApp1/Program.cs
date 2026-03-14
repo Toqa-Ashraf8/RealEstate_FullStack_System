@@ -51,8 +51,8 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "Photos_units")),
-    RequestPath = "/Photos_units"
+        Path.Combine(Directory.GetCurrentDirectory(), "Photos_Units")),
+    RequestPath = "/Photos_Units"
 });
 //----------------------------------------------
 app.UseHttpsRedirection();

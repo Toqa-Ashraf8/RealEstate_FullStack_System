@@ -3,11 +3,10 @@ import axios from "axios";
 import { variables } from "../variables";
 import { toast } from "react-toastify";
 const initialState = {
-    client: { ClientID: 0, ClientName: "", PhoneNumber: "", 
-              ProjectName: "-1", Unit: "-1", ClientStatus: "-1",Notes: ""},
+    client: { ClientID: 0, ClientName: "", PhoneNumber: "", ClientStatus: "-1",Notes: ""},
     clients: [],
     projects: [],
-    negotiation:{serialCode:"",OriginalPrice:"",NegotiationPrice:"",DiscountAmount:"",
+    negotiation:{serialCode:"", ProjectName:"-1",Unit:"-1",OriginalPrice:"",NegotiationPrice:"",DiscountAmount:"",
                  NegotiationStatus:"في انتظار موافقة الإدارة",
                  NegotiationDate:new Date().toISOString().split('T')[0],checkedByAdmin:0},
     negotiations:[],
@@ -79,7 +78,7 @@ const clientSlice = createSlice({
             state.negotiation={...state.negotiation,...action.payload}
         },
         AddNegotiation:(state,action)=>{
-            state.negotiation={serialCode:"",OriginalPrice:"",NegotiationPrice:"",DiscountAmount:"",
+            state.negotiation={serialCode:"",ProjectName:"-1",Unit:"-1",OriginalPrice:"",NegotiationPrice:"",DiscountAmount:"",
                  NegotiationStatus:"في انتظار موافقة الإدارة",
                  NegotiationDate:new Date().toISOString().split('T')[0],checkedByAdmin:0};
             state.rowIndex=-1;  

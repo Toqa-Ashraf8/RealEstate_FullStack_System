@@ -9,6 +9,8 @@ namespace WebApp1.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int serialCode { get; set; }
+        public string? ProjectName { get; set; }
+        public string? Unit { get; set; }
         public int OriginalPrice { get; set; }
         public int NegotiationPrice { get; set; }
         public decimal DiscountAmount { get; set; }

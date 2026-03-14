@@ -68,16 +68,13 @@ namespace WebApp1.Controllers
             {
                 try
                 {
-                    string sqlin = @"insert into Clients (ClientName,PhoneNumber,ProjectName,Unit,
-                            ClientStatus,Notes) values(@ClientName,@PhoneNumber,
-                             @ProjectName,@Unit,@ClientStatus,@Notes)select SCOPE_IDENTITY()";
+                    string sqlin = @"insert into Clients (ClientName,PhoneNumber,
+                            ClientStatus,Notes) values(@ClientName,@PhoneNumber,@ClientStatus,@Notes)select SCOPE_IDENTITY()";
                     using(SqlCommand cmd=new SqlCommand(sqlin,conn))
                     {
                         cmd.Parameters.Clear();
                         cmd.Parameters.AddWithValue("@ClientName", cl.ClientName);
                         cmd.Parameters.AddWithValue("@PhoneNumber", cl.PhoneNumber);
-                        cmd.Parameters.AddWithValue("@ProjectName", cl.ProjectName);
-                        cmd.Parameters.AddWithValue("@Unit", cl.Unit);
                         cmd.Parameters.AddWithValue("@ClientStatus", cl.ClientStatus);
                         cmd.Parameters.AddWithValue("@Notes", cl.Notes);
                         if (conn.State == ConnectionState.Closed) conn.Open();
@@ -97,15 +94,12 @@ namespace WebApp1.Controllers
                 try
                 {
                     string sqlupdate = @"update Clients set ClientName=@ClientName,PhoneNumber=@PhoneNumber,
-                                    ProjectName=@ProjectName,Unit=@Unit,ClientStatus=@ClientStatus,
-                                    Notes=@Notes where ClientID=@ClientID";
+                                     ClientStatus=@ClientStatus,Notes=@Notes where ClientID=@ClientID";
                     using (SqlCommand cmd = new SqlCommand(sqlupdate, conn))
                     {
                         cmd.Parameters.Clear();
                         cmd.Parameters.AddWithValue("@ClientName", cl.ClientName);
                         cmd.Parameters.AddWithValue("@PhoneNumber", cl.PhoneNumber);
-                        cmd.Parameters.AddWithValue("@ProjectName", cl.ProjectName);
-                        cmd.Parameters.AddWithValue("@Unit", cl.Unit);
                         cmd.Parameters.AddWithValue("@ClientStatus", cl.ClientStatus);
                         cmd.Parameters.AddWithValue("@Notes", cl.Notes);
                         cmd.Parameters.AddWithValue("@ClientID", id);
@@ -129,9 +123,9 @@ namespace WebApp1.Controllers
                         {
                           
 
-                            string sqlin_dtls = @"insert into Negotiation (serialCode,OriginalPrice,NegotiationPrice,
+                            string sqlin_dtls = @"insert into Negotiation (serialCode,ProjectName,Unit,OriginalPrice,NegotiationPrice,
                                                         DiscountAmount,ClientID,ClientName,NegotiationStatus,
-                                                          NegotiationDate,checkedByAdmin) values(@serialCode,@OriginalPrice,@NegotiationPrice,
+                                                          NegotiationDate,checkedByAdmin) values(@serialCode,@ProjectName,@Unit,@OriginalPrice,@NegotiationPrice,
                                                            @DiscountAmount,@ClientID,@ClientName,@NegotiationStatus,@NegotiationDate,
                                                            @checkedByAdmin)";
                             using (SqlCommand cmd = new SqlCommand(sqlin_dtls, conn))
@@ -140,6 +134,8 @@ namespace WebApp1.Controllers
                                 {
                                     cmd.Parameters.Clear();
                                     cmd.Parameters.AddWithValue("@serialCode", neg.serialCode);
+                                    cmd.Parameters.AddWithValue("@projectName", neg.ProjectName);
+                                    cmd.Parameters.AddWithValue("@Unit", neg.Unit);
                                     cmd.Parameters.AddWithValue("@OriginalPrice", neg.OriginalPrice);
                                     cmd.Parameters.AddWithValue("@NegotiationPrice", neg.NegotiationPrice);
                                     cmd.Parameters.AddWithValue("@DiscountAmount", neg.DiscountAmount);

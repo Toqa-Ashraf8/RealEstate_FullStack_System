@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Photos_units\" />
+    <Folder Include="Photos_Units\" />
     <Folder Include="Photos_projects\" />
   </ItemGroup>
 

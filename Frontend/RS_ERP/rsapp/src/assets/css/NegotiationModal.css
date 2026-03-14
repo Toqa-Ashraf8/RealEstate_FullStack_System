@@ -9,7 +9,7 @@
     z-index: 1000;
 }
 .modalcnt_n{
-    width:700px;
+    max-width:900px;
     height: 450px;
     margin: auto;
     overflow: hidden;

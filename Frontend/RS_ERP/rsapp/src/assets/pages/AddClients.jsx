@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import "../css/AddClients.css";
-import { MdCleaningServices, MdAdd ,MdDeleteOutline} from "react-icons/md";
+import { MdCleaningServices, MdAdd ,MdDeleteOutline,MdLastPage,MdFirstPage,MdNavigateNext,MdChevronLeft} from "react-icons/md";
 import { RiSave3Fill, RiDeleteBinLine } from "react-icons/ri";
 import { FaSearch } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
@@ -12,8 +12,6 @@ import {
   User,
   Hash,
   Phone,
-  Building2,
-  Ungroup,
   ReceiptText,
   NotebookPen,
   Hourglass,
@@ -54,14 +52,6 @@ const AddClients = () => {
   //************************************************************** */
   const HandleChange = (e) => {
     const { name, value } = e.target;
-    if (e.target.name === "ProjectName") {
-      const selectedValue = e.target.value;
-      if (e.target.value !== "-1") dispatch(getunitsByproject(selectedValue));
-    }
-    if(e.target.name === "Unit"){
-      const unitvalue=e.target.value;
-    if (e.target.value !== "-1") dispatch(getpriceByunit(unitvalue));
-  }
     dispatch(changeclientsVls({[name]:value}));
   };
 //------------------------------------------------------------------------------------
@@ -97,18 +87,7 @@ const AddClients = () => {
          });
        }
   }
-//------------------------------------------------------------------------------------
-  useEffect(() => {
-    nameRef.current.focus();
-    const loadProjects = async () => {
-      try {
-        await dispatch(getprojects());
-      } catch (error) {
-        console.error("فشل في جلب البيانات:", error);
-      }
-    };
-    loadProjects();
-  }, [dispatch]);
+
  
  //******************************************************************** */
   return (
@@ -199,24 +178,6 @@ const AddClients = () => {
       <input type="text" className="crm_inp" name="PhoneNumber" value={db.client.PhoneNumber || ""} onChange={HandleChange} />
     </div>
 
- 
-    <div className="data_crm">
-      <label className="lbl_crm"><Building2 size={18} /> إسم المشروع</label>
-      <select className="crm_select" name="ProjectName" value={db.client.ProjectName || ""} onChange={HandleChange}>
-        <option value="-1">-إختر-</option>
-        {db.projects.map((project, index) => <option key={index} value={project.ProjectName}>{project.ProjectName}</option>)}
-      </select>
-    </div>
-
-    {db.client.ProjectName && db.client.ProjectName !== "-1" && (
-      <div className="data_crm">
-        <label className="lbl_crm"><Ungroup size={18} /> الوحدة</label>
-        <select className="crm_select" name="Unit" value={db.client.Unit || ""} onChange={HandleChange}>
-          <option value="-1">-إختر-</option>
-          {db.units.map((unit, index) => <option key={index} value={unit.UnitName}>{unit.UnitName}</option>)}
-        </select>
-      </div>
-    )}
 
     {/* الحالة */}
     <div className="data_crm">
@@ -246,10 +207,10 @@ const AddClients = () => {
   </div>
   
   <div className="btns_arrows">
-    <span className="btn_c" title="السجل الأول"><ArrowRight size={22}/></span>
-    <span className="btn_c" title="التالي"><ArrowBigLeftDash size={22}/></span>
-    <span className="btn_c" title="السابق"><ArrowBigRightDash size={22} /></span>
-    <span className="btn_c" title="السجل الأخير"><ArrowLeft size={22} /></span>
+    <span className="btn_c" title="السجل الأول"><MdLastPage size={22}/></span>
+    <span className="btn_c" title="التالي"><MdNavigateNext size={22}/></span>
+    <span className="btn_c" title="السابق"><MdChevronLeft  size={22} /></span>
+    <span className="btn_c" title="السجل الأخير"><MdFirstPage size={22} /></span>
   </div>
 </div>
       
