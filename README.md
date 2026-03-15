@@ -41,7 +41,7 @@ The system relies on a robust relational schema:
 * **Automation:** The system pulls validated client data into the booking phase automatically to ensure data integrity and zero manual entry errors.
 
 ## 🔧 Installation & Setup
-1. Clone the repo: `git clone (https://github.com/Toqa-Ashraf8/RealEstate_FullStack_System.git)`
+1. Clone the repo: `git clone https://github.com/Toqa-Ashraf8/RealEstate_FullStack_System.git`
 2. **Backend:** - Update `appsettings.json` with your SQL connection string.ٍ
    - Run `dotnet ef database update`.
    - Run `dotnet run`.
