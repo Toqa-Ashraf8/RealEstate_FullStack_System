@@ -32,7 +32,7 @@ In many real estate agencies, operations like unit bookings and installment trac
 * **Frontend:** React.js, Redux Toolkit (Complex State Management), Custom CSS.
 * **Backend:** .NET Core Web API (Restful Services).
 * **Database:** Microsoft SQL Server & Entity Framework Core.
-* **Data Visualization:** Chart.js (or similar) for business analytics.
+* **Data Visualization:** Chart.js for business analytics.
 
 ## 🏗️ Database Architecture & Logic
 The system relies on a robust relational schema:
