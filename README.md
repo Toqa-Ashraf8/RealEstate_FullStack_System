@@ -47,6 +47,3 @@ The system relies on a robust relational schema:
    - Run `dotnet run`.
 3. **Frontend:** - Run `npm install`.
    - Run `npm start`.
-
----
-*Developed with ❤️ by Toqa Ashraf*
