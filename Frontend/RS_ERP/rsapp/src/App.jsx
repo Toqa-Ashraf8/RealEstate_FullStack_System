@@ -16,6 +16,7 @@ import BookingsManager from './assets/pages/BookingsManager';
 import ClientProfile from './assets/pages/ClientProfile';
 import UnitsCard from './assets/pages/UnitsCard';
 import AddClients from './assets/pages/AddClients';
+import CompleteBooking from './assets/pages/CompleteBooking';
 
 function App() {
 
@@ -42,6 +43,7 @@ function App() {
               <Route path='/rejected_negotiations' element={<RejectedNegotiations/>}/> 
               <Route path='/accepted_negotiations' element={<AcceptedNegotiations/>}/> 
               <Route path='/clientprofile' element={<ClientProfile/>}/> 
+              <Route path='/complete_booking' element={<CompleteBooking/>}/>
       </Routes>
     </>
   )

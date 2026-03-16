@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { UserCheck, FileEdit, Calculator, Printer, User } from 'lucide-react';
 import '../css/BookingsManager.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const BookingsManager = () => {
-    // مثال لطلب وافق عليه المدير وجاهز للاستكمال
-    const approvedRequests = [
-        { id: 1, name: "أحمد محمد علي", project: "تاج سلطان", unit: "A1-4", price: "2,500,000", deposit: "250,000" }
-    ];
+   const db = useSelector((state) => state.negotiation);
+    const dispatch = useDispatch();
+    const navigate=useNavigate();
+ //----------------------------------------------------------
+
 
     return (
         <div className="bk-manage-wrapper">
@@ -16,28 +19,29 @@ const BookingsManager = () => {
             </div>
 
             <div className="bk-container">
-                {approvedRequests.map((req) => (
-                    <div key={req.id} className="bk-card">
+                {db.acceptedRequests.map((req) => (
+                    <div key={req.ClientID} className="bk-card">
                         <div className="bk-main-info">
                             <div className="bk-user-avatar"><User size={20} /></div>
                             <div>
-                                <h3>{req.name}</h3>
-                                <span>مشروع: {req.project} | وحدة: {req.unit}</span>
+                                <h3>{req.ClientName}</h3>
+                                <span>مشروع: {req.ProjectName} | وحدة: {req.Unit}</span>
                             </div>
                         </div>
 
                         <div className="bk-price-info">
                             <p className="label">السعر المعتمد</p>
-                            <p className="value">{req.price} ج.م</p>
+                            <p className="value">{req.NegotiationPrice} ج.م</p>
                         </div>
 
                         <div className="bk-actions">
-                            <button className="btn-complete">
+                            <button 
+                            className="btn-complete"
+                            onClick={()=>navigate('/complete_booking')}
+                            >
                                 <FileEdit size={16} /> استكمال بيانات الحجز
                             </button>
-                            <button className="btn-schedule">
-                                <Calculator size={16} /> إنشاء جدول الأقساط
-                            </button>
+                           
                         </div>
                     </div>
                 ))}
