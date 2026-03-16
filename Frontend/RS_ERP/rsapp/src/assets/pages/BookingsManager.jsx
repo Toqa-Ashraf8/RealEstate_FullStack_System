@@ -19,8 +19,16 @@ const BookingsManager = () => {
             </div>
 
             <div className="bk-container">
-                {db.acceptedRequests.map((req) => (
-                    <div key={req.ClientID} className="bk-card">
+                {db.acceptedRequests.length===0 ?
+                (<div className="empty-state-container">
+                 <div className="empty-state-icon">
+                
+                 </div>
+                     <h3>لا توجد طلبات معتمدة حالياً</h3>
+                     <p>بمجرد الموافقة على طلبات التفاوض، ستظهر جميعها هنا لاستكمال بيانات الحجز.</p>
+                     </div>): 
+                 (db.acceptedRequests.map((req,index)=>
+                    <div key={index} className="bk-card">
                         <div className="bk-main-info">
                             <div className="bk-user-avatar"><User size={20} /></div>
                             <div>
@@ -46,6 +54,7 @@ const BookingsManager = () => {
                     </div>
                 ))}
             </div>
+        
         </div>
     );
 };

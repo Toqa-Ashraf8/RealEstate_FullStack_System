@@ -28,6 +28,10 @@ import {
   clearinputs,
   deleteAllData,
   GetAllClients,
+  getfirstClient,
+  getlastClient,
+  getnextClient,
+  getpreviousClient,
   getpriceByunit,
   getprojects,
   getunitsByproject,
@@ -89,9 +93,9 @@ const AddClients = () => {
   }
   //------------------------------------------------------------------------------------
 useEffect(()=>{
-    nameRef.current.focus();
+nameRef.current.focus();
 },[])
- 
+ console.log(db.client?.ClientID);
  //******************************************************************** */
   return (
     <div
@@ -210,10 +214,10 @@ useEffect(()=>{
   </div>
   
   <div className="btns_arrows">
-    <span className="btn_c" title="السجل الأول"><MdLastPage size={22}/></span>
-    <span className="btn_c" title="التالي"><MdNavigateNext size={22}/></span>
-    <span className="btn_c" title="السابق"><MdChevronLeft  size={22} /></span>
-    <span className="btn_c" title="السجل الأخير"><MdFirstPage size={22} /></span>
+    <span className="btn_c" title="السجل الأول" onClick={()=>dispatch(getfirstClient())}><MdLastPage size={22}/></span>
+    <span className="btn_c" title="التالي" onClick={()=> dispatch(getnextClient(db.client.ClientID))}>< MdChevronLeft size={22}/></span>
+    <span className="btn_c" title="السابق" onClick={()=>dispatch(getpreviousClient(db.client.ClientID))}><MdNavigateNext  size={22} /></span>
+    <span className="btn_c" title="السجل الأخير" onClick={()=>dispatch(getlastClient())}><MdFirstPage size={22} /></span>
   </div>
 </div>
       

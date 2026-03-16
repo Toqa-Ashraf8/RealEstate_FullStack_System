@@ -227,10 +227,20 @@ namespace WebApp1.Controllers
         public JsonResult GetFirstClient()
         {
             DataTable dt = new DataTable();
+            int first_clientId = 0;
             string sqlgetFirst = "select top(1)* from Clients order by ClientID ASC";
             SqlDataAdapter da = new SqlDataAdapter(sqlgetFirst, conn);
             da.Fill(dt);
-            return new JsonResult(dt);
+            if (dt.Rows.Count > 0)
+            {
+                first_clientId = Convert.ToInt32(dt.Rows[0][0]);
+                
+            }
+            var negotiations_f = _context.Negotiations.Where(n => n.ClientID == first_clientId).ToList();
+            var data = new { dt = dt, negotiations_f = negotiations_f };
+            return new JsonResult(data);
+            
+            
         }
         //***************************************************************************
         [Route("GetLastClient")]
@@ -238,13 +248,66 @@ namespace WebApp1.Controllers
         public JsonResult GetLastClient()
         {
             DataTable dt = new DataTable();
+            int last_clientid = 0;
             string sqlgetLast = "select top(1)* from Clients order by ClientID DESC";
             SqlDataAdapter da = new SqlDataAdapter(sqlgetLast, conn);
             da.Fill(dt);
-            return new JsonResult(dt);
+            if (dt.Rows.Count > 0)
+            {
+                last_clientid = Convert.ToInt32(dt.Rows[0][0]);
+                
+            }
+            var negotiations_l = _context.Negotiations.Where(n => n.ClientID == last_clientid).ToList();
+            var data = new { dt = dt, negotiations_l = negotiations_l };
+            return new JsonResult(data);
         }
         //***************************************************************************
-      
+        [Route("GetNextClient")]
+        [HttpPost]
+        public JsonResult GetNextClient(int id)
+        {
+            DataTable dt = new DataTable();
+            int next_clientid = 0;
+            string sqlnext = "select top(1)* from Clients where ClientID > @ClientID order by ClientID ASC";
+            SqlCommand cmd = new SqlCommand(sqlnext, conn);
+            if (conn.State == ConnectionState.Closed) conn.Open();
+             cmd.Parameters.Clear();
+             cmd.Parameters.AddWithValue("@ClientID", id);
+             if (conn.State == ConnectionState.Open) conn.Close();
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            da.Fill(dt);
+            if (dt.Rows.Count > 0)
+            {
+                next_clientid = Convert.ToInt32(dt.Rows[0][0]);
+            }
+            var negotiations_n = _context.Negotiations.Where(n => n.ClientID == next_clientid).ToList();
+            var data = new { dt = dt, negotiations_n = negotiations_n };
+            return new JsonResult(data);
+        }
+        //***************************************************************************
+        [Route("GetpreviousClient")]
+        [HttpPost]
+        public JsonResult GetpreviousClient(int id)
+        {
+            DataTable dt = new DataTable();
+            int previous_clientid = 0;
+            string sqlnext = "select top(1)* from Clients where ClientID < @ClientID order by ClientID DESC";
+            SqlCommand cmd = new SqlCommand(sqlnext, conn);
+            if (conn.State == ConnectionState.Closed) conn.Open();
+            cmd.Parameters.Clear();
+            cmd.Parameters.AddWithValue("@ClientID", id);
+            if (conn.State == ConnectionState.Open) conn.Close();
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            da.Fill(dt);
+            if (dt.Rows.Count > 0)
+            {
+                previous_clientid = Convert.ToInt32(dt.Rows[0][0]);
+            }
+            var negotiations_p = _context.Negotiations.Where(n => n.ClientID == previous_clientid).ToList();
+            var data = new { dt = dt, negotiations_p = negotiations_p };
+            return new JsonResult(data);
+        }
+
 
     }
 }

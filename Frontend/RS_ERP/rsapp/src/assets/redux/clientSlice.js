@@ -57,7 +57,26 @@ export const GetnegotiationsByclient=createAsyncThunk("GetNegotiationsByClient/c
     .then((res)=>res.data);
     return resp;
 })
-
+export const getfirstClient=createAsyncThunk("getfirstClient/clients",async()=>{
+    const resp=await axios.get(variables.URL_API_C+"GetFirstClient")
+    .then((res)=>res.data);
+    return resp;
+})
+export const getlastClient=createAsyncThunk("getlastClient/clients",async()=>{
+    const resp=await axios.get(variables.URL_API_C+"GetLastClient")
+    .then((res)=>res.data);
+    return resp;
+})
+export const getnextClient=createAsyncThunk("getnextClient/clients",async(id)=>{
+    const resp=await axios.post(variables.URL_API_C+"GetNextClient?id="+id)
+    .then((res)=>res.data);
+    return resp;
+})
+export const getpreviousClient=createAsyncThunk("getpreviousClient/clients",async(id)=>{
+    const resp=await axios.post(variables.URL_API_C+"GetpreviousClient?id="+id)
+    .then((res)=>res.data);
+    return resp;
+})
 //************************************************************* */
 const clientSlice = createSlice({
     name: "clients",
@@ -198,8 +217,58 @@ const clientSlice = createSlice({
                 state.loading = false;
                 state.error = true;
             })
-           
-
+            //-----------------------------------------------------
+            .addCase(getfirstClient.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getfirstClient.fulfilled, (state, action) => {
+                state.loading = false;
+                state.client = action.payload.dt[0];
+                state.negotiations=action.payload.negotiations_f;
+            })
+            .addCase(getfirstClient.rejected, (state) => {
+                state.loading = false;
+                state.error = true;
+            })
+             //-----------------------------------------------------
+            .addCase(getlastClient.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getlastClient.fulfilled, (state, action) => {
+                state.loading = false;
+                state.client = action.payload.dt[0];
+                state.negotiations=action.payload.negotiations_l;
+            })
+            .addCase(getlastClient.rejected, (state) => {
+                state.loading = false;
+                state.error = true;
+            })
+            //-----------------------------------------------------
+            .addCase(getnextClient.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getnextClient.fulfilled, (state, action) => {
+                state.loading = false;
+                state.client = action.payload.dt[0];
+                state.negotiations=action.payload.negotiations_n;
+            })
+            .addCase(getnextClient.rejected, (state) => {
+                state.loading = false;
+                state.error = true;
+            })
+            //-----------------------------------------------------
+            .addCase(getpreviousClient.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getpreviousClient.fulfilled, (state, action) => {
+                state.loading = false;
+                state.client = action.payload.dt[0];
+                state.negotiations=action.payload.negotiations_p;
+            })
+            .addCase(getpreviousClient.rejected, (state) => {
+                state.loading = false;
+                state.error = true;
+            })
     }
 })
 export const { changeclientsVls, clearinputs,showNegotiationModal ,changeNegotiation_values,

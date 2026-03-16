@@ -34,7 +34,7 @@ const CompleteBooking = () => {
                 </div>
 
                 <form className="booking-form">
-                    {/* قسم البيانات الأساسية (Autofill) */}
+                  
                     <div className="form-section">
                         <h3 className="section-title"><User size={20} /> بيانات الوحدة والعميل</h3>
                         <div className="grid-3">
@@ -57,12 +57,12 @@ const CompleteBooking = () => {
                         <h3 className="section-title"><CreditCard size={20} /> البيانات الشخصية والمستندات</h3>
                         <div className="grid-2">
                             <div className="input-group">
-                                <label>رقم البطاقة (14 رقم)</label>
-                                <input type="text" name="nationalID" placeholder="0000 0000 0000 00" onChange={handleInputChange} />
+                                <label>رقم البطاقة </label>
+                                <input type="text" name="nationalID"onChange={handleInputChange} />
                             </div>
                             <div className="input-group">
                                 <label>رقم تليفون إضافي</label>
-                                <input type="tel" name="secondaryPhone" placeholder="01xxxxxxxxx" onChange={handleInputChange} />
+                                <input type="tel" name="secondaryPhone" onChange={handleInputChange} />
                             </div>
                         </div>
                         <div className="grid-2">
@@ -70,7 +70,7 @@ const CompleteBooking = () => {
                                 <label>العنوان بالتفصيل</label>
                                 <div className="input-with-icon">
                                     <MapPin size={18} className="icon" />
-                                    <input type="text" name="address" placeholder="المحافظة - المدينة - الشارع" onChange={handleInputChange} />
+                                    <input type="text" name="address" onChange={handleInputChange} />
                                 </div>
                             </div>
                             <div className="upload-group">
