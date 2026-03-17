@@ -76,7 +76,6 @@ const AddClients = () => {
   }
 //------------------------------------------------------------------------------------
   const SaveForm=async()=>{
-  
     try {
          const result = await dispatch(saveclientsform(parms)).unwrap();
            toast.success("تم حفظ البيانات بنجاح ", {
@@ -92,10 +91,33 @@ const AddClients = () => {
        }
   }
   //------------------------------------------------------------------------------------
+const getprevious=()=>{
+  try {
+    dispatch(getpreviousClient(db.client.ClientID))
+  } catch (error) {
+    toast.error("حدث خطأ , يرجي إعادة المحاولة", {
+           theme: "colored",
+           position: "top-center",
+    });
+  }
+}
+const getnext=()=>{
+  try {
+
+    dispatch(getnextClient(db.client.ClientID))
+  } catch (error) {
+    toast.error("حدث خطأ , يرجي إعادة المحاولة", {
+           theme: "colored",
+           position: "top-center",
+    });
+  }
+}
+
+ //------------------------------------------------------------------------------------
 useEffect(()=>{
 nameRef.current.focus();
 },[])
- console.log(db.client?.ClientID);
+
  //******************************************************************** */
   return (
     <div
@@ -210,13 +232,13 @@ nameRef.current.focus();
 <div className="btns_bottomcrm">
   <div className="btns_actions_left">
     <button className="btn_nego" onClick={() => AddnegotiationRequest()}>طلب تفاوض / شراء</button>
-    <button className="btn_clientshow">عرض السجلات</button>
+    
   </div>
   
   <div className="btns_arrows">
     <span className="btn_c" title="السجل الأول" onClick={()=>dispatch(getfirstClient())}><MdLastPage size={22}/></span>
-    <span className="btn_c" title="التالي" onClick={()=> dispatch(getnextClient(db.client.ClientID))}>< MdChevronLeft size={22}/></span>
-    <span className="btn_c" title="السابق" onClick={()=>dispatch(getpreviousClient(db.client.ClientID))}><MdNavigateNext  size={22} /></span>
+    <span className="btn_c" title="التالي" onClick={()=> getnext()}>< MdChevronLeft size={22}/></span>
+    <span className="btn_c" title="السابق" onClick={()=>getprevious()}><MdNavigateNext  size={22} /></span>
     <span className="btn_c" title="السجل الأخير" onClick={()=>dispatch(getlastClient())}><MdFirstPage size={22} /></span>
   </div>
 </div>

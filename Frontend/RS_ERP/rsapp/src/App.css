@@ -1,0 +1,19 @@
+/* تعديل شكل التوست نفسه */
+.Toastify__toast {
+  border-radius: 20px !important;
+  font-family: 'Cairo', sans-serif!important; 
+  direction: rtl; /* عشان التنسيق العربي */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+
+.Toastify__progress-bar--info {
+  background: #3b82f6 !important;
+}
+
+/* تنسيق الخط جوه الرسالة */
+.Toastify__toast-body {
+  font-size: 14px;
+  font-weight: 800!important;
+  padding: 10px;
+}

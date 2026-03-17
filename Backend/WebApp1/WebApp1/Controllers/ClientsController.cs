@@ -21,7 +21,7 @@ namespace WebApp1.Controllers
              _env=env;
             conn = new SqlConnection(_context.Database.GetConnectionString());
         }
-        //***********************   Get Projects To put In Select ******************************
+        //*********************** Get Projects to put in a Select ******************
         [Route("GetProjects")]
         [HttpGet]
         public JsonResult GetProjects()
@@ -33,7 +33,7 @@ namespace WebApp1.Controllers
             return new JsonResult(dt);
 
         }
-        //**************************** get Units By Project Name *********************************
+        //**************************** Get Units By Project Name ******************
         [Route("getUnits")]
         [HttpPost]
         public JsonResult getUnits(string projectname)
@@ -46,7 +46,7 @@ namespace WebApp1.Controllers
 
         }
 
-        //**********************************  Get Price Of Unit ********************************
+        //********************************** Get Price Of Unit ********************
         [Route("getPriceOfUnit")]
         [HttpPost]
         public JsonResult getPriceOfUnit(string unitname)
@@ -58,7 +58,7 @@ namespace WebApp1.Controllers
             return new JsonResult(dt);
 
         }
-        //***************************************************************************
+        //******************* Save Clients with their negotiation requests ********
         [Route("SaveClients")]
         [HttpPost]
         public JsonResult SaveClients([FromBody] Client cl)
@@ -157,7 +157,7 @@ namespace WebApp1.Controllers
                  } 
             return new JsonResult(id);
         }
-        //***************************************************************************
+        //******************* Delete Clients and their negotiations***************
         [Route("DeleteClient")]
         [HttpDelete]
         public JsonResult DeleteClient(int id)
@@ -191,7 +191,7 @@ namespace WebApp1.Controllers
             var data = new { deleted = deleted };
             return new JsonResult(data);
         }
-        //***************************************************************************
+        //******************** Search Clients ************************************
         [Route("SearchClients")]
         [HttpGet]
         public JsonResult SearchClients()
@@ -202,7 +202,7 @@ namespace WebApp1.Controllers
             da.Fill(dt);
             return new JsonResult(dt);
         }
-        //***************************************************************************
+        //************************** Get negotiation of client *******************
         [Route("GetNegotiationsByClient")]
         [HttpPost]
         public JsonResult GetNegotiationsByClient(int clientid)
@@ -221,90 +221,212 @@ namespace WebApp1.Controllers
             da.Fill(dt);
             return new JsonResult(dt);
         }
-        //***************************************************************************
+        //*************************** Get first client ***************************
         [Route("GetFirstClient")]
         [HttpGet]
         public JsonResult GetFirstClient()
         {
             DataTable dt = new DataTable();
             int first_clientId = 0;
+            bool isnull = false;
             string sqlgetFirst = "select top(1)* from Clients order by ClientID ASC";
             SqlDataAdapter da = new SqlDataAdapter(sqlgetFirst, conn);
             da.Fill(dt);
             if (dt.Rows.Count > 0)
             {
-                first_clientId = Convert.ToInt32(dt.Rows[0][0]);
+                first_clientId = Convert.ToInt32(dt.Rows[0]["ClientID"]);
+                isnull = false;
                 
             }
+            else
+            {
+                isnull = true;
+
+            }
             var negotiations_f = _context.Negotiations.Where(n => n.ClientID == first_clientId).ToList();
-            var data = new { dt = dt, negotiations_f = negotiations_f };
+            var data = new { dt = dt, negotiations_f = negotiations_f , isnull = isnull };
             return new JsonResult(data);
             
             
         }
-        //***************************************************************************
+        //************************** Get last Client *****************************
         [Route("GetLastClient")]
         [HttpGet]
         public JsonResult GetLastClient()
         {
             DataTable dt = new DataTable();
             int last_clientid = 0;
+            bool isnull = false;
             string sqlgetLast = "select top(1)* from Clients order by ClientID DESC";
             SqlDataAdapter da = new SqlDataAdapter(sqlgetLast, conn);
             da.Fill(dt);
             if (dt.Rows.Count > 0)
             {
-                last_clientid = Convert.ToInt32(dt.Rows[0][0]);
-                
+                last_clientid = Convert.ToInt32(dt.Rows[0]["ClientID"]);
+                 isnull = false;
+
             }
-            var negotiations_l = _context.Negotiations.Where(n => n.ClientID == last_clientid).ToList();
-            var data = new { dt = dt, negotiations_l = negotiations_l };
+            else
+            {
+                isnull = true;
+            }
+                var negotiations_l = _context.Negotiations.Where(n => n.ClientID == last_clientid).ToList();
+            var data = new { dt = dt, negotiations_l = negotiations_l, isnull= isnull };
             return new JsonResult(data);
         }
-        //***************************************************************************
+        //************************ Get Next Client *******************************
         [Route("GetNextClient")]
         [HttpPost]
         public JsonResult GetNextClient(int id)
         {
+            bool empty_db = false;
+            DataTable dt_all = new DataTable();
             DataTable dt = new DataTable();
             int next_clientid = 0;
-            string sqlnext = "select top(1)* from Clients where ClientID > @ClientID order by ClientID ASC";
-            SqlCommand cmd = new SqlCommand(sqlnext, conn);
-            if (conn.State == ConnectionState.Closed) conn.Open();
-             cmd.Parameters.Clear();
-             cmd.Parameters.AddWithValue("@ClientID", id);
-             if (conn.State == ConnectionState.Open) conn.Close();
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            da.Fill(dt);
-            if (dt.Rows.Count > 0)
+            bool islast = false;
+            string sqlall = "select * from Clients";
+            using (SqlCommand cmdd = new SqlCommand(sqlall, conn))
             {
-                next_clientid = Convert.ToInt32(dt.Rows[0][0]);
+                if (conn.State == ConnectionState.Closed) conn.Open();
+                SqlDataAdapter sqla = new SqlDataAdapter(cmdd);
+                sqla.Fill(dt_all);
+                if (conn.State == ConnectionState.Open) conn.Close();
+                if (dt_all.Rows.Count > 0)
+                {
+                    empty_db = false;
+                }
+                else
+                {
+                    empty_db = true;
+                }
+
             }
+            //************************************************************************
+            if (empty_db == false)
+            {
+                try
+                {
+
+                    string sqlnext = "select top(1)* from Clients where ClientID > @ClientID order by ClientID ASC";
+                    SqlCommand cmd = new SqlCommand(sqlnext, conn);
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@ClientID", id);
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(dt);
+                    if (conn.State == ConnectionState.Open) conn.Close();
+                    if (dt.Rows.Count > 0)
+                    {
+                        next_clientid = Convert.ToInt32(dt.Rows[0]["ClientID"]);
+                        islast = false;
+                    }
+                    else
+                    {
+                        string sqllast = "select * from Clients where ClientID = @ClientID";
+                        SqlCommand cmdl = new SqlCommand(sqllast, conn);
+                        if (conn.State == ConnectionState.Closed) conn.Open();
+                        cmdl.Parameters.Clear();
+                        cmdl.Parameters.AddWithValue("@ClientID", id);
+                        SqlDataAdapter da_l = new SqlDataAdapter(cmdl);
+                        da_l.Fill(dt);
+                        if (conn.State == ConnectionState.Open) conn.Close();
+                        if (dt.Rows.Count > 0)
+                        {
+                            islast = true;
+                            next_clientid = Convert.ToInt32(dt.Rows[0]["ClientID"]);
+
+                        }
+                    }
+
+                }
+                catch (Exception ex)
+                {
+
+                    return new JsonResult(new { error = ex.Message });
+                }
+
+            }
+       
             var negotiations_n = _context.Negotiations.Where(n => n.ClientID == next_clientid).ToList();
-            var data = new { dt = dt, negotiations_n = negotiations_n };
+            var data = new { dt = dt, negotiations_n = negotiations_n,islast=islast , empty_db = empty_db };
             return new JsonResult(data);
         }
-        //***************************************************************************
+        //******************************* Get Previous Client ********************
         [Route("GetpreviousClient")]
         [HttpPost]
         public JsonResult GetpreviousClient(int id)
         {
             DataTable dt = new DataTable();
+            DataTable dt_all = new DataTable();
             int previous_clientid = 0;
-            string sqlnext = "select top(1)* from Clients where ClientID < @ClientID order by ClientID DESC";
-            SqlCommand cmd = new SqlCommand(sqlnext, conn);
-            if (conn.State == ConnectionState.Closed) conn.Open();
-            cmd.Parameters.Clear();
-            cmd.Parameters.AddWithValue("@ClientID", id);
-            if (conn.State == ConnectionState.Open) conn.Close();
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            da.Fill(dt);
-            if (dt.Rows.Count > 0)
+            bool isfirst = false;
+            bool empty_db = false;
+            string sqlall = "select * from Clients";
+            using (SqlCommand cmdd = new SqlCommand(sqlall, conn))
             {
-                previous_clientid = Convert.ToInt32(dt.Rows[0][0]);
+                if (conn.State == ConnectionState.Closed) conn.Open();
+                SqlDataAdapter sqla = new SqlDataAdapter(cmdd);
+                sqla.Fill(dt_all);
+                if (conn.State == ConnectionState.Open) conn.Close();
+                if (dt_all.Rows.Count > 0)
+                {
+                    empty_db = false;
+                }
+                else
+                {
+                    empty_db = true;
+                }
+
             }
+            if (empty_db == false)
+            {
+
+                try
+                {
+                    string sqlnext = @"select top(1)* from Clients where ClientID < @ClientID order by ClientID DESC";
+                    SqlCommand cmd = new SqlCommand(sqlnext, conn);
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@ClientID", id);
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(dt);
+                    if (conn.State == ConnectionState.Open) conn.Close();
+                    if (dt.Rows.Count > 0)
+                    {
+                        previous_clientid = Convert.ToInt32(dt.Rows[0]["ClientID"]);
+                        isfirst = false;
+
+                    }
+                    else
+                    {
+                        string sqlfirst = @"select * from Clients where ClientID=@ClientID";
+                        SqlCommand cmdf = new SqlCommand(sqlfirst, conn);
+                        if (conn.State == ConnectionState.Closed) conn.Open();
+                        cmdf.Parameters.Clear();
+                        cmdf.Parameters.AddWithValue("@ClientID", id);
+                        SqlDataAdapter daa = new SqlDataAdapter(cmdf);
+                        daa.Fill(dt);
+                        if (conn.State == ConnectionState.Open) conn.Close();
+                        if (dt.Rows.Count > 0)
+                        {
+                            isfirst = true;
+                            previous_clientid = Convert.ToInt32(dt.Rows[0]["ClientID"]);
+                        }
+
+
+                    }
+
+                }
+                catch (Exception ex)
+                {
+
+                    return new JsonResult(new { error = ex.Message });
+                }
+
+            }
+
             var negotiations_p = _context.Negotiations.Where(n => n.ClientID == previous_clientid).ToList();
-            var data = new { dt = dt, negotiations_p = negotiations_p };
+            var data = new { dt = dt, negotiations_p = negotiations_p,isfirst=isfirst , empty_db = empty_db };
             return new JsonResult(data);
         }
 

@@ -225,6 +225,14 @@ const clientSlice = createSlice({
                 state.loading = false;
                 state.client = action.payload.dt[0];
                 state.negotiations=action.payload.negotiations_f;
+                if(action.payload.isnull===true){
+                    state.client=initialState.client;
+                    toast.error("لا يوجد بيانات لعملاء , حاول مره أخري", {
+                      theme: "colored",
+                      position: "top-left",
+                    });
+                }
+               
             })
             .addCase(getfirstClient.rejected, (state) => {
                 state.loading = false;
@@ -238,6 +246,13 @@ const clientSlice = createSlice({
                 state.loading = false;
                 state.client = action.payload.dt[0];
                 state.negotiations=action.payload.negotiations_l;
+                   if(action.payload.isnull===true){
+                    state.client=initialState.client;
+                    toast.error("لا يوجد بيانات لعملاء , حاول مره أخري", {
+                      theme: "colored",
+                      position: "top-left",
+                    });
+                }
             })
             .addCase(getlastClient.rejected, (state) => {
                 state.loading = false;
@@ -251,6 +266,19 @@ const clientSlice = createSlice({
                 state.loading = false;
                 state.client = action.payload.dt[0];
                 state.negotiations=action.payload.negotiations_n;
+                if(action.payload.islast===true){
+                    toast.info("لا توجد سجلات تالية,انت بالفعل في السجل الأخير", {
+                      theme: "colored",
+                      position: "top-left",
+                    });
+                }
+                if(action.payload.empty_db===true){
+                    state.client=initialState.client;
+                    toast.error("لا يوجد بيانات لعملاء , حاول مره أخري", {
+                      theme: "colored",
+                      position: "top-left",
+                    });
+                }
             })
             .addCase(getnextClient.rejected, (state) => {
                 state.loading = false;
@@ -264,6 +292,19 @@ const clientSlice = createSlice({
                 state.loading = false;
                 state.client = action.payload.dt[0];
                 state.negotiations=action.payload.negotiations_p;
+               if(action.payload.isfirst===true){
+                 toast.info("لا توجد سجلات سابقة,انت بالفعل في السجل الأول", {
+                      theme: "colored",
+                      position: "top-left",
+                    });
+               }
+                if(action.payload.empty_db===true){
+                    state.client=initialState.client;
+                    toast.error("لا يوجد بيانات لعملاء , حاول مره أخري", {
+                      theme: "colored",
+                      position: "top-left",
+                    });
+                }
             })
             .addCase(getpreviousClient.rejected, (state) => {
                 state.loading = false;
