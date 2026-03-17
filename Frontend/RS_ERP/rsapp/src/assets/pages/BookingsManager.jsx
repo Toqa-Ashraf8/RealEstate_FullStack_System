@@ -3,14 +3,27 @@ import { UserCheck, FileEdit, Calculator, Printer, User } from 'lucide-react';
 import '../css/BookingsManager.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { acceptedCount, GetBookngClient } from '../redux/negotiationSlice';
+import { FillClientData } from '../redux/bookingSlice';
+
 
 const BookingsManager = () => {
    const db = useSelector((state) => state.negotiation);
     const dispatch = useDispatch();
     const navigate=useNavigate();
+    
  //----------------------------------------------------------
-
-
+const CompleteBooking=async(index)=>{
+   await dispatch(GetBookngClient(index));
+   await navigate('/complete_booking');
+}
+//********************************************************* */
+useEffect(()=>{
+    const Fetch=async()=>{
+         dispatch(acceptedCount());
+    }
+    Fetch();
+},[])
     return (
         <div className="bk-manage-wrapper">
             <div className="bk-header">
@@ -45,7 +58,7 @@ const BookingsManager = () => {
                         <div className="bk-actions">
                             <button 
                             className="btn-complete"
-                            onClick={()=>navigate('/complete_booking')}
+                            onClick={()=>CompleteBooking(index)}
                             >
                                 <FileEdit size={16} /> استكمال بيانات الحجز
                             </button>

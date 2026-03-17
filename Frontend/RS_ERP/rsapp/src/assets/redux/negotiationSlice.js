@@ -23,7 +23,8 @@ const initialState={
         defineRow:0,
         updated:false,
         Re_approveRow:0,
-        deleteModal:false
+        deleteModal:false,
+        bookingClient:{},
 }
 export const negotiationCount=createAsyncThunk("negotiationCount/negotiaion",async()=>{
     const resp=await axios.get(variables.URL_API_N+"GetNegotationsCount")
@@ -119,6 +120,9 @@ const negotiationSlice=createSlice({
             state.Re_approveRow=action.payload;
            
         },
+        GetBookngClient:(state,action)=>{
+            state.bookingClient=state.acceptedRequests[action.payload];
+        }
        
     },
     //****************************************************************************** */
@@ -215,18 +219,9 @@ const negotiationSlice=createSlice({
                 state.rejectedRequests = state.rejectedRequests.filter(neg2 => neg2.Unit !== unitidentity_rejected);
                 if (state.negotiationNo > 0) {
                    state.negotiationNo -= 1;
-                   
                  }
-                /*  if (state.negotiationRow.NegotiationCondition === 1) {
-                   state.accepted_neg = (Number(state.accepted_neg) || 0) + 1;
-                   state.rejected_neg = (Number(state.rejected_neg) || 0) -2;
-                  } 
-                  else if (state.negotiationRow.NegotiationCondition === 0) {
-                   state.accepted_neg =  (Number(state.accepted_neg) || 0) -2;
-                   state.rejected_neg = (Number(state.rejected_neg) || 0) + 1;
-                  }    */
-                   
-             state.negotiationRow = {
+              
+               state.negotiationRow = {
                 ClientID: "", ProjectName: "", Unit: "", 
                 NegotiationCondition: 0, SuggestedPrice: 0, 
                 ReasonOfReject: "", CheckedDate: new Date().toISOString()
@@ -244,7 +239,8 @@ const negotiationSlice=createSlice({
 })
 export const{showModal_reject,GetClientDetails,RejectModal_values,ChangeConditionOfRequest,clearValuesOfRow,
             showconfirmModal,rejectedRequests_show,showModal_reconfrim,GetAdcceptedrowByIndex,
-            GetRejectModalvalues,DefineApproveRow,DefineRejectRow,GetRejectedrowByIndex
+            GetRejectModalvalues,DefineApproveRow,DefineRejectRow,GetRejectedrowByIndex,
+            GetBookngClient
 }=negotiationSlice.actions;
 const negotiationReducer=negotiationSlice.reducer;
 export default negotiationReducer;

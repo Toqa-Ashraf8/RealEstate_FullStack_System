@@ -1,25 +1,19 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { User, CreditCard, Phone, MapPin, Calendar, Image as ImageIcon, CheckCircle, FileText, Hash, Activity, Underline } from 'lucide-react';
 import '../css/CompleteBooking.css';
 import { RiSave3Fill } from "react-icons/ri";
 import { AiOutlineClear } from "react-icons/ai";
 import { FiPrinter } from "react-icons/fi";
+import { useEffect } from 'react';
+import { FillClientData } from '../redux/bookingSlice';
 
 const CompleteBooking = () => {
     const db = useSelector((state) => state.negotiation);
-    
-    const [formData, setFormData] = useState({
-        clientName: db.detailsOfRow?.ClientName || "",
-        projectName: db.detailsOfRow?.ProjectName || "",
-        unitNo: db.detailsOfRow?.Unit || "",
-        nationalID: '',
-        address: '',
-        secondaryPhone: '',
-        installmentYears: '1',
-        paymentMethod: 'cash', 
-    });
-
+    const db_b=useSelector((state)=>state.booking);
+    const dispatch=useDispatch();
+    const focusRef=useRef();
+    const Clientdata=db.bookingClient;
     const [previews, setPreviews] = useState({ idPreview: null, checkPreview: null });
 
     const handleFileChange = (e, fileType) => {
@@ -35,11 +29,16 @@ const CompleteBooking = () => {
             reader.readAsDataURL(file);
         }
     };
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
+//****************************************************************************** */
+useEffect(()=>{
+    if(!focusRef.current.focus()){
+        focusRef.current.focus();    
+    }
+    const FetchClientData=async()=>{
+     await dispatch(FillClientData(Clientdata));
+    }
+    FetchClientData();
+},[dispatch])
 
     return (
         <div className="final_page_wrapper">
@@ -48,44 +47,52 @@ const CompleteBooking = () => {
                     <h2 className="final_main_title">استكمال بيانات الحجز النهائي</h2>
                 </div>
 
-                <div className="final_content_box animate__animated animate__fadeIn">
+                <div className="final_content_box animate__animated animate__fadeIn">  
+                   
                     <form className="final_form_body">
-                        
-                        {/* Row 1: Read-only Data */}
-                        <div className="row mb-4">
+                      {db_b.bookingClients.length>0 && 
+                      db_b.bookingClients.map((client,index)=>  
+                        <div className="row mb-4">  
                             <div className="col-md-4">
                                 <div className="final_field_group">
                                     <label className="final_label"><User size={18} /> إسم العميل</label>
-                                    <input type="text" value={formData.clientName} readOnly className="final_input_modern final_disabled" />
+                                    <input type="text" value={client.ClientName} readOnly className="final_input_modern final_disabled" />
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="final_field_group">
                                     <label className="final_label"><Hash size={18} /> المشروع</label>
-                                    <input type="text" value={formData.projectName} readOnly className="final_input_modern final_disabled" />
+                                    <input type="text" value={client.ProjectName} readOnly className="final_input_modern final_disabled" />
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="final_field_group">
                                     <label className="final_label"><Activity size={18} /> الوحدة</label>
-                                    <input type="text" value={formData.unitNo} readOnly className="final_input_modern final_disabled" />
+                                    <input type="text" value={client.Unit} readOnly className="final_input_modern final_disabled" />
                                 </div>
                             </div>
+
                         </div>
+                        )}
                         
                         <hr className="final_divider" />
 
-                        {/* Row 2: ID Data & Preview */}
+                    
                         <div className="row mt-4">
                             <div className="col-lg-8">
                                 <div className="final_field_group">
                                     <label className="final_label"><CreditCard size={18} /> رقم البطاقة</label>
-                                    <input type="text" name="nationalID" className="final_input_modern" onChange={handleInputChange} />
+                                    <input 
+                                    type="text" 
+                                    name="nationalID" 
+                                    className="final_input_modern"
+                                    ref={focusRef}
+                                    />
                                 </div>
                                    <div className="final_field_group mt-3">
                                     <label className="final_label"><ImageIcon size={18} /> صورة البطاقة</label>
                                     <div className="final_upload_btn">
-                                        <input type="file" onChange={(e) => handleFileChange(e, 'id')} />
+                                        <input type="file"  />
                                         <div className="final_upload_label">
                                             <span>إضغط لرفع صورة البطاقة الشخصية</span>
                                             <ImageIcon size={18} />
@@ -94,11 +101,11 @@ const CompleteBooking = () => {
                                 </div>
                                 <div className="final_field_group mt-3">
                                     <label className="final_label"><Phone size={18} /> تليفون إضافي</label>
-                                    <input type="tel" name="secondaryPhone" className="final_input_modern" onChange={handleInputChange} />
+                                    <input type="tel" name="secondaryPhone" className="final_input_modern"/>
                                 </div>
                                 <div className="final_field_group mt-3">
                                     <label className="final_label"><MapPin size={18} /> العنوان بالتفصيل</label>
-                                    <input type="text" name="address" className="final_input_modern" onChange={handleInputChange} />
+                                    <input type="text" name="address" className="final_input_modern" />
                                 </div>
                              
                             </div>
@@ -124,18 +131,18 @@ const CompleteBooking = () => {
                             <div className="col-lg-8">
                                 <div className="final_field_group">
                                     <label className="final_label"><Calendar size={18} /> طريقة الدفع</label>
-                                    <select name="paymentMethod" className="final_select_modern" onChange={handleInputChange}>
+                                    <select name="paymentMethod" className="final_select_modern" >
                                         <option value="cash">كاش (نقدي)</option>
                                         <option value="check">شيكات بنكية</option>
                                     </select>
                                 </div>
                                 <div className="final_field_group mt-3">
                                     <label className="final_label"><Calendar size={18} /> مدة التقسيط (بالسنوات)</label>
-                                    <select name="installmentYears" className="final_select_modern" onChange={handleInputChange}>
+                                    <select name="installmentYears" className="final_select_modern">
                                         {[1, 2, 3, 4, 5, 7, 10].map(y => <option key={y} value={y}>{y} سنوات</option>)}
                                     </select>
                                 </div>
-                                {formData.paymentMethod === 'check' && (
+                             
                                     <div className="final_field_group mt-3 animate__animated animate__fadeIn">
                                         <label className="final_label"><FileText size={18} /> إرفاق صورة الشيك</label>
                                         <div className="final_upload_btn">
@@ -146,7 +153,7 @@ const CompleteBooking = () => {
                                             </div>
                                         </div>
                                     </div>
-                                )}
+                               
                             </div>
                                 <div className="col-lg-4">
                                 <div className="final_image_preview_big" style={{height: '220px'}}>

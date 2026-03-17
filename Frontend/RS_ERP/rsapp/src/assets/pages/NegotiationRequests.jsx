@@ -35,9 +35,9 @@ const Accepted=(i)=>{
       const Fetch=async()=>{
         try {
            await dispatch(negotiationCount());
-          await dispatch(GetAllnegotiations());
-          await dispatch(rejectedCount());
-          await dispatch(acceptedCount());
+           await dispatch(GetAllnegotiations());
+           await dispatch(rejectedCount());
+           await dispatch(acceptedCount());
 
         } catch (error) {
           console.log("فشل في جلب البيانات",error)
