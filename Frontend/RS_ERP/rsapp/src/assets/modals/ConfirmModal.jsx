@@ -23,7 +23,7 @@ const AcceptRequest=()=>{
       if(db.Re_approveRow===0)
       {
         await dispatch(SaveRequestByAdmin(row)).unwrap();
-        toast.error("تم  قبول الطلب!", {
+        toast.success("تم  قبول الطلب!", {
           theme: "colored",
           position: "top-left",
         });     

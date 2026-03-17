@@ -55,11 +55,11 @@ const Header = () => {
               إدارة الحجوزات
           </Link>
         </li>
-        <li className="nav-item">
+       {/*  <li className="nav-item">
           <Link className="nav-link" to="/clientprofile">
             صفحة العميل
           </Link>
-        </li>
+        </li> */}
       </ul>
     <div>
       <span><MdOutlineNotifications size={30}/></span>
