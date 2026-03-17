@@ -22,7 +22,8 @@ const initialState={
         rejectedrow:{},
         defineRow:0,
         updated:false,
-        Re_approveRow:0
+        Re_approveRow:0,
+        deleteModal:false
 }
 export const negotiationCount=createAsyncThunk("negotiationCount/negotiaion",async()=>{
     const resp=await axios.get(variables.URL_API_N+"GetNegotationsCount")
@@ -118,6 +119,7 @@ const negotiationSlice=createSlice({
             state.Re_approveRow=action.payload;
            
         },
+       
     },
     //****************************************************************************** */
     extraReducers:(builder)=>{

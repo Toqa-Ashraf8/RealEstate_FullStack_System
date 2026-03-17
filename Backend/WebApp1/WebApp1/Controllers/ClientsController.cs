@@ -63,14 +63,16 @@ namespace WebApp1.Controllers
         [HttpPost]
         public JsonResult SaveClients([FromBody] Client cl)
         {
+           
             int id = Convert.ToInt32(cl.ClientID);
-            if (id == 0)
+           
+            if (id == 0 )
             {
                 try
                 {
                     string sqlin = @"insert into Clients (ClientName,PhoneNumber,
                             ClientStatus,Notes) values(@ClientName,@PhoneNumber,@ClientStatus,@Notes)select SCOPE_IDENTITY()";
-                    using(SqlCommand cmd=new SqlCommand(sqlin,conn))
+                    using (SqlCommand cmd = new SqlCommand(sqlin, conn))
                     {
                         cmd.Parameters.Clear();
                         cmd.Parameters.AddWithValue("@ClientName", cl.ClientName);
@@ -114,7 +116,7 @@ namespace WebApp1.Controllers
                 {
                     return new JsonResult(new { error = ex.Message });
                 }
-               
+
 
             }
             if (cl.negotiations.Count > 0)
@@ -154,8 +156,9 @@ namespace WebApp1.Controllers
                         }
                         catch (Exception) { throw; }
 
-                 } 
-            return new JsonResult(id);
+            }
+            var data = new { id = id };
+            return new JsonResult(data);
         }
         //******************* Delete Clients and their negotiations***************
         [Route("DeleteClient")]

@@ -70,7 +70,7 @@ const AddProjects = () => {
     dispatch(ClearInputs());
     NameRef.current.focus();
   };
-  console.log(parms);
+ 
   //--------------- Save Master--------------------------------------------
   const HandleSave = async () => {
     try {

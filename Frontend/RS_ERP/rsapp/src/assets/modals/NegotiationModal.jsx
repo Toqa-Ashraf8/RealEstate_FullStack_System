@@ -29,8 +29,12 @@ const AddToTable=()=>{
 }
 //--------------------------------------------
  useEffect(()=>{
- negotiationpriceRef.current.focus();
- },[])
+    negotiationpriceRef.current.focus();
+    if(db.negotiation.ProjectName!==-1 && db.negotiation.ProjectName){
+        dispatch(getprojects());
+        dispatch(getunitsByproject(db.negotiation.ProjectName))
+    }
+ },[dispatch])
   return (
     <div dir="rtl">
       <div className="modaln">
@@ -69,7 +73,7 @@ const AddToTable=()=>{
                       <label className="lbl_crm"> الوحدة</label>
                       <select className="crm_select select-unit" name="Unit" value={db.negotiation.Unit || ""} onChange={HandleChange}>
                         <option value="-1">-إختر-</option>
-                        {db.units.map((unit, index) => <option key={index} value={unit.UnitName}>{unit.UnitName}</option>)}
+                        {db.units.map((unit, index) => <option key={index} value={unit.UnitName}>{unit.UnitName }</option>)}
                       </select>
                     </div>
                   )}

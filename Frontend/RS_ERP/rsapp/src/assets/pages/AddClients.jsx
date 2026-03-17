@@ -27,8 +27,10 @@ import {
   changeclientsVls,
   clearinputs,
   deleteAllData,
+  DeleteNegotiationModal,
   GetAllClients,
   getfirstClient,
+  GetIndexofRemovednegotiation,
   getlastClient,
   getnextClient,
   getpreviousClient,
@@ -36,15 +38,16 @@ import {
   getprojects,
   getunitsByproject,
   HandleShowModal,
+  IdentifyEditorAddNew,
   saveclientsform,
   showNegotiationModal,
   ShowsearchcLientsMdl,
 } from "../redux/clientSlice";
-import NegotiationModal from "../modals/NegotiationModal";
 import {toast}from 'react-toastify'
 import SearchClients from "../modals/SearchClients";
 import { IoClose } from "react-icons/io5";
 import ModalDeleteClients from "../modals/ModalDeleteClients";
+import DeleteNegotiation from "../modals/DeleteNegotiation";
 
 
 const AddClients = () => {
@@ -71,9 +74,16 @@ const AddClients = () => {
   };
  //------------------------------------------------------------------------------------
   const AddnegotiationRequest=()=>{
+    dispatch(IdentifyEditorAddNew(-1));
     dispatch(AddNegotiation(db.negotiations.length +1));
-      dispatch(getprojects());
+    dispatch(getprojects());
   }
+//------------------------------------------------------------------------------------
+const EditRow=(index)=>{
+dispatch(IdentifyEditorAddNew(index));
+console.log(db.negotiation);
+console.log(db.negotiations[index]);
+}
 //------------------------------------------------------------------------------------
   const SaveForm=async()=>{
     try {
@@ -81,8 +91,7 @@ const AddClients = () => {
            toast.success("تم حفظ البيانات بنجاح ", {
              theme: "colored",
              position: "top-left",
-           });
-         
+           }); 
        } catch (error) {
          toast.error("حدث خطأ في الاتصال بالخادم", {
            theme: "colored",
@@ -115,9 +124,9 @@ const getnext=()=>{
 
  //------------------------------------------------------------------------------------
 useEffect(()=>{
-nameRef.current.focus();
+  nameRef.current.focus();
 },[])
-
+console.log(db.deleteRowIndex);
  //******************************************************************** */
   return (
     <div
@@ -127,6 +136,7 @@ nameRef.current.focus();
       {db.showNeg && <NegotiationModal/>} 
       {db.showdModal && <ModalDeleteClients/>}
       {db.ShowSearchCLientsMdl && <SearchClients/>}
+      {db.deleteNegoModal && <DeleteNegotiation/>}
     <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -232,7 +242,6 @@ nameRef.current.focus();
 <div className="btns_bottomcrm">
   <div className="btns_actions_left">
     <button className="btn_nego" onClick={() => AddnegotiationRequest()}>طلب تفاوض / شراء</button>
-    
   </div>
   
   <div className="btns_arrows">
@@ -254,7 +263,7 @@ nameRef.current.focus();
                 <th>السعر الأصلي للوحدة</th>
                 <th>سعر التفاوض</th>
                 <th>قيمة الخصم</th>
-               {db.rowIndex===-1 || db.negotiations ? 
+               {db.rowIndex===-1 || db.negotiations.length > 0 ? 
                ( <>  
                <th>حالة الطلب</th>
                <th>تاريخ الطلب</th>
@@ -273,7 +282,7 @@ nameRef.current.focus();
                 <td>{neg.OriginalPrice} ج</td>
                 <td>{neg.NegotiationPrice} ج</td>
                 <td>{neg.DiscountAmount} %</td>
-              {db.rowIndex === -1 || db.negotiations ? (
+              {db.rowIndex === -1 || db.negotiations.length > 0 ? (
           <>
             <td style={{ fontWeight: 'bold' }}>
            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -299,8 +308,17 @@ nameRef.current.focus();
 ) : ""}
                 <td>
                   <div className="btns_dtls_n">
-                    <span><CiEdit size={30} color="blue"/></span>
-                    <span><MdDeleteOutline size={30} color="red"/></span>
+                    <span><CiEdit 
+                    size={30} 
+                    color="blue"
+                    onClick={()=>EditRow(index)}
+                    /></span>
+                    <span>
+                      <MdDeleteOutline 
+                      size={30} 
+                      color="red"
+                      onClick={()=>dispatch(GetIndexofRemovednegotiation(index))}
+                      /></span>
                   </div>
                 </td>
               </tr>

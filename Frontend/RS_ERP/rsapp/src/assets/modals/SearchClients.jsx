@@ -13,7 +13,6 @@ const HandleSearch= async(i)=>{
     if (!selectedClient) return;  
     const clientid=selectedClient.ClientID;
     dispatch(FillClientsForm(i));
-    console.log(clientid);
    if (clientid) {
         await dispatch(GetnegotiationsByclient(clientid));
     }

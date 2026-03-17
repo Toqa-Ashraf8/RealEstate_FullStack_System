@@ -108,6 +108,9 @@ const projectSlice = createSlice({
             state.rowSel = action.payload;
             state.deleteUnitRow = true;
         },
+        hidedeleteUnitRowModal:(state)=>{
+            state.deleteUnitRow = false;
+        },
         DeleteRow: (state, action) => {
             state.unitss = state.unitss.filter((items, index) => index !== state.rowSel);
             state.deleteUnitRow = false;
@@ -222,7 +225,7 @@ const projectSlice = createSlice({
 })
 export const { showunitMdl, changeVls, ClearInputs, changeVls_U, ClearModalvls,
     fromMdlTotbl, showdeleteUnitRowModal, DeleteRow, hideDelmdl, calcTotalPrice, showDeleteProjectModal,
-    showSearchm, getRowIndexOfS,SetRowIndexvalue,GetProjectCode
+    showSearchm, getRowIndexOfS,SetRowIndexvalue,GetProjectCode,hidedeleteUnitRowModal
 } = projectSlice.actions;
 const projReducer = projectSlice.reducer;
 export default projReducer;

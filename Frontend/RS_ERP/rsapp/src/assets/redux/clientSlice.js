@@ -10,7 +10,7 @@ const initialState = {
                  NegotiationStatus:"في انتظار موافقة الإدارة",
                  NegotiationDate:new Date().toISOString().split('T')[0],checkedByAdmin:0},
     negotiations:[],
-    rowIndex:"",
+    rowIndex:-1,
     units: [],
     showNeg:false,
     loading: false,
@@ -20,6 +20,9 @@ const initialState = {
     deletedall:false,
     showdModal:false,
     searchclientsMdl:false,
+    deleteNegoModal:false,
+    deleteRowIndex:-1,
+    
 }
 //*************************************************************************************/
 export const getprojects = createAsyncThunk("getprojects/clients", async () => {
@@ -99,11 +102,8 @@ const clientSlice = createSlice({
         AddNegotiation:(state,action)=>{
             state.negotiation={serialCode:"",ProjectName:"-1",Unit:"-1",OriginalPrice:"",NegotiationPrice:"",DiscountAmount:"",
                  NegotiationStatus:"في انتظار موافقة الإدارة",
-                 NegotiationDate:new Date().toISOString().split('T')[0],checkedByAdmin:0};
-            state.rowIndex=-1;  
+                 NegotiationDate:new Date().toISOString().split('T')[0],checkedByAdmin:0}; 
             state.negotiation.serialCode=action.payload;
-            state.showNeg=true; 
-          
         },
         calculateDiscount:(state)=>{
             if(state.negotiation.OriginalPrice && state.negotiation.NegotiationPrice){
@@ -112,15 +112,24 @@ const clientSlice = createSlice({
                 state.negotiation.DiscountAmount=parseFloat(discount.toFixed(1));
             }
        },
+       IdentifyEditorAddNew:(state,action)=>{
+         state.rowIndex=action.payload;
+         if(action.payload!==-1){
+            state.negotiation=state.negotiations[action.payload];
+            state.negotiation.ProjectName=state.negotiations[action.payload].ProjectName;
+            state.negotiation.Unit=state.negotiations[action.payload].Unit
+         }
+         state.showNeg=true; 
+         
+       },
        AddToNegotiationTable:(state,action)=>{
-        if(state.rowIndex===-1){
-            state.negotiations=[...state.negotiations,state.negotiation];
+            if(state.rowIndex===-1){state.negotiations=[...state.negotiations,state.negotiation];}
+            else{state.negotiations[state.rowIndex]=state.negotiation;}
             state.showNeg=false; 
-        }
-       },
-       HandleShowModal:(state,action)=>{
+        },
+        HandleShowModal:(state,action)=>{
          state.showdModal=action.payload;
-       },
+        },
        ShowsearchcLientsMdl:(state,action)=>{
          state.ShowSearchCLientsMdl=action.payload;
 
@@ -129,7 +138,18 @@ const clientSlice = createSlice({
         const selectedClient = state.clients[action.payload];
         state.client = selectedClient;
         state.ShowSearchCLientsMdl = false;
-       }
+       },
+        DeleteNegotiationModal:(state,action)=>{
+            state.deleteNegoModal=action.payload;
+        },
+        GetIndexofRemovednegotiation:(state,action)=>{
+             state.deleteNegoModal=true;
+             state.deleteRowIndex=action.payload;
+        },
+        DeleteNegotiationRow:(state,action)=>{
+            state.negotiations=state.negotiations.filter((neg,index)=> index !==state.deleteRowIndex);
+            state.deleteNegoModal=false;
+        }
       
     },
     extraReducers: (builder) => {
@@ -175,7 +195,8 @@ const clientSlice = createSlice({
             })
             .addCase(saveclientsform.fulfilled, (state, action) => {
                 state.loading = false;
-                state.client.ClientID = action.payload;
+                state.client.ClientID = action.payload.id;
+               
             })
             .addCase(saveclientsform.rejected, (state) => {
                 state.loading = false;
@@ -314,7 +335,8 @@ const clientSlice = createSlice({
 })
 export const { changeclientsVls, clearinputs,showNegotiationModal ,changeNegotiation_values,
                AddNegotiation,calculateDiscount,AddToNegotiationTable,HandleShowModal,ShowsearchcLientsMdl,
-               FillClientsForm,Getunit
+               FillClientsForm,Getunit,IdentifyEditorAddNew,DeleteNegotiationModal,GetIndexofRemovednegotiation,
+               DeleteNegotiationRow
 } = clientSlice.actions;
 const clientReducer = clientSlice.reducer;
 export default clientReducer;
