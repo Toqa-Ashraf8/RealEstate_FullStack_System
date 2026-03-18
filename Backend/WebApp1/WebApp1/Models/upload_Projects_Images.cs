@@ -1,6 +1,6 @@
 ﻿namespace WebApp1.Models
 {
-    public class uploadImg
+    public class upload_Projects_Images
     {
         public IFormFile file { get; set; }
     }

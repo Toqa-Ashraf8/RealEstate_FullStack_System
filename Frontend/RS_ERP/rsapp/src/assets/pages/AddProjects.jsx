@@ -74,7 +74,6 @@ const AddProjects = () => {
   //--------------- Save Master--------------------------------------------
   const HandleSave = async () => {
     try {
-     
       const result = await dispatch(save_all(parms)).unwrap();
       if (result.errorOccured) {
         toast.error("أدخل بيانات لإتمام عملية الحفظ!", {

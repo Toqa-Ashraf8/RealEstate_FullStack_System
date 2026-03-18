@@ -2,7 +2,7 @@
 
 namespace WebApp1.Models
 {
-    public class project
+    public class Project
     {
         [Key]
         public int ProjectCode { get; set; }

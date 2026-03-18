@@ -27,7 +27,7 @@ namespace WebApp1.Controllers
         //***************************** Save Images Of Projects **************************
         [Route("SaveImages")]
         [HttpPost]
-        public JsonResult SaveImages ([FromForm] uploadImg uploadimg)
+        public JsonResult SaveImages ([FromForm] upload_Projects_Images uploadimg)
 
         {
             var postedFile = uploadimg.file;
@@ -42,7 +42,7 @@ namespace WebApp1.Controllers
         //***************************** Save Images Of Units *****************************
         [Route("SaveImagesUnits")]
         [HttpPost]
-        public JsonResult SaveImagesUnits([FromForm] UploadImgu imgu)
+        public JsonResult SaveImagesUnits([FromForm] upload_Unit_Images imgu)
         {
             var postedFile = imgu.fileu;
             string fileName = postedFile.FileName;
@@ -57,7 +57,7 @@ namespace WebApp1.Controllers
         //********************** Save Projects (Master) With Units (Details) **************
         [Route("SaveAll")]
         [HttpPost]
-        public JsonResult SaveAll([FromBody]project prj)
+        public JsonResult SaveAll([FromBody]Project prj)
         {
            
             bool allFieldsAreEmpty = true;

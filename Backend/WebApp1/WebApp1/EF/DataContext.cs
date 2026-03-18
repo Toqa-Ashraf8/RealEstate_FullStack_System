@@ -6,10 +6,11 @@ namespace WebApp1.EF
     public class DataContext :DbContext
     {
      public DataContext(DbContextOptions<DataContext> options) : base(options){}
-        public DbSet<project> Projects { get; set; }
+        public DbSet<Project> Projects { get; set; }
         public DbSet<Unit> Units { get; set; }
         public DbSet<Client> Clients { get; set; }
-        public DbSet<Negotiation> Negotiations { get; set; }    
+        public DbSet<Negotiation> Negotiations { get; set; }
+        public DbSet <ClientBookingDetail> ClientBookingDetails { get; set; }
         public DbSet<Rejected_negotiations_phase> Rejected_negotiations_phases { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

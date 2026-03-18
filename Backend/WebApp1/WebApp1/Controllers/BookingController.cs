@@ -6,6 +6,7 @@ using WebApp1.EF;
 using System.Data;
 using System.Data.SqlClient;
 using WebApp1.Models;
+using System.Diagnostics.Contracts;
 
 namespace WebApp1.Controllers
 {
@@ -22,6 +23,8 @@ namespace WebApp1.Controllers
             _env = env;
             conn = new SqlConnection(_context.Database.GetConnectionString());
         }
+
+    //******************* Get Client Data Automatically to Complete Booking ************
         [Route("GetBookingClientData")]
         [HttpPost]
         public JsonResult GetBookingClientData([FromBody] BookingClient cl)
@@ -48,5 +51,74 @@ namespace WebApp1.Controllers
             }
             return new JsonResult(dt);
         }
+        //***************************** Save NationalID Cards Images *******************
+        [Route("SaveNationalID_Images")]
+        [HttpPost]
+        public JsonResult SaveNationalID_Images([FromForm] upload_NationalID_Images cardimg)
+        {
+            var postedFile = cardimg.formFile;
+            string fileName = postedFile.FileName;
+            var physicalPath = _env.ContentRootPath + "/NationalIDCard_Images/" + fileName;
+            using (var stream = new FileStream(physicalPath, FileMode.Create))
+            {
+                postedFile.CopyTo(stream);
+            }
+            return new JsonResult(fileName);
+        }
+        //***************************** Save Checks Images ******************************
+        [Route("SaveChecks_Images")]
+        [HttpPost]
+        public JsonResult SaveChecks_Images([FromForm] upload_Checks_Images checkimg)
+        {
+            var postedFile = checkimg.file_c;
+            string fileName = postedFile.FileName;
+            var physicalPath = _env.ContentRootPath + "/Checks_Images/" + fileName;
+            using (var stream = new FileStream(physicalPath, FileMode.Create))
+            {
+                postedFile.CopyTo(stream);
+            }
+            return new JsonResult(fileName);
+        }
+        //*************************** Save Booking Client Data ********************************
+        [Route("SaveBookingClient")]
+        [HttpPost]
+        public JsonResult SaveBookingClient([FromBody]ClientBookingDetail client)
+        {
+            int id = Convert.ToInt32(client.BookingID);
+            bool saved = false;
+            if (id == 0)
+            {
+                string sqlinsert = @"insert into ClientBookingDetails (NationalID,NationalIdImagePath,SecondaryPhone,Address,PaymentMethod,
+                                    InstallmentYears,CheckImagePath,ClientID,ClientName,ProjectName,Unit) 
+                                    values (@NationalID,@NationalIdImagePath,@SecondaryPhone,@Address,@PaymentMethod,@InstallmentYears,@CheckImagePath
+                                            ,@ClientID,@ClientName,@ProjectName,@Unit)SELECT SCOPE_IDENTITY()";
+                using(SqlCommand cmd=new SqlCommand(sqlinsert, conn))
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@NationalID",client.NationalID);
+                    cmd.Parameters.AddWithValue("@NationalIdImagePath", client.NationalIdImagePath);
+                    cmd.Parameters.AddWithValue("@SecondaryPhone", client.SecondaryPhone);
+                    cmd.Parameters.AddWithValue("@Address", client.Address);
+                    cmd.Parameters.AddWithValue("@PaymentMethod", client.PaymentMethod);
+                    cmd.Parameters.AddWithValue("@InstallmentYears", client.InstallmentYears);
+                    cmd.Parameters.AddWithValue("@CheckImagePath", string.IsNullOrEmpty(client.CheckImagePath) ? DBNull.Value : client.CheckImagePath);
+                    cmd.Parameters.AddWithValue("@ClientID", client.ClientID);
+                    cmd.Parameters.AddWithValue("@ClientName", client.ClientName);
+                    cmd.Parameters.AddWithValue("@ProjectName", client.ProjectName);
+                    cmd.Parameters.AddWithValue("@Unit", client.Unit);
+                    id = Convert.ToInt32(cmd.ExecuteScalar());
+                    if (conn.State == ConnectionState.Open) conn.Close();
+                    saved = true;
+
+                }
+
+            }
+            
+                var data = new { saved = saved, id = id };
+            return new JsonResult(data);
+
+        }
+
     }
 }

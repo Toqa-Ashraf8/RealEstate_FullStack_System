@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApp1.EF;
 
@@ -11,9 +12,11 @@ using WebApp1.EF;
 namespace WebApp1.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20260318030318_AddClientBookingDetailsTable")]
+    partial class AddClientBookingDetailsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,15 +120,7 @@ namespace WebApp1.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ClientID")
-                        .HasColumnType("int");
-
                     b.Property<string>("ClientName")
-                        .IsRequired()
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InstallmentYears")
                         .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
@@ -211,7 +206,41 @@ namespace WebApp1.Migrations
                     b.ToTable("Negotiations");
                 });
 
-            modelBuilder.Entity("WebApp1.Models.Project", b =>
+            modelBuilder.Entity("WebApp1.Models.Rejected_negotiations_phase", b =>
+                {
+                    b.Property<int>("ClientID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CheckedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("NegotiationCondition")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProjectName")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReasonOfReject")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SuggestedPrice")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ClientID");
+
+                    b.ToTable("Rejected_negotiations_phases");
+                });
+
+            modelBuilder.Entity("WebApp1.Models.project", b =>
                 {
                     b.Property<int>("ProjectCode")
                         .ValueGeneratedOnAdd()
@@ -247,43 +276,9 @@ namespace WebApp1.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("WebApp1.Models.Rejected_negotiations_phase", b =>
-                {
-                    b.Property<int>("ClientID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CheckedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("NegotiationCondition")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ProjectName")
-                        .IsRequired()
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ReasonOfReject")
-                        .IsRequired()
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SuggestedPrice")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Unit")
-                        .IsRequired()
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ClientID");
-
-                    b.ToTable("Rejected_negotiations_phases");
-                });
-
             modelBuilder.Entity("Unit", b =>
                 {
-                    b.HasOne("WebApp1.Models.Project", null)
+                    b.HasOne("WebApp1.Models.project", null)
                         .WithMany("Units")
                         .HasForeignKey("ProjectCode1");
                 });
@@ -302,7 +297,7 @@ namespace WebApp1.Migrations
                     b.Navigation("negotiations");
                 });
 
-            modelBuilder.Entity("WebApp1.Models.Project", b =>
+            modelBuilder.Entity("WebApp1.Models.project", b =>
                 {
                     b.Navigation("Units");
                 });

@@ -2,9 +2,9 @@
 
 .final_page_wrapper {
     background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
-    font-family: 'Cairo', sans-serif!important;
+    font-family: 'Cairo', sans-serif !important;
     direction: rtl;
-    padding: 40px ;
+    padding: 40px;
 }
 
 .final_booking_container {
@@ -106,9 +106,9 @@
 }
 
 .final_image_preview_big {
-    width: objex;
+    width: 100%;
     height: 100%;
-    object-fit: cover;
+    min-height: 200px;
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -117,25 +117,40 @@
     overflow: hidden;
     box-shadow: inset 0 2px 8px rgba(0,0,0,0.02);
     border: 1px solid #edf2f7;
+    position: relative; /* عشان نوسط الكلام جواه */
 }
 
-.final_img_fluid { width: 100%; height: 100%; object-fit: contain; }
+.final_img_fluid { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    z-index: 1;
+}
 
-.final_empty_msg { text-align: center; color: #cbd5e1; }
+.final_empty_msg { 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* التوسيط المثالي في النص */
+    text-align: center; 
+    color: #cbd5e1;  
+    width: 100%;
+}
+
 .final_icon_fade { opacity: 0.3; margin-bottom: 10px; }
 
 /* الخط الفاصل */
 .final_divider { 
     border: 0; 
-    border-top: 2px solid #f1f5f9; /* خليته اسمك شوية عشان يبان */
+    border-top: 2px solid #f1f5f9; 
     margin: 25px 0; 
 }
 
-/* التعديل الجديد للزرار الكبير */
+/* الزرار الكبير */
 .final_submit_btn {
-    width: 100%; /* واخد عرض الصفحة */
+    width: 100%; 
     padding: 16px;
-    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); /* بنفسجي احترافي */
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); 
     color: white;
     border: none;
     border-radius: 20px;
