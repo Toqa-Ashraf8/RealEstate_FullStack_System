@@ -122,7 +122,7 @@ const HandleChangeImage=async(e)=>{
                 />
               </div>
           
-               <div className="input-group-modern data_cntu mb-0">
+                 <div className="input-group-modern data_cntu mb-0">
                   <label className='data_lbl'> صورة الوحدة</label>
                   <div className="file-input-wrapper">
                     <input 

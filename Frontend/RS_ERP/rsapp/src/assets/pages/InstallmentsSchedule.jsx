@@ -41,21 +41,16 @@ const InstallmentsSchedule = () => {
                             <button className="mini_btn btn-success"><Save size={16} /> حفظ التغييرات</button>
                         </div>
                     </header>
-
-              
                     <div className="mini_ins_summary_strip">
                         <div className="mini_stat_card blue"><User className="card_icon" /><div><span>العميل</span><strong>{client.ClientName}</strong></div></div>
                         <div className="mini_stat_card green"><DollarSign className="card_icon" /><div><span>الإجمالي</span><strong>{client.NegotiationPrice} ج.م</strong></div></div>
                         <div className="mini_stat_card highlight"><CalendarDays className="card_icon" /><div><span>المقدم</span><strong>{db_b.InstallmentInformation.DownPayment} ج.م</strong></div></div>
-                    </div>  
-                    
+                    </div>      
                     <div className="mini_table_section">
                         <div className="mini_table_header">
                             <h2>جدول الدفعات ({db_b.InstallmentDetails[0]?.Months || 0} شهر)</h2>
                         </div>
-
-                        <div className="mini_table_box">
-                          
+                        <div className="mini_table_box">   
                             <div className="mini_thead sticky_th">
                                 <div className="ins_th">#</div>
                                 <div className="ins_th">التاريخ</div>

@@ -19,6 +19,7 @@ import AddClients from './assets/pages/AddClients';
 import CompleteBooking from './assets/pages/CompleteBooking';
 import InstallmentsSchedule from './assets/pages/InstallmentsSchedule';
 
+
 function App() {
 
 
@@ -46,6 +47,7 @@ function App() {
               <Route path='/clientprofile' element={<ClientProfile/>}/> 
               <Route path='/complete_booking' element={<CompleteBooking/>}/>
               <Route path='/installments_schedule' element={<InstallmentsSchedule/>}/>
+           
       </Routes>
     </>
   )
