@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Data.SqlClient;
-using WebApp1.EF;
 using System.Data;
 using System.Data.SqlClient;
-using WebApp1.Models;
+using System.Data.SqlClient;
 using System.Diagnostics.Contracts;
+using WebApp1.EF;
+using WebApp1.Models;
 
 namespace WebApp1.Controllers
 {
@@ -89,8 +90,8 @@ namespace WebApp1.Controllers
             if (id == 0)
             {
                 string sqlinsert = @"insert into ClientBookingDetails (NationalID,NationalIdImagePath,SecondaryPhone,Address,ReservationAmount,PaymentMethod,
-                                    InstallmentYears,CheckImagePath,ClientID,ClientName,ProjectName,Unit) 
-                                    values (@NationalID,@NationalIdImagePath,@SecondaryPhone,@Address,@ReservationAmount,@PaymentMethod,@InstallmentYears,@CheckImagePath
+                                    CheckImagePath,ClientID,ClientName,ProjectName,Unit) 
+                                    values (@NationalID,@NationalIdImagePath,@SecondaryPhone,@Address,@ReservationAmount,@PaymentMethod,@CheckImagePath
                                             ,@ClientID,@ClientName,@ProjectName,@Unit)SELECT SCOPE_IDENTITY()";
                 using(SqlCommand cmd=new SqlCommand(sqlinsert, conn))
                 {
@@ -101,8 +102,7 @@ namespace WebApp1.Controllers
                     cmd.Parameters.AddWithValue("@SecondaryPhone", client.SecondaryPhone);
                     cmd.Parameters.AddWithValue("@Address", client.Address);
                     cmd.Parameters.AddWithValue("@ReservationAmount", client.ReservationAmount);
-                    cmd.Parameters.AddWithValue("@PaymentMethod", client.PaymentMethod);
-                    cmd.Parameters.AddWithValue("@InstallmentYears", client.InstallmentYears);
+                    cmd.Parameters.AddWithValue("@PaymentMethod", client.PaymentMethod);                    
                     cmd.Parameters.AddWithValue("@CheckImagePath", string.IsNullOrEmpty(client.CheckImagePath) ? DBNull.Value : client.CheckImagePath);
                     cmd.Parameters.AddWithValue("@ClientID", client.ClientID);
                     cmd.Parameters.AddWithValue("@ClientName", client.ClientName);
@@ -120,6 +120,34 @@ namespace WebApp1.Controllers
             return new JsonResult(data);
 
         }
+        //*************************** Generate installment Table ********************************
+        [Route("GenerateInstallments")]
+        [HttpPost]
+        public JsonResult GenerateInstallments([FromBody]InstallmentDetails request)
+        {
+            if (request == null || request.InstallmentYears <= 0)
+                return new JsonResult("بيانات غير صالحة");
+            var installments = new List<InstallmentViewModel>();
+            //الحساب المتبقي من غير المقدم
+            int remainingAmount = request.TotalAmount - request.DownPayment;
+            //حساب عدد الشهور من عدد السنين
+            int TotalMonths = request.InstallmentYears * 12;
+            //قيمة القسط الشهري 
+            decimal monthlyPrice = remainingAmount / TotalMonths;
+            for (int i = 1; i <= TotalMonths; i++)
+            {
+                installments.Add(new InstallmentViewModel
+                {
+                    InstallmentNumber = i,
+                    // إضافة شهر في كل لفة بناءً على تاريخ أول قسط
+                    DueDate = request.FirstInstallmentDate.AddMonths(i - 1),
+                    Months = TotalMonths,
+                    MonthlyAmount = monthlyPrice
+                });
 
+            }
+            return new JsonResult(installments);
+
+        }
     }
 }

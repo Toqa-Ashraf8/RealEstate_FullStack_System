@@ -216,3 +216,18 @@
     background-color: #f0fdf4 !important; /* تمييز الصف المدفوع بلون أخضر خفيف */
     opacity: 0.8;
 }
+/* عدلي السطرين دول في ملف الـ CSS */
+.mini_thead {
+    display: grid;
+    /* تقسيم الأعمدة: رقم(50) - تاريخ(120) - قيمة(1fr) - حالة(100) - زرار(100) */
+    grid-template-columns: 50px 120px 1fr 100px 100px; 
+    background: #f8fafc;
+    border-radius: 10px 10px 0 0;
+}
+
+.mini_trow {
+    display: grid;
+    grid-template-columns: 50px 120px 1fr 100px 100px;
+    border-bottom: 1px solid #f8fafc;
+    align-items: center;
+}

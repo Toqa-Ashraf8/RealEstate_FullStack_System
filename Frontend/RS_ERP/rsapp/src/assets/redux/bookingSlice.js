@@ -20,6 +20,7 @@ const initialState = {
     checkImage: "",
     savedData: "",
     InstallmentInformation: { TotalAmount: 0, DownPayment: 0, FirstInstallmentDate: "", InstallmentYears: "-1" },
+    InstallmentDetails:[],
 }
 //*********************************************************************** */
 export const FillClientData = createAsyncThunk("FillClientData/booking", async (Clientdata) => {
@@ -39,6 +40,11 @@ export const saveChecksImages = createAsyncThunk("saveChecksImages/booking", asy
 })
 export const savebookingClient = createAsyncThunk("savebookingClient/booking", async (parms) => {
     const resp = await axios.post(variables.URL_API_B + "SaveBookingClient", parms)
+        .then((res) => res.data);
+    return resp;
+})
+export const generateInstallments = createAsyncThunk("generateInstallments/booking", async (request) => {
+    const resp = await axios.post(variables.URL_API_B + "GenerateInstallments", request)
         .then((res) => res.data);
     return resp;
 })
@@ -117,6 +123,19 @@ const bookingSlice = createSlice({
                 state.savedData = action.payload.saved;
             })
             .addCase(savebookingClient.rejected, (state) => {
+                state.loading = false;
+                state.error = true;
+            })
+             //-------------------------------------------------------------
+            .addCase(generateInstallments.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(generateInstallments.fulfilled, (state, action) => {
+                state.loading = false;
+                state.InstallmentDetails = action.payload;
+
+            })
+            .addCase(generateInstallments.rejected, (state) => {
                 state.loading = false;
                 state.error = true;
             })

@@ -13,7 +13,6 @@ namespace WebApp1.Models
         public string Address { get; set; }
         public int ReservationAmount { get; set; }
         public string PaymentMethod { get; set; }
-        public int InstallmentYears { get; set; }
         public string CheckImagePath { get; set; }
         [ForeignKey("ClientID")]
         public int ClientID { get; set; }

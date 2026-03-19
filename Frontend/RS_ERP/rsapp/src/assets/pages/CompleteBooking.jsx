@@ -5,7 +5,7 @@ import '../css/CompleteBooking.css';
 import { RiSave3Fill } from "react-icons/ri";
 import { AiOutlineClear } from "react-icons/ai";
 import { FiPrinter } from "react-icons/fi";
-import { caluclateDownPayment, ChangevaluesOfBookingClient, clearInputs, FillClientData, getInstallmentData, savebookingClient, saveChecksImages, saveNationalidImage } from '../redux/bookingSlice';
+import { caluclateDownPayment, ChangevaluesOfBookingClient, clearInputs, FillClientData, generateInstallments, getInstallmentData, savebookingClient, saveChecksImages, saveNationalidImage } from '../redux/bookingSlice';
 import { variables } from '../variables';
 import {toast} from 'react-toastify'
 
@@ -15,6 +15,7 @@ const CompleteBooking = () => {
     const dispatch = useDispatch();
     const focusRef = useRef();
     const Clientdata = db.bookingClient;
+    const downPaymentRef=useRef();
     
 //************************************************************************ 
 const HandleChange=(e)=>{
@@ -87,6 +88,7 @@ const SavedData=async()=>{
         }
         const FetchClientData = async () => {
             await dispatch(FillClientData(Clientdata));
+            
         }
         FetchClientData();
     }, [dispatch, Clientdata]);
@@ -94,15 +96,16 @@ const SavedData=async()=>{
 const calcutlateDownpayment=()=>{
     const totalamount=db_b.bookingClients[0].NegotiationPrice;
    dispatch(caluclateDownPayment(totalamount));
+   downPaymentRef.current.disabled=false;
 }
-console.log(db_b.InstallmentInformation);
+
     return (
         <div className="final_page_wrapper">
             <div className="final_booking_container">
                 <div className="final_header_area">
                     <h2 className="final_main_title">استكمال بيانات الحجز والأقساط</h2>
                 </div>
-
+                
                 <div className="final_content_box animate__animated animate__fadeIn">
                     <form className="final_form_body">
                         
@@ -128,8 +131,9 @@ console.log(db_b.InstallmentInformation);
                                         </div>
                                     </div>
                                 </div>
-                            ))}
+  
 
+                            ))}
                         <hr className="final_divider" />
 
                         <div className="row mt-4">
@@ -225,6 +229,8 @@ console.log(db_b.InstallmentInformation);
                                         type="text"
                                         name="DownPayment"
                                         className="final_input_modern"
+                                        disabled
+                                        ref={downPaymentRef}
                                         value={db_b.InstallmentInformation.DownPayment || ""}
                                         onChange={HandleChangeinstallmentValues}
                                     />
@@ -271,7 +277,11 @@ console.log(db_b.InstallmentInformation);
                                             <option value="7">7 سنوات</option>
                                         </select>
                                         {db_b.InstallmentInformation.InstallmentYears !== "-1" && (
-                                            <button type="button" className="final_small_generate_btn animate__animated animate__zoomIn">
+                                            <button 
+                                            type="button" 
+                                            className="final_small_generate_btn animate__animated animate__zoomIn"
+                                            onClick={()=>dispatch(generateInstallments(db_b.InstallmentInformation))}
+                                            >
                                                 <CheckCircle size={16} /> إنشاء الأقساط
                                             </button>
                                         )}
