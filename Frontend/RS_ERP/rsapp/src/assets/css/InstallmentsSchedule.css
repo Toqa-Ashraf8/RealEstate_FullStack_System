@@ -231,3 +231,31 @@
     border-bottom: 1px solid #f8fafc;
     align-items: center;
 }
+/* تحديد الحدود لكل خلية وتوسيط الكلام */
+.ins_td {
+    padding: 12px 15px;
+    border-left: 1px solid #e2e8f0; 
+    text-align: center; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.ins_th{
+    text-align: center;
+}
+
+
+
+.mini_trow {
+    display: grid;
+    grid-template-columns: 50px 120px 1fr 100px 100px;
+    border-bottom: 1px solid #e2e8f0; 
+    align-items: stretch; 
+}
+
+
+
+/* إضافة ظل خفيف عند الوقوف على الصف */
+.mini_trow:hover {
+    background: #f1f5f9;
+}

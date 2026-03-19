@@ -1,25 +1,29 @@
 import React, { useEffect } from 'react';
 import { 
-    CalendarDays, DollarSign, User, Printer, Save, Banknote 
+    CalendarDays, DollarSign, User, Printer, Save, Banknote ,ArrowRight 
 } from 'lucide-react';
 import '../css/InstallmentsSchedule.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { FillClientData } from '../redux/bookingSlice';
+import { useDispatch, useSelector} from 'react-redux';
+import { FillClientData, generateInstallments } from '../redux/bookingSlice';
+import { useNavigate } from 'react-router-dom';
 
 const InstallmentsSchedule = () => {
     const db = useSelector((state) => state.negotiation);
     const db_b = useSelector((state) => state.booking);
     const dispatch = useDispatch();
+    const navigate=useNavigate();
     const Clientdata = db.bookingClient;
+    const installmentdata=db_b.InstallmentInformation;
 
     useEffect(() => {
         const FetchClientData = async () => {
             if (Clientdata) {
                 await dispatch(FillClientData(Clientdata));
+                await dispatch(generateInstallments(installmentdata));
             }
         }
         FetchClientData();
-    }, [dispatch, Clientdata]);
+    }, [dispatch, Clientdata,installmentdata]);
 
     return (
         <div className="mini_ins_wrapper"> 
@@ -32,12 +36,13 @@ const InstallmentsSchedule = () => {
                             <p>الوحدة: <mark>{client.Unit}</mark> - مشروع <mark>{client.ProjectName}</mark></p>
                         </div>
                         <div className="mini_ins_actions">
-                            <button className="mini_btn secundary"><Printer size={16} /> طباعة</button>
-                            <button className="mini_btn primary"><Save size={16} /> حفظ التغييرات</button>
+                              <button className="mini_btn secundary" onClick={()=>navigate('/complete_booking')}><ArrowRight  size={16} /> الرجوع لصفحة الحجز</button>
+                            <button className="mini_btn btn-info" style={{color:'#fff'}} ><Printer size={16} /> طباعة</button>
+                            <button className="mini_btn btn-success"><Save size={16} /> حفظ التغييرات</button>
                         </div>
                     </header>
 
-                    {/* كروت الملخص */}
+              
                     <div className="mini_ins_summary_strip">
                         <div className="mini_stat_card blue"><User className="card_icon" /><div><span>العميل</span><strong>{client.ClientName}</strong></div></div>
                         <div className="mini_stat_card green"><DollarSign className="card_icon" /><div><span>الإجمالي</span><strong>{client.NegotiationPrice} ج.م</strong></div></div>
@@ -46,12 +51,11 @@ const InstallmentsSchedule = () => {
                     
                     <div className="mini_table_section">
                         <div className="mini_table_header">
-                            {/* عرض عدد الشهور من أول عنصر في المصفوفة */}
                             <h2>جدول الدفعات ({db_b.InstallmentDetails[0]?.Months || 0} شهر)</h2>
                         </div>
 
                         <div className="mini_table_box">
-                            {/* الهيدر الثابت */}
+                          
                             <div className="mini_thead sticky_th">
                                 <div className="ins_th">#</div>
                                 <div className="ins_th">التاريخ</div>
@@ -60,7 +64,7 @@ const InstallmentsSchedule = () => {
                                 <div className="ins_th">الإجراء</div>
                             </div>
 
-                            {/* الجسم القابل للتمرير */}
+                       
                             <div className="mini_tbody scrollable_body">
                                 {db_b.InstallmentDetails.map((item, idx) => (
                                     <div className="mini_trow" key={idx}>

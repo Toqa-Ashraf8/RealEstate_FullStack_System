@@ -1,13 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { User, CreditCard, Phone, MapPin, FilePenLine ,Building2, Calendar, Image as ImageIcon, CheckCircle, FileText, Hash, Activity } from 'lucide-react';
+import { User,  CreditCard,  Phone,  MapPin,  FilePenLine ,CircleDollarSign,Building2,  Calendar,Image as ImageIcon, CheckCircle,  FileText, Hash,  Activity ,  Banknote } from 'lucide-react';
 import '../css/CompleteBooking.css';
 import { RiSave3Fill } from "react-icons/ri";
 import { AiOutlineClear } from "react-icons/ai";
 import { FiPrinter } from "react-icons/fi";
-import { caluclateDownPayment, ChangevaluesOfBookingClient, clearInputs, FillClientData, generateInstallments, getInstallmentData, savebookingClient, saveChecksImages, saveNationalidImage } from '../redux/bookingSlice';
+import { caluclateDownPayment,  ChangevaluesOfBookingClient,  clearInputs,  FillClientData, generateInstallments, getInstallmentData, savebookingClient, saveChecksImages, saveNationalidImage} from '../redux/bookingSlice';
 import { variables } from '../variables';
 import {toast} from 'react-toastify'
+import { useNavigate } from 'react-router-dom';
 
 const CompleteBooking = () => {
     const db = useSelector((state) => state.negotiation);
@@ -16,6 +17,7 @@ const CompleteBooking = () => {
     const focusRef = useRef();
     const Clientdata = db.bookingClient;
     const downPaymentRef=useRef();
+    const navigate=useNavigate();
     
 //************************************************************************ 
 const HandleChange=(e)=>{
@@ -96,9 +98,24 @@ const SavedData=async()=>{
 const calcutlateDownpayment=()=>{
     const totalamount=db_b.bookingClients[0].NegotiationPrice;
    dispatch(caluclateDownPayment(totalamount));
-   downPaymentRef.current.disabled=false;
-}
 
+}
+//***********************************************************************************
+const createInstallments=()=>{
+    if(db_b.InstallmentInformation.DownPayment!=="" &&
+       db_b.InstallmentInformation.FirstInstallmentDate!=="" &&
+       db_b.bookingClient.ReservationAmount !=""){
+         dispatch(generateInstallments(db_b.InstallmentInformation))
+         navigate('/installments_schedule');
+    }
+    else{
+        toast.error(" أكمل إدخال البيانات لإنشاء جدول الأقساط!", {
+            theme: "colored",
+            position: "top-left",
+        });
+    }
+}
+//***********************************************************************************
     return (
         <div className="final_page_wrapper">
             <div className="final_booking_container">
@@ -212,7 +229,7 @@ const calcutlateDownpayment=()=>{
                         <div className="row mt-4">
                             <div className="col-lg-8">
                                  <div className="final_field_group mt-3">
-                                    <label className="final_label"><CreditCard size={18} />مبلغ الحجز</label>
+                                    <label className="final_label"><CircleDollarSign  size={18} />مبلغ الحجز</label>
                                     <input
                                         type="text"
                                         name="ReservationAmount"
@@ -224,7 +241,7 @@ const calcutlateDownpayment=()=>{
                                     />
                                 </div>
                                 <div className="final_field_group mt-3">
-                                    <label className="final_label"><CreditCard size={18} />المقدم (25%)</label>
+                                    <label className="final_label"><CircleDollarSign  size={18} />المقدم (25%)</label>
                                     <input
                                         type="text"
                                         name="DownPayment"
@@ -248,7 +265,7 @@ const calcutlateDownpayment=()=>{
                                 </div>
                                 <div className="final_field_group">
                                     <label 
-                                    className="final_label"><Calendar size={18} /> طريقة الدفع</label>
+                                    className="final_label"><Banknote  size={18} /> طريقة الدفع</label>
                                     <select 
                                     name="PaymentMethod" 
                                     className="final_select_modern"
@@ -279,8 +296,8 @@ const calcutlateDownpayment=()=>{
                                         {db_b.InstallmentInformation.InstallmentYears !== "-1" && (
                                             <button 
                                             type="button" 
-                                            className="final_small_generate_btn animate__animated animate__zoomIn"
-                                            onClick={()=>dispatch(generateInstallments(db_b.InstallmentInformation))}
+                                            className="mini_btn primary"
+                                            onClick={()=>createInstallments()}
                                             >
                                                 <CheckCircle size={16} /> إنشاء الأقساط
                                             </button>
@@ -311,12 +328,7 @@ const calcutlateDownpayment=()=>{
                             </div>
                         </div>
 
-                        <div className="final_action_center mt-5">
-                            <button type="button" className="final_submit_btn">
-                                <CheckCircle size={22} />
-                                إنشاء جدول الأقساط
-                            </button>
-                        </div>
+                       
                     </form>
                 </div>
 
