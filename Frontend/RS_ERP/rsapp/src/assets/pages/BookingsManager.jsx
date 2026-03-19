@@ -4,11 +4,12 @@ import '../css/BookingsManager.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { acceptedCount, GetBookngClient } from '../redux/negotiationSlice';
-import { FillClientData } from '../redux/bookingSlice';
+import { clearInputs, FillClientData } from '../redux/bookingSlice';
 
 
 const BookingsManager = () => {
    const db = useSelector((state) => state.negotiation);
+   const db_b=useSelector((state)=>state.booking);
     const dispatch = useDispatch();
     const navigate=useNavigate();
     
@@ -16,6 +17,7 @@ const BookingsManager = () => {
 const CompleteBooking=async(index)=>{
    await dispatch(GetBookngClient(index));
    await navigate('/complete_booking');
+   await dispatch(clearInputs());
 }
 //********************************************************* */
 useEffect(()=>{

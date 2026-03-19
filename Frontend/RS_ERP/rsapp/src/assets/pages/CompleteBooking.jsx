@@ -5,7 +5,7 @@ import '../css/CompleteBooking.css';
 import { RiSave3Fill } from "react-icons/ri";
 import { AiOutlineClear } from "react-icons/ai";
 import { FiPrinter } from "react-icons/fi";
-import { ChangevaluesOfBookingClient, clearInputs, FillClientData, savebookingClient, saveChecksImages, saveNationalidImage } from '../redux/bookingSlice';
+import { caluclateDownPayment, ChangevaluesOfBookingClient, clearInputs, FillClientData, getInstallmentData, savebookingClient, saveChecksImages, saveNationalidImage } from '../redux/bookingSlice';
 import { variables } from '../variables';
 import {toast} from 'react-toastify'
 
@@ -15,15 +15,22 @@ const CompleteBooking = () => {
     const dispatch = useDispatch();
     const focusRef = useRef();
     const Clientdata = db.bookingClient;
+    
 //************************************************************************ 
 const HandleChange=(e)=>{
     const {name,value}=e.target;
     dispatch(ChangevaluesOfBookingClient({[name]:value}));
+    
+  
 }
 //************************************************************************ 
 const ClearValues=()=>{
     dispatch(clearInputs());
     focusRef.current.focus();
+}
+const HandleChangeinstallmentValues=(e)=>{
+    const {name,value}=e.target;
+   dispatch(getInstallmentData({[name]:value}));
 }
 //************************************************************************
  const handleFileChange =async (e) => {
@@ -84,6 +91,11 @@ const SavedData=async()=>{
         FetchClientData();
     }, [dispatch, Clientdata]);
 //***********************************************************************************
+const calcutlateDownpayment=()=>{
+    const totalamount=db_b.bookingClients[0].NegotiationPrice;
+   dispatch(caluclateDownPayment(totalamount));
+}
+console.log(db_b.InstallmentInformation);
     return (
         <div className="final_page_wrapper">
             <div className="final_booking_container">
@@ -201,8 +213,10 @@ const SavedData=async()=>{
                                         type="text"
                                         name="ReservationAmount"
                                         className="final_input_modern"
-                                        value={db_b.bookingClient.ReservationAmount || 0}
+                                        value={db_b.bookingClient.ReservationAmount || ""} 
+                                        onBlur={()=>calcutlateDownpayment()}
                                         onChange={HandleChange}
+                                        
                                     />
                                 </div>
                                 <div className="final_field_group mt-3">
@@ -211,8 +225,8 @@ const SavedData=async()=>{
                                         type="text"
                                         name="DownPayment"
                                         className="final_input_modern"
-                                        value={db_b.bookingClient.DownPayment || ""}
-                                        onChange={HandleChange}
+                                        value={db_b.InstallmentInformation.DownPayment || ""}
+                                        onChange={HandleChangeinstallmentValues}
                                     />
                                 </div>
 
@@ -222,8 +236,8 @@ const SavedData=async()=>{
                                         type="date"
                                         name="FirstInstallmentDate"
                                         className="final_input_modern"
-                                        value={db_b.bookingClient.FirstInstallmentDate || ""}
-                                        onChange={HandleChange}
+                                        value={db_b.InstallmentInformation.FirstInstallmentDate || ""}
+                                        onChange={HandleChangeinstallmentValues}
                                     />
                                 </div>
                                 <div className="final_field_group">
@@ -247,8 +261,8 @@ const SavedData=async()=>{
                                         <select
                                             name="InstallmentYears"
                                             className="final_select_modern"
-                                            value={db_b.bookingClient.InstallmentYears}
-                                            onChange={HandleChange}
+                                            value={db_b.InstallmentInformation.InstallmentYears}
+                                            onChange={HandleChangeinstallmentValues}
                                         >
                                             <option value="-1">-إختر السنين-</option>
                                             <option value="1">1 سنة</option>
@@ -256,7 +270,7 @@ const SavedData=async()=>{
                                             <option value="5">5 سنوات</option>
                                             <option value="7">7 سنوات</option>
                                         </select>
-                                        {db_b.bookingClient.InstallmentYears !== "-1" && (
+                                        {db_b.InstallmentInformation.InstallmentYears !== "-1" && (
                                             <button type="button" className="final_small_generate_btn animate__animated animate__zoomIn">
                                                 <CheckCircle size={16} /> إنشاء الأقساط
                                             </button>
