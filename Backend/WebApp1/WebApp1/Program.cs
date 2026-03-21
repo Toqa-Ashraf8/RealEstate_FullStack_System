@@ -66,6 +66,12 @@ app.UseStaticFiles(new StaticFileOptions
         Path.Combine(Directory.GetCurrentDirectory(), "Checks_Images")),
     RequestPath = "/Checks_Images"
 });
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "InstallmentChecks_Images")),
+    RequestPath = "/InstallmentChecks_Images"
+});
 //----------------------------------------------
 app.UseHttpsRedirection();
 app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());

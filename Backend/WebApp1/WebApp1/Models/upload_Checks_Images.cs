@@ -4,4 +4,5 @@
     {
         public IFormFile file_c { get; set; }
     }
+   
 }

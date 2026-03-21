@@ -17,18 +17,18 @@ namespace WebApp1.Migrations
                 {
                     InstallmentID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TotalPrice = table.Column<int>(type: "int", nullable: false),
-                    DownPayment = table.Column<int>(type: "int", nullable: false),
-                    MonthsCount = table.Column<int>(type: "int", nullable: false),
-                    InstallmentNo = table.Column<int>(type: "int", nullable: false),
-                    InstallmentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EachMonthPrice = table.Column<int>(type: "int", nullable: false),
-                    InstallmentStatus = table.Column<int>(type: "int", nullable: false),
-                    ClientID = table.Column<int>(type: "int", nullable: false),
-                    ClientName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProjectName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BookingID = table.Column<int>(type: "int", nullable: false)
+                    TotalPrice = table.Column<int>(type: "int", nullable: true),
+                    DownPayment = table.Column<int>(type: "int", nullable: true),
+                    MonthsCount = table.Column<int>(type: "int", nullable: true),
+                    InstallmentNo = table.Column<int>(type: "int", nullable: true),
+                    InstallmentDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EachMonthPrice = table.Column<int>(type: "int", nullable: true),
+                    InstallmentStatus = table.Column<int>(type: "int", nullable: true),
+                    ClientID = table.Column<int>(type: "int", nullable: true),
+                    ClientName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProjectName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BookingID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {

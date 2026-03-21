@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -66,7 +67,7 @@ namespace WebApp1.Controllers
             }
             return new JsonResult(fileName);
         }
-        //***************************** Save Checks Images ******************************
+        //***************************** Save Client Checks Images ******************************
         [Route("SaveChecks_Images")]
         [HttpPost]
         public JsonResult SaveChecks_Images([FromForm] upload_Checks_Images checkimg)
@@ -79,6 +80,21 @@ namespace WebApp1.Controllers
                 postedFile.CopyTo(stream);
             }
             return new JsonResult(fileName);
+        }
+        //***************************** Save Installment Checks Images ****************************
+        [Route("SaveInstallmentChecks_Images")]
+        [HttpPost]
+        public JsonResult SaveInstallmentChecks_Images([FromForm] upload_Installment_Checks check)
+        {
+            var postedFile = check.checkfile;
+            string fileName=postedFile.FileName;
+            var physicalPath = _env.ContentRootPath + "/InstallmentChecks_Images/" + fileName;
+            using(var stream=new FileStream(physicalPath, FileMode.Create))
+            {
+                postedFile.CopyTo(stream);
+            }
+            return new JsonResult(fileName);
+
         }
         //*************************** Save Booking Client Data ********************************
         [Route("SaveBookingClient")]
@@ -120,11 +136,12 @@ namespace WebApp1.Controllers
             return new JsonResult(data);
 
         }
-        //*************************** Generate installment Table ********************************
+        //*************************** Generate installment Table *******************************
         [Route("GenerateInstallments")]
         [HttpPost]
         public JsonResult GenerateInstallments([FromBody]InstallmentDetails request)
         {
+            string InitialPaymentStatus = "مستحق";
             if (request == null || request.InstallmentYears <= 0)
                 return new JsonResult("بيانات غير صالحة");
             var installments = new List<InstallmentViewModel>();
@@ -134,6 +151,7 @@ namespace WebApp1.Controllers
             int TotalMonths = request.InstallmentYears * 12;
             //قيمة القسط الشهري 
             decimal monthlyPrice = remainingAmount / TotalMonths;
+
             for (int i = 1; i <= TotalMonths; i++)
             {
                 installments.Add(new InstallmentViewModel
@@ -142,7 +160,9 @@ namespace WebApp1.Controllers
                     // إضافة شهر في كل لفة بناءً على تاريخ أول قسط
                     DueDate = request.FirstInstallmentDate.AddMonths(i - 1),
                     Months = TotalMonths,
-                    MonthlyAmount = monthlyPrice
+                    MonthlyAmount = monthlyPrice,
+                    status = InitialPaymentStatus
+
                 });
 
             }

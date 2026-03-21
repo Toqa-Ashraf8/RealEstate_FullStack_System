@@ -3,16 +3,30 @@ import "../css/PaymentTypeModal.css";
 import {Building2,Ungroup,Image as ImageIcon}from 'lucide-react'
 import { useDispatch, useSelector } from "react-redux";
 import { CiImageOn } from "react-icons/ci";
+import {  changepaymentStatus, getPaymentModalvalues, saveinstallmentCheck, showPaymentModal } from "../redux/bookingSlice";
+import { variables } from "../variables";
 const PaymentTypeModal = () => {
 const db_b = useSelector((state) => state.booking);
 const dispatch = useDispatch();
 
 //-------------------------------------------------------------
-
-
+const HandlepaymentValuesChange=(e)=>{
+  const {name,value}=e.target;
+  dispatch(getPaymentModalvalues({[name]:value}));
+}
+const HandleChangeImage=async(e)=>{
+   const { name } = e.target;
+    if (!e.target.files || e.target.files.length === 0) return; 
+       const file = e.target.files[0];
+       const formData = new FormData();
+       const fileName = file.name;
+        formData.append("checkfile", file, fileName);    
+          await  dispatch(saveinstallmentCheck(formData));
+          await  dispatch(getPaymentModalvalues({[name]:fileName}));         
+}
 //********************************************************************************/
 
-//--------------------------------------------
+
 
   return (
     <div dir="rtl">
@@ -22,6 +36,7 @@ const dispatch = useDispatch();
             <div className="mdl_titles_p">
               <span 
               className="close_p"
+              onClick={()=>dispatch(showPaymentModal(false))}
               >&times;</span>
             </div>
           </div>
@@ -33,7 +48,11 @@ const dispatch = useDispatch();
              <div className="input-group-modern data_cntp">
                 <label className='data_lbl'>طريقة الدفع </label>
                 <select 
-                className='form-select-modern'>
+                className='form-select-modern'
+                name='PaymentType'
+                value={db_b.paymentType.PaymentType || ""}
+                onChange={HandlepaymentValuesChange}
+                >
             
                   <option value="-1">-إختر-</option>
                   <option value="كاش">كاش</option>
@@ -46,8 +65,9 @@ const dispatch = useDispatch();
                   <div className="file-input-wrapper">
                     <input 
                      type="file"
-                     className='form-control-modern' 
-                     
+                     className='form-control-modern'
+                     name='CheckImage'
+                     onChange={HandleChangeImage}
                      />
                     <div className="custom-file-label">
                        <span>اضغط لرفع صورة الشيك</span>
@@ -58,10 +78,10 @@ const dispatch = useDispatch();
                 <div className="col-6">
                  <div className="final_image_preview_big">
                                    
-                         <img src="" className="final_img_fluid" alt="" />
+                         <img src={variables.URL_IMGI+db_b.installmentCheckImageName} className="final_img_fluid_I" alt="" />
                          <div className="final_empty_msg">
                             <ImageIcon size={40} className="final_icon_fade" />
-                            <p>معاينة البطاقة</p>
+                            <p>معاينة الشيك</p>
                             </div>
                     </div>
                </div>
@@ -73,7 +93,9 @@ const dispatch = useDispatch();
           <div className="footerp">
           <div className="footer_btns_container">
             <button className="btn_modal success">تحديث الحالة</button>
-            <button className="btn_modal danger">إلغاء</button>
+            <button className="btn_modal danger"
+             onClick={()=>dispatch(showPaymentModal(false))}
+            >إلغاء</button>
             </div>
           </div>
         </div>

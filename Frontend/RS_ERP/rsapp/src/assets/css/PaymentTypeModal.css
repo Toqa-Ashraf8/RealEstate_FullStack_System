@@ -102,6 +102,16 @@
   font-size: 0.9rem;
   color: #475569;
 }
+.final_img_fluid_I{
+   width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    z-index: 1;
+}
+
+.final_img_fluid_I[style*="display: none"] + .final_empty_msg{
+    display: flex !important;
+}
 
 
 @media (max-width: 768px) {

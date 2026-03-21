@@ -21,6 +21,11 @@ const initialState = {
     savedData: "",
     InstallmentInformation: { TotalAmount: 0, DownPayment: 0, FirstInstallmentDate: "", InstallmentYears: "-1" },
     InstallmentDetails:[],
+    paymentModal:false,
+    paymentType:{PaymentType:"",CheckImage:""},
+    installmentCheckImageName:"",
+    paid:0,
+    installmentRow:{}
 }
 //*********************************************************************** */
 export const FillClientData = createAsyncThunk("FillClientData/booking", async (Clientdata) => {
@@ -48,6 +53,11 @@ export const generateInstallments = createAsyncThunk("generateInstallments/booki
         .then((res) => res.data);
     return resp;
 })
+export const saveinstallmentCheck = createAsyncThunk("saveinstallmentCheck/booking", async (formData) => {
+    const resp = await axios.post(variables.URL_API_B + "SaveInstallmentChecks_Images", formData)
+        .then((res) => res.data);
+    return resp;
+})
 const bookingSlice = createSlice({
     name: 'booking',
     initialState,
@@ -62,7 +72,7 @@ const bookingSlice = createSlice({
             state.bookingClient = initialState.bookingClient;
             state.InstallmentInformation = initialState.InstallmentInformation;
             state.checkImage = "",
-                state.nationalidImage = "";
+            state.nationalidImage = "";
         },
         caluclateDownPayment: (state, action) => {
             if (state.bookingClient.ReservationAmount > 0) {
@@ -74,7 +84,24 @@ const bookingSlice = createSlice({
         },
         getInstallmentData: (state, action) => {
             state.InstallmentInformation = { ...state.InstallmentInformation, ...action.payload };
+            state.paid=0;
+        },
+        showPaymentModal:(state,action)=>
+        {
+            state.paymentModal=action.payload;
+        },
+        getPaymentModalvalues:(state,action)=>{
+            state.paymentType={...state.paymentType,...action.payload}
+        },
+        changepaymentStatus:(state,action)=>{
+            state.paid=1;
+            state.paymentModal=false;
+        },
+        getInstallmentIndexRow:(state,action)=>{
+            state.installmentRow=state.InstallmentDetails[action.payload];
         }
+         
+
     },
     extraReducers: (builder) => {
         builder
@@ -139,11 +166,24 @@ const bookingSlice = createSlice({
                 state.loading = false;
                 state.error = true;
             })
+              //-------------------------------------------------------------
+            .addCase(saveinstallmentCheck.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(saveinstallmentCheck.fulfilled, (state, action) => {
+                state.loading = false;
+                state.installmentCheckImageName = action.payload;
+
+            })
+            .addCase(saveinstallmentCheck.rejected, (state) => {
+                state.loading = false;
+                state.error = true;
+            })
 
     }
 })
 export const { GetClientDataForbooking, ChangevaluesOfBookingClient, clearInputs, caluclateDownPayment,
-    getInstallmentData,
+    getInstallmentData,showPaymentModal,getPaymentModalvalues,changepaymentStatus,getInstallmentIndexRow
 } = bookingSlice.actions;
 const bookingReducer = bookingSlice.reducer;
 export default bookingReducer;

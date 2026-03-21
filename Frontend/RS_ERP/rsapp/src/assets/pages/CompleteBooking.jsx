@@ -43,7 +43,6 @@ const HandleChangeinstallmentValues=(e)=>{
             const file = e.target.files[0];
             const formData = new FormData();
             const fileName = file.name;
-            console.log("cardimg",fileName);
             formData.append("formFile", file, fileName);    
            await  dispatch(saveNationalidImage(formData));
            await  dispatch(ChangevaluesOfBookingClient({[name]:fileName}));         
@@ -52,7 +51,6 @@ const HandleChangeinstallmentValues=(e)=>{
                 const file2 = e.target.files[0];
                 const formData_ = new FormData();
                 const fileName_ = file2.name;
-                console.log("checkimg",fileName_);
                 formData_.append("file_c", file2, fileName_);    
               await dispatch(saveChecksImages(formData_));
               await dispatch(ChangevaluesOfBookingClient({[name]:fileName_})); 
@@ -277,6 +275,16 @@ const createInstallments=()=>{
                                         <option value="شيكات بنكية">شيكات بنكية</option>
                                     </select>
                                 </div>
+                                 <div className="final_field_group mt-3 animate__animated animate__fadeIn">
+                                    <label className="final_label"><FileText size={18} /> إرفاق صورة الشيك</label>
+                                    <div className="final_upload_btn">
+                                        <input type="file" name='CheckImagePath' onChange={handleFileChange} />
+                                        <div className="final_upload_label">
+                                            <span>رفع صورة الشيك</span>
+                                            <FileText size={18} />
+                                        </div>
+                                    </div>
+                                </div>
                                 <div className="final_field_group mt-3">
                                     <label className="final_label"><Calendar size={18} /> مدة التقسيط (بالسنوات)</label>
                                     
@@ -304,16 +312,7 @@ const createInstallments=()=>{
                                         )}
                                     </div>
                                 </div>
-                                <div className="final_field_group mt-3 animate__animated animate__fadeIn">
-                                    <label className="final_label"><FileText size={18} /> إرفاق صورة الشيك</label>
-                                    <div className="final_upload_btn">
-                                        <input type="file" name='CheckImagePath' onChange={handleFileChange} />
-                                        <div className="final_upload_label">
-                                            <span>رفع صورة الشيك</span>
-                                            <FileText size={18} />
-                                        </div>
-                                    </div>
-                                </div>
+                               
                             </div>
                             <div className="col-lg-4">
                                 <div className="final_image_preview_big" style={{ height: '220px' }}>

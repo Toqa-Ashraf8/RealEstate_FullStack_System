@@ -4,8 +4,9 @@ import {
 } from 'lucide-react';
 import '../css/InstallmentsSchedule.css';
 import { useDispatch, useSelector} from 'react-redux';
-import { FillClientData, generateInstallments } from '../redux/bookingSlice';
+import { FillClientData, generateInstallments, getInstallmentIndexRow, showPaymentModal } from '../redux/bookingSlice';
 import { useNavigate } from 'react-router-dom';
+import PaymentTypeModal from '../modals/PaymentTypeModal';
 
 const InstallmentsSchedule = () => {
     const db = useSelector((state) => state.negotiation);
@@ -14,7 +15,15 @@ const InstallmentsSchedule = () => {
     const navigate=useNavigate();
     const Clientdata = db.bookingClient;
     const installmentdata=db_b.InstallmentInformation;
+//-----------------------------------------------------------------------------------
+const GetInstallmentRow=(i)=>{
+    dispatch(getInstallmentIndexRow(i));
+    dispatch(showPaymentModal(true));
+}
+console.log(db_b.installmentRow);
 
+
+//-----------------------------------------------------------------------------------
     useEffect(() => {
         const FetchClientData = async () => {
             if (Clientdata) {
@@ -24,12 +33,12 @@ const InstallmentsSchedule = () => {
         }
         FetchClientData();
     }, [dispatch, Clientdata,installmentdata]);
-
+//------------------------------------------------------------------------------------
     return (
         <div className="mini_ins_wrapper"> 
+        {db_b.paymentModal && <PaymentTypeModal/>}
             {db_b.bookingClients.map((client, index) => (
                 <div key={index} className="mini_ins_container">
-                    
                     <header className="mini_ins_header">
                         <div className="mini_ins_title_section">  
                             <h1>إدارة تحصيل الأقساط</h1>
@@ -52,7 +61,7 @@ const InstallmentsSchedule = () => {
                         </div>
                         <div className="mini_table_box">   
                             <div className="mini_thead sticky_th">
-                                <div className="ins_th">#</div>
+                                <div className="ins_th">رقم</div>
                                 <div className="ins_th">التاريخ</div>
                                 <div className="ins_th">القيمة</div>
                                 <div className="ins_th">الحالة</div>
@@ -67,10 +76,13 @@ const InstallmentsSchedule = () => {
                                         <div className="ins_td">{item.DueDate.split('T')[0]}</div>
                                         <div className="ins_td bold">{item.MonthlyAmount} ج.م</div>
                                         <div className="ins_td">
-                                            <span className="mini_badge warning">مستحق</span>
+                                            <span className="mini_badge warning">{item.status}</span>
                                         </div>
                                         <div className="ins_td">
-                                            <button className="pay_btn">
+                                            <button 
+                                            className="pay_btn"
+                                            onClick={()=>GetInstallmentRow(idx)}
+                                            >
                                                 <Banknote size={14} /> دفع
                                             </button>
                                         </div>
