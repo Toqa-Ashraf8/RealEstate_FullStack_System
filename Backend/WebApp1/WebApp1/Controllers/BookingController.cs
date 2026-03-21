@@ -141,7 +141,7 @@ namespace WebApp1.Controllers
         [HttpPost]
         public JsonResult GenerateInstallments([FromBody]InstallmentDetails request)
         {
-            string InitialPaymentStatus = "مستحق";
+            string initial_payment_status = "مستحق";
             if (request == null || request.InstallmentYears <= 0)
                 return new JsonResult("بيانات غير صالحة");
             var installments = new List<InstallmentViewModel>();
@@ -161,7 +161,7 @@ namespace WebApp1.Controllers
                     DueDate = request.FirstInstallmentDate.AddMonths(i - 1),
                     Months = TotalMonths,
                     MonthlyAmount = monthlyPrice,
-                    status = InitialPaymentStatus
+                    status = initial_payment_status
 
                 });
 
