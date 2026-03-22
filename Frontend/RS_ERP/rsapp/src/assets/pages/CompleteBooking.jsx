@@ -18,7 +18,8 @@ const CompleteBooking = () => {
     const Clientdata = db.bookingClient;
     const downPaymentRef=useRef();
     const navigate=useNavigate();
-    
+    const obj={...db_b.bookingClient,...db_b.InstallmentInformation}
+    console.log("obj",obj);
 //************************************************************************ 
 const HandleChange=(e)=>{
     const {name,value}=e.target;
@@ -63,8 +64,7 @@ const SavedData=async()=>{
     const client_name=Clientdata.ClientName;
     const project_name=Clientdata.ProjectName;
     const unit=Clientdata.Unit;
-    const parms={...db_b.bookingClient,ClientID:client_id,ClientName:client_name,ProjectName:project_name,Unit:unit};
-    console.log(parms);
+    const parms={...db.bookingClient,ClientID:client_id,ClientName:client_name,ProjectName:project_name,Unit:unit};
     try {
         const result=await dispatch(savebookingClient(parms)).unwrap();
         if(result.saved===true){
@@ -209,6 +209,16 @@ const createInstallments=()=>{
                                     onChange={HandleChange}
                                     />
                                 </div>
+                                 <div className="final_field_group mt-3">
+                                    <label className="final_label"><MapPin size={18} />الوظيفة</label>
+                                    <input 
+                                    type="text" 
+                                    name="Address" 
+                                    className="final_input_modern"
+                                    value={db_b.bookingClient.Job || ""}
+                                    onChange={HandleChange}
+                                    />
+                                </div>
                             </div>
                             <div className="col-lg-4">
                                 <div className="final_image_preview_big">
@@ -267,7 +277,7 @@ const createInstallments=()=>{
                                     <select 
                                     name="PaymentMethod" 
                                     className="final_select_modern"
-                                    value={db_b.bookingClient.PaymentMethod}
+                                    value={db_b.bookingClient.PaymentMethod || ""}
                                     onChange={HandleChange}
                                     >
                                         <option value="-1">-إختر-</option>
@@ -292,7 +302,7 @@ const createInstallments=()=>{
                                         <select
                                             name="InstallmentYears"
                                             className="final_select_modern"
-                                            value={db_b.InstallmentInformation.InstallmentYears}
+                                            value={db_b.InstallmentInformation.InstallmentYears||""}
                                             onChange={HandleChangeinstallmentValues}
                                         >
                                             <option value="-1">-إختر السنين-</option>
@@ -317,7 +327,7 @@ const createInstallments=()=>{
                             <div className="col-lg-4">
                                 <div className="final_image_preview_big" style={{ height: '220px' }}>
                                     
-                                        <img src={variables.URL_IMGC+db_b.checkImage} className="final_img_fluid" alt="" />
+                                        <img src={variables.URL_IMGC+db_b.checkImage? variables.URL_IMGC+db_b.checkImage:""} className="final_img_fluid" alt="" />
                                         <div className="final_empty_msg" >
                                             <FileText size={40} className="final_icon_fade" />
                                             <p>معاينة الشيك</p>

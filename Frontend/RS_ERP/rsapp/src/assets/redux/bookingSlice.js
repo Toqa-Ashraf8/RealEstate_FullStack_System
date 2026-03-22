@@ -11,6 +11,7 @@ const initialState = {
         NationalIdImagePath: "",
         SecondaryPhone: "",
         Address: "",
+        Job:"",
         ReservationAmount: 0,
         PaymentMethod: "-1",
         CheckImagePath: ""
@@ -24,8 +25,10 @@ const initialState = {
     paymentModal:false,
     paymentType:{PaymentType:"",CheckImage:""},
     installmentCheckImageName:"",
+    paymentRowIndex:-1,
     paid:0,
-    installmentRow:{}
+    installmentId:0
+   
 }
 //*********************************************************************** */
 export const FillClientData = createAsyncThunk("FillClientData/booking", async (Clientdata) => {
@@ -84,8 +87,8 @@ const bookingSlice = createSlice({
         },
         getInstallmentData: (state, action) => {
             state.InstallmentInformation = { ...state.InstallmentInformation, ...action.payload };
-            state.paid=0;
         },
+       
         showPaymentModal:(state,action)=>
         {
             state.paymentModal=action.payload;
@@ -93,15 +96,19 @@ const bookingSlice = createSlice({
         getPaymentModalvalues:(state,action)=>{
             state.paymentType={...state.paymentType,...action.payload}
         },
-        changepaymentStatus:(state,action)=>{
-            state.paid=1;
-            state.paymentModal=false;
+        clearpaymentModal:(state)=>{
+            state.paymentType={PaymentType:"",CheckImage:""};
+            state.installmentCheckImageName="";
         },
         getInstallmentIndexRow:(state,action)=>{
-            state.installmentRow=state.InstallmentDetails[action.payload];
+            state.paymentRowIndex=action.payload;
+        },
+        changepaymentStatus:(state,action)=>{
+            if(state.paymentType.PaymentType!==""){
+              state.InstallmentDetails[state.paymentRowIndex].Paid=1;  
+            }
+            state.paymentModal=false;
         }
-         
-
     },
     extraReducers: (builder) => {
         builder
@@ -183,7 +190,8 @@ const bookingSlice = createSlice({
     }
 })
 export const { GetClientDataForbooking, ChangevaluesOfBookingClient, clearInputs, caluclateDownPayment,
-    getInstallmentData,showPaymentModal,getPaymentModalvalues,changepaymentStatus,getInstallmentIndexRow
+    getInstallmentData,showPaymentModal,getPaymentModalvalues,changepaymentStatus,getInstallmentIndexRow,
+    clearpaymentModal
 } = bookingSlice.actions;
 const bookingReducer = bookingSlice.reducer;
 export default bookingReducer;

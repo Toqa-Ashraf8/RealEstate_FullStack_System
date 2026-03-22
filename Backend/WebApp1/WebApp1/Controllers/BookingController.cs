@@ -99,27 +99,32 @@ namespace WebApp1.Controllers
         //*************************** Save Booking Client Data ********************************
         [Route("SaveBookingClient")]
         [HttpPost]
-        public JsonResult SaveBookingClient([FromBody]ClientBookingDetail client)
+        public JsonResult SaveBookingClient([FromBody] ClientBookingDetail client)
         {
             int id = Convert.ToInt32(client.BookingID);
             bool saved = false;
             if (id == 0)
             {
-                string sqlinsert = @"insert into ClientBookingDetails (NationalID,NationalIdImagePath,SecondaryPhone,Address,ReservationAmount,PaymentMethod,
-                                    CheckImagePath,ClientID,ClientName,ProjectName,Unit) 
-                                    values (@NationalID,@NationalIdImagePath,@SecondaryPhone,@Address,@ReservationAmount,@PaymentMethod,@CheckImagePath
-                                            ,@ClientID,@ClientName,@ProjectName,@Unit)SELECT SCOPE_IDENTITY()";
-                using(SqlCommand cmd=new SqlCommand(sqlinsert, conn))
+                string sqlinsert = @"insert into ClientBookingDetails (NationalID,NationalIdImagePath,SecondaryPhone,Address,Job,ReservationAmount,PaymentMethod,
+                                    CheckImagePath,DownPayment,FirstInstallmentDate,InstallmentYears,ClientID,
+                                    ClientName,ProjectName,Unit) 
+                                    values (@NationalID,@NationalIdImagePath,@SecondaryPhone,@Address,@Job,@ReservationAmount,@PaymentMethod,
+                                           @CheckImagePath,@DownPayment,@FirstInstallmentDate,@InstallmentYears,
+                                            @ClientID,@ClientName,@ProjectName,@Unit)SELECT SCOPE_IDENTITY()";
+                using (SqlCommand cmd = new SqlCommand(sqlinsert, conn))
                 {
                     if (conn.State == ConnectionState.Closed) conn.Open();
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@NationalID",client.NationalID);
+                    cmd.Parameters.AddWithValue("@NationalID", client.NationalID);
                     cmd.Parameters.AddWithValue("@NationalIdImagePath", client.NationalIdImagePath);
                     cmd.Parameters.AddWithValue("@SecondaryPhone", client.SecondaryPhone);
                     cmd.Parameters.AddWithValue("@Address", client.Address);
                     cmd.Parameters.AddWithValue("@ReservationAmount", client.ReservationAmount);
-                    cmd.Parameters.AddWithValue("@PaymentMethod", client.PaymentMethod);                    
+                    cmd.Parameters.AddWithValue("@PaymentMethod", client.PaymentMethod);
                     cmd.Parameters.AddWithValue("@CheckImagePath", string.IsNullOrEmpty(client.CheckImagePath) ? DBNull.Value : client.CheckImagePath);
+                    cmd.Parameters.AddWithValue("@DownPayment", client.DownPayment);
+                    cmd.Parameters.AddWithValue("@FirstInstallmentDate", client.FirstInstallmentDate);
+                    cmd.Parameters.AddWithValue("@InstallmentYears", client.InstallmentYears);
                     cmd.Parameters.AddWithValue("@ClientID", client.ClientID);
                     cmd.Parameters.AddWithValue("@ClientName", client.ClientName);
                     cmd.Parameters.AddWithValue("@ProjectName", client.ProjectName);
@@ -131,7 +136,26 @@ namespace WebApp1.Controllers
                 }
 
             }
-            
+            else
+            {
+               
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            }
+
                 var data = new { saved = saved, id = id };
             return new JsonResult(data);
 
@@ -141,7 +165,7 @@ namespace WebApp1.Controllers
         [HttpPost]
         public JsonResult GenerateInstallments([FromBody]InstallmentDetails request)
         {
-            string initial_payment_status = "مستحق";
+            int initial_payment_status = 0;
             if (request == null || request.InstallmentYears <= 0)
                 return new JsonResult("بيانات غير صالحة");
             var installments = new List<InstallmentViewModel>();
@@ -161,7 +185,7 @@ namespace WebApp1.Controllers
                     DueDate = request.FirstInstallmentDate.AddMonths(i - 1),
                     Months = TotalMonths,
                     MonthlyAmount = monthlyPrice,
-                    status = initial_payment_status
+                    Paid = initial_payment_status
 
                 });
 

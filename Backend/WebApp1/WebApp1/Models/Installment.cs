@@ -6,13 +6,11 @@ namespace WebApp1.Models
     {
         [Key]
         public int InstallmentID { get; set; }
-        public int TotalPrice { get; set; }
-        public int DownPayment { get; set; }
-        public int InstallmentYears { get; set; }
-        public int MonthsCount { get; set; }
-        public DateTime InstallmentDate { get; set; }
-        public int EachMonthPrice { get; set; }
-        public int InstallmentStatus { get; set; }
+        public int InstallmentNumber { get; set; }
+        public DateTime DueDate { get; set; }
+        public int Months { get; set; }
+        public int MonthlyAmount { get; set; }
+        public Boolean Paid { get; set; }
         public int ClientID { get; set; }
         public string ClientName { get; set; }
         public string ProjectName { get; set; }

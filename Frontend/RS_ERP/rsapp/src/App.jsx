@@ -13,11 +13,11 @@ import ReservationControl from './assets/pages/ReservationControl';
 import RejectedNegotiations from './assets/pages/RejectedNegotiations';
 import AcceptedNegotiations from './assets/pages/AcceptedNegotiations';
 import BookingsManager from './assets/pages/BookingsManager';
-import ClientProfile from './assets/pages/ClientProfile';
 import UnitsCard from './assets/pages/UnitsCard';
 import AddClients from './assets/pages/AddClients';
 import CompleteBooking from './assets/pages/CompleteBooking';
 import InstallmentsSchedule from './assets/pages/InstallmentsSchedule';
+
 
 
 function App() {
@@ -43,11 +43,9 @@ function App() {
               <Route path='/negotiation_requests' element={<NegotiationRequests/>}/>
               <Route path='/booking' element={<BookingsManager/>}/> 
               <Route path='/rejected_negotiations' element={<RejectedNegotiations/>}/> 
-              <Route path='/accepted_negotiations' element={<AcceptedNegotiations/>}/> 
-              <Route path='/clientprofile' element={<ClientProfile/>}/> 
+              <Route path='/accepted_negotiations' element={<AcceptedNegotiations/>}/>  
               <Route path='/complete_booking' element={<CompleteBooking/>}/>
               <Route path='/installments_schedule' element={<InstallmentsSchedule/>}/>
-           
       </Routes>
     </>
   )

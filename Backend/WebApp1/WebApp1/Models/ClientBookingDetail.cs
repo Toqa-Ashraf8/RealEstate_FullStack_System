@@ -11,9 +11,13 @@ namespace WebApp1.Models
         public string NationalIdImagePath { get; set; }
         public string SecondaryPhone { get; set; }
         public string Address { get; set; }
-        public int ReservationAmount { get; set; }
-        public string PaymentMethod { get; set; }
+        public string Job { get; set; }
+        public int ReservationAmount { get; set; }  
+        public string PaymentMethod { get; set; } 
         public string CheckImagePath { get; set; }
+        public int DownPayment { get; set; }
+        public DateTime FirstInstallmentDate { get; set; }
+        public int InstallmentYears { get; set; }
         [ForeignKey("ClientID")]
         public int ClientID { get; set; }
         public string ClientName { get; set; }

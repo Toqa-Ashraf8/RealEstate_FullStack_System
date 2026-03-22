@@ -14,7 +14,7 @@
         public DateTime DueDate { get; set; }
         public int Months { get; set; }
         public decimal MonthlyAmount { get; set; }
-        public string status { get; set; }
+        public int Paid { get; set; }
 
     }
 }

@@ -4,7 +4,7 @@ import {
 } from 'lucide-react';
 import '../css/InstallmentsSchedule.css';
 import { useDispatch, useSelector} from 'react-redux';
-import { FillClientData, generateInstallments, getInstallmentIndexRow, showPaymentModal } from '../redux/bookingSlice';
+import { clearpaymentModal, FillClientData, generateInstallments, getInstallmentIndexRow, showPaymentModal } from '../redux/bookingSlice';
 import { useNavigate } from 'react-router-dom';
 import PaymentTypeModal from '../modals/PaymentTypeModal';
 
@@ -15,13 +15,13 @@ const InstallmentsSchedule = () => {
     const navigate=useNavigate();
     const Clientdata = db.bookingClient;
     const installmentdata=db_b.InstallmentInformation;
+    const array=db_b.InstallmentDetails
 //-----------------------------------------------------------------------------------
-const GetInstallmentRow=(i)=>{
+const GetInstallmentRowIndex=(i)=>{
     dispatch(getInstallmentIndexRow(i));
     dispatch(showPaymentModal(true));
+    dispatch(clearpaymentModal());
 }
-console.log(db_b.installmentRow);
-
 
 //-----------------------------------------------------------------------------------
     useEffect(() => {
@@ -45,12 +45,13 @@ console.log(db_b.installmentRow);
                             <p>الوحدة: <mark>{client.Unit}</mark> - مشروع <mark>{client.ProjectName}</mark></p>
                         </div>
                         <div className="mini_ins_actions">
-                              <button className="mini_btn secundary" onClick={()=>navigate('/complete_booking')}><ArrowRight  size={16} /> الرجوع لصفحة الحجز</button>
+                            <button className="mini_btn secundary" onClick={()=>navigate('/complete_booking')}><ArrowRight  size={16} /> الرجوع لصفحة الحجز</button>
                             <button className="mini_btn btn-info" style={{color:'#fff'}} ><Printer size={16} /> طباعة</button>
                             <button className="mini_btn btn-success"><Save size={16} /> حفظ التغييرات</button>
                         </div>
                     </header>
                     <div className="mini_ins_summary_strip">
+                        <div className="mini_stat_card blue"><div><span>كود القسط</span><strong>{db_b.installmentId}</strong></div></div>
                         <div className="mini_stat_card blue"><User className="card_icon" /><div><span>العميل</span><strong>{client.ClientName}</strong></div></div>
                         <div className="mini_stat_card green"><DollarSign className="card_icon" /><div><span>الإجمالي</span><strong>{client.NegotiationPrice} ج.م</strong></div></div>
                         <div className="mini_stat_card highlight"><CalendarDays className="card_icon" /><div><span>المقدم</span><strong>{db_b.InstallmentInformation.DownPayment} ج.م</strong></div></div>
@@ -76,16 +77,21 @@ console.log(db_b.installmentRow);
                                         <div className="ins_td">{item.DueDate.split('T')[0]}</div>
                                         <div className="ins_td bold">{item.MonthlyAmount} ج.م</div>
                                         <div className="ins_td">
-                                            <span className="mini_badge warning">{item.status}</span>
+                                            {item.Paid===0 ? 
+                                            (<span className="mini_badge warning">مستحق</span>)
+                                            :
+                                            (<span className="mini_badge success">تم الدفع</span>)
+                                            }
                                         </div>
+                                        {item.Paid===0 && 
                                         <div className="ins_td">
                                             <button 
                                             className="pay_btn"
-                                            onClick={()=>GetInstallmentRow(idx)}
+                                            onClick={()=>GetInstallmentRowIndex(idx)}
                                             >
                                                 <Banknote size={14} /> دفع
                                             </button>
-                                        </div>
+                                        </div>}
                                     </div>
                                 ))}
                             </div>

@@ -92,7 +92,7 @@ const HandleChangeImage=async(e)=>{
           </div>
           <div className="footerp">
           <div className="footer_btns_container">
-            <button className="btn_modal success">تحديث الحالة</button>
+            <button className="btn_modal success" onClick={()=>dispatch(changepaymentStatus())}>تحديث الحالة</button>
             <button className="btn_modal danger"
              onClick={()=>dispatch(showPaymentModal(false))}
             >إلغاء</button>
