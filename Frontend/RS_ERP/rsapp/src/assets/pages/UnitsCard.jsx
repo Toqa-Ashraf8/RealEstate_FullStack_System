@@ -5,7 +5,7 @@ import { FaRulerCombined, FaTag, FaImage, FaInfoCircle } from 'react-icons/fa';
 import { getdtlsByMaster } from '../redux/projectSlice';
 import { variables } from '../variables';
 import { formatCurrency } from '../helpers'
-
+import { HandCoins } from 'lucide-react';
 const UnitsCard = () => {
   const db = useSelector((state) => state.projects);
   const dispatch = useDispatch();
@@ -62,7 +62,7 @@ const UnitsCard = () => {
                       <span>{unit.TotalArea} م²</span>
                     </div>
                     <div className="u-card-detail">
-                      <FaTag size={12} />
+                      <HandCoins size={12} />
                       <span>{unit.MeterPrice} ج/م</span>
                     </div>
                   </div>
@@ -72,7 +72,7 @@ const UnitsCard = () => {
                       <span className="price-label">السعر الإجمالي</span>
                       <span className="price-value">{formatCurrency(unit.TotalPrice)} ج</span>
                     </div>
-                    <FaInfoCircle className="info-icon" title="تفاصيل أكثر" />
+                   
                   </div>
                 </div>
               </div>

@@ -379,7 +379,7 @@ const getinstallmentsData=(id)=>{
                             </div>
                             <div className="col-lg-4">
                                 <div className="final_image_preview_big" style={{ height: '220px' }}>
-                                                                {(() => {
+                                {(() => {
                                     const imgName2 = db_b.checkImage || db_b.bookingClient.CheckImagePath;
 
                                     if (imgName2 && imgName2 !== "null") {
