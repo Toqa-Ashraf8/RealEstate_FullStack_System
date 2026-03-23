@@ -1,7 +1,6 @@
 import './App.css'
 import 'animate.css';
 import { Routes,Route }from 'react-router-dom'
-import Home from './assets/pages/Home'
 import Projects from './assets/pages/Projects'
 import Header from './assets/nav/Header'
 import AddProjects from './assets/pages/AddProjects'
@@ -34,7 +33,6 @@ function App() {
       />
     <Header/>
       <Routes>
-              <Route path='/' element={<Home/>}/>
               <Route path="/addprojects" element={<AddProjects/>}/>
               <Route path="/projects" element={<ProjectsCard/>}/>
               <Route path="/units" element={<UnitsCard/>}/>

@@ -20,8 +20,9 @@ const CompleteBooking = () => {
     const navigate=useNavigate();
     const obj={...db_b.bookingClient,...db_b.InstallmentInformation}
     const reservationRef=useRef();
+  
+    
    
- 
 
 //************************************************************************
 const HandleChange=(e)=>{
@@ -100,17 +101,19 @@ const SavedData=async()=>{
     useEffect(() => {
         if (focusRef.current) {
             focusRef.current.focus();
-        }
-        const saved = localStorage.getItem('cachedClient');
-        
-      if (saved) {
-        const parsedData = JSON.parse(saved);
-        if (db_b.bookingClients.length === 0 && db_b.reserved===0) {
+        } 
+        const savedclient = localStorage.getItem('cachedClient');
+       if (savedclient) {
+        const parsedData = JSON.parse(savedclient); 
+        console.log("db_b.bookingClient",db_b.bookingClient) 
+        console.log("parsedData",parsedData)
+        console.log("db.indexdata",db.indexdata)
+        if (db_b.bookingClients.length === 0 || db_b.reserved===0){ 
             dispatch(FillClientData(parsedData));
         }
      }       
-     console.log("saved",saved);
- }, [dispatch, db_b.bookingClients.length]);
+
+ }, [dispatch]);
 
 //***********************************************************************************
 
@@ -161,33 +164,30 @@ const getinstallmentsData=(id)=>{
                 <div className="final_content_box animate__animated animate__fadeIn">
                     <form className="final_form_body">
                         
-                           {db_b.bookingClients.map((client, index) => (
-                                <div className="row mb-4" key={index}>
+                          
+                                <div className="row mb-4">
                                     <div className="col-md-4">
                                         <div className="final_field_group">
-                                             <input type="text" value={client.ClientID} hidden className="final_input_modern final_disabled" />
+                                             <input type="text" value={db_b.bookingClient.ClientID} hidden className="final_input_modern final_disabled" />
                                             <label className="final_label"><User size={18} /> إسم العميل</label>
-                                            <input type="text" value={client.ClientName} readOnly className="final_input_modern final_disabled" />
+                                            <input type="text" value={db_b.bookingClient.ClientName} readOnly className="final_input_modern final_disabled" />
                                         </div>
                                     </div>
                                     <div className="col-md-4">
                                         <div className="final_field_group">
                                             <label className="final_label"><Building2 size={18} /> المشروع</label>
-                                            <input type="text" value={client.ProjectName} readOnly className="final_input_modern final_disabled" />
+                                            <input type="text" value={db_b.bookingClient.ProjectName} readOnly className="final_input_modern final_disabled" />
                                         </div>
                                     </div>
                                     <div className="col-md-4">
                                         <div className="final_field_group">
                                             <label className="final_label"><Activity size={18} /> الوحدة</label>
-                                            <input type="text" value={client.Unit} readOnly className="final_input_modern final_disabled" />
+                                            <input type="text" value={db_b.bookingClient.Unit} readOnly className="final_input_modern final_disabled" />
                                         </div>
                                     </div>
                                 </div>
-  
 
-                            ))}
                         <hr className="final_divider" />
-
                         <div className="row mt-4">
                             <div className="col-lg-8">
                                 <div className="final_field_group mt-3">

@@ -9,9 +9,9 @@ const Header = () => {
     <div dir='rtl'>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
      <div className="container-fluid">
-    <Link className="navbar-brand" to="/">
+    <div className="navbar-brand" >
       <span> <MdOutlineRealEstateAgent size={35} color='teal' /> </span>
-    </Link>
+    </div>
     <button
       className="navbar-toggler"
       type="button"
@@ -25,11 +25,7 @@ const Header = () => {
     </button>
     <div className="collapse navbar-collapse" id="navbarSupportedContent">
       <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-        <li className="nav-item">
-          <Link className="nav-link" aria-current="page" to="/">
-            الرئيسية
-          </Link>
-        </li>
+        
         <li className="nav-item">
           <Link className="nav-link" to="/addprojects">
             إضافة المشاريع
@@ -57,13 +53,10 @@ const Header = () => {
         </li>
        
       </ul>
-    <div>
-      <span><MdOutlineNotifications size={30}/></span>
-    </div>
+    
     </div>
   </div>
 </nav>
-
     </div>
   )
 }

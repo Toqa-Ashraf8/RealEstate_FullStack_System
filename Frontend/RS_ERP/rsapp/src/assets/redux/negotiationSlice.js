@@ -25,6 +25,7 @@ const initialState={
         Re_approveRow:0,
         deleteModal:false,
         bookingClient:{},
+        indexdata:-1
 }
 export const negotiationCount=createAsyncThunk("negotiationCount/negotiaion",async()=>{
     const resp=await axios.get(variables.URL_API_N+"GetNegotationsCount")
@@ -121,6 +122,7 @@ const negotiationSlice=createSlice({
         },
         GetBookngClient:(state,action)=>{
             state.bookingClient=state.acceptedRequests[action.payload];  
+            state.indexdata=action.payload;
         },
     },
     //****************************************************************************** */
