@@ -16,6 +16,7 @@ const initialState = {
         PaymentMethod: "-1",
         CheckImagePath: ""
     },
+    initialClientData:{},
     bookingClients: [],
     nationalidImage: "",
     checkImage: "",
@@ -143,6 +144,9 @@ const bookingSlice = createSlice({
                 DownPayment: action.payload
             };
         },
+         GetBookngClient:(state,action)=>{
+            state.initialClientData=action.payload;    
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -151,7 +155,8 @@ const bookingSlice = createSlice({
             })
             .addCase(FillClientData.fulfilled, (state, action) => {
                 state.loading = false;
-                state.bookingClient= action.payload[0];
+                state.initialClientData= action.payload[0];
+               /*  state.bookingClient = { ...state.bookingClient, ...action.payload[0] } */
             })
             .addCase(FillClientData.rejected, (state) => {
                 state.loading = false;
@@ -253,7 +258,6 @@ const bookingSlice = createSlice({
             })
             .addCase(getreservedClientsByID.fulfilled, (state, action) => {
                 state.loading = false;
-               /*  state.bookingClients=action.payload.clientdata; */
                 state.InstallmentInformation=action.payload.installmentdata[0];
                 state.bookingClient=action.payload.clientdt[0];
                 state.InstallmentDetails=action.payload.installmentdt;
@@ -267,7 +271,7 @@ const bookingSlice = createSlice({
 })
 export const {GetClientDataForbooking, ChangevaluesOfBookingClient, clearInputs, caluclateDownPayment,
     getInstallmentData,showPaymentModal,getPaymentModalvalues,changepaymentStatus,getInstallmentIndexRow,
-    clearpaymentModal,reservedOrnot,updateDownPaymentManual,calculatenewDownPayment
+    clearpaymentModal,reservedOrnot,updateDownPaymentManual,calculatenewDownPayment,GetBookngClient
 } = bookingSlice.actions;
 const bookingReducer = bookingSlice.reducer;
 export default bookingReducer;

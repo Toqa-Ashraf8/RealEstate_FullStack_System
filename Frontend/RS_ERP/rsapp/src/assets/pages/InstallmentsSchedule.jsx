@@ -24,10 +24,10 @@ const GetInstallmentRowIndex=(i)=>{
     dispatch(clearpaymentModal());
 }
 const saveAllData=async()=>{
-    const bookingclientID=db.bookingClient.ClientID;
-    const bookingclientName=db.bookingClient.ClientName;
-    const bookingclientProject=db.bookingClient.ProjectName;
-    const bookingclientUnit=db.bookingClient.Unit;
+    const bookingclientID=db_b.initialClientData.ClientID;
+    const bookingclientName=db_b.initialClientData.ClientName;
+    const bookingclientProject=db_b.initialClientData.ProjectName;
+    const bookingclientUnit=db_b.initialClientData.Unit;
     const downpay=db_b.InstallmentInformation.DownPayment;
     const firstinstallmentDate=db_b.InstallmentInformation.FirstInstallmentDate;
     const yearsCount=db_b.InstallmentInformation.InstallmentYears;
@@ -69,7 +69,6 @@ const saveAllData=async()=>{
         await navigate('/booking');
        } 
        else{
-        
         await navigate('/booked_clients');
        }
 }
@@ -77,8 +76,11 @@ const saveAllData=async()=>{
     useEffect(() => {
      
         const FetchClientData = async () => {
-            if (Clientdata && db_b.reserved===0) {
-                await dispatch(FillClientData(Clientdata));
+         const savedData = localStorage.getItem('activeBookingClient');
+         console.log("db_b.reserved",db_b.reserved)
+            if (savedData && db_b.reserved===0 && !db_b.bookingClient.ClientID) {
+                const parsedData = JSON.parse(savedData);
+                await  dispatch(FillClientData(parsedData));
                 await dispatch(generateInstallments(installmentdata));
             }
         }
@@ -90,15 +92,15 @@ const saveAllData=async()=>{
     return (
         <div className="mini_ins_wrapper"> 
         {db_b.paymentModal && <PaymentTypeModal/>}
-            {db_b.bookingClients.map((client, index) => (
-                <div key={index} className="mini_ins_container">
+         
+                <div className="mini_ins_container">
                     <header className="mini_ins_header">
                         <div className="mini_ins_title_section">  
                             <h1>إدارة تحصيل الأقساط</h1>
-                            <p>الوحدة: <mark>{client.Unit}</mark> - مشروع <mark>{client.ProjectName}</mark></p>
+                            <p>الوحدة: <mark>{db_b.initialClientData.Unit}</mark> - مشروع <mark>{db_b.initialClientData.ProjectName}</mark></p>
                         </div>
                         <div className="mini_ins_actions">
-                            <button className="mini_btn secundary" onClick={()=>navigate('/complete_booking')}><ArrowRight  size={16} /> الرجوع لصفحة الحجز</button>
+                            <button className="mini_btn secundary" onClick={()=>navigate(-1)}><ArrowRight  size={16} /> الرجوع لصفحة الحجز</button>
                             <button className="mini_btn btn-info" style={{color:'#fff'}} onClick={() => window.print()}><Printer size={16} /> طباعة</button>
                             <button 
                             className="mini_btn btn-success"
@@ -108,8 +110,8 @@ const saveAllData=async()=>{
                     </header>
                     <div className="mini_ins_summary_strip">
                       
-                        <div className="mini_stat_card blue"><User className="card_icon" /><div><span>العميل</span><strong>{client.ClientName}</strong></div></div>
-                        <div className="mini_stat_card green"><DollarSign className="card_icon" /><div><span>الإجمالي</span><strong>{client.NegotiationPrice || db_b.bookingClient.NegotiationPrice} ج.م</strong></div></div>
+                        <div className="mini_stat_card blue"><User className="card_icon" /><div><span>العميل</span><strong>{db_b.initialClientData.ClientName}</strong></div></div>
+                        <div className="mini_stat_card green"><DollarSign className="card_icon" /><div><span>الإجمالي</span><strong>{db_b.initialClientData.NegotiationPrice} ج.م</strong></div></div>
                         <div className="mini_stat_card highlight"><CalendarDays className="card_icon" /><div><span>المقدم</span><strong>{db_b.InstallmentInformation.DownPayment}ج.م</strong></div></div>
                     </div>      
                     <div className="mini_table_section">
@@ -153,7 +155,7 @@ const saveAllData=async()=>{
                         </div>
                     </div>
                 </div>
-            ))}
+           
         </div>
     );
 };

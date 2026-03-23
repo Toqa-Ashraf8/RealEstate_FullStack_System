@@ -5,7 +5,7 @@ import '../css/CompleteBooking.css';
 import { RiSave3Fill } from "react-icons/ri";
 import { AiOutlineClear } from "react-icons/ai";
 import { FiPrinter } from "react-icons/fi";
-import { calculatenewDownPayment, caluclateDownPayment,  ChangevaluesOfBookingClient,  clearInputs,  FillClientData, generateInstallments, getInstallmentData, getreservedClientsByID, saveBookingandInstallment, saveChecksImages, saveNationalidImage, updateDownPaymentManual} from '../redux/bookingSlice';
+import { calculatenewDownPayment, caluclateDownPayment,  ChangevaluesOfBookingClient,  clearInputs,  FillClientData, generateInstallments, getInstallmentData, getreservedClientsByID, reservedOrnot, saveBookingandInstallment, saveChecksImages, saveNationalidImage, updateDownPaymentManual} from '../redux/bookingSlice';
 import { variables } from '../variables';
 import {toast} from 'react-toastify'
 import { useNavigate } from 'react-router-dom';
@@ -33,7 +33,7 @@ const ClearValues=()=>{
 }
 const HandleChangeinstallmentValues=(e)=>{
     const {name,value}=e.target;
-     const totalamount=db_b.bookingClients[0].NegotiationPrice;
+     const totalamount=db_b.bookingClient.NegotiationPrice;
     dispatch(getInstallmentData({[name]:value}));
 
 }
@@ -66,11 +66,12 @@ const SavedData=async()=>{
         return;
     }
     
-    const client_id=Clientdata.ClientID;
-    const client_name=Clientdata.ClientName;
-    const project_name=Clientdata.ProjectName;
-    const unit=Clientdata.Unit;
+    const client_id=db_b.bookingClient.ClientID;
+    const client_name=db_b.bookingClient.ClientName;
+    const project_name=db_b.bookingClient.ProjectName;
+    const unit=db_b.bookingClient.Unit;
     const parms={...db_b.bookingClient,...db_b.InstallmentInformation,ClientID:client_id,ClientName:client_name,ProjectName:project_name,Unit:unit,installments:[]};
+   console.log("parms",parms);
     try {
         const result=await dispatch(saveBookingandInstallment(parms)).unwrap();
         if(result.saved===true){
@@ -99,23 +100,12 @@ const SavedData=async()=>{
         if (focusRef.current) {
             focusRef.current.focus();
         } 
-        console.log("db_b.bookingClient",db_b.bookingClient)
-        //دي اللي تتحط لما ندوس عليedit عشان نعدل البيانات للحجز 
-        const reservedClient = localStorage.getItem('cachedClient'); 
-        const parsedData = JSON.parse(reservedClient);
-        //دي تتحط لو هدوس استكمال بيانات الحجز 
-       
-       if (reservedClient) {
-        const parsedfirstReserveClientData = JSON.parse(reservedClient);
-        console.log("parsedData",parsedData)
-        if (db_b.bookingClients.length === 0 || db_b.reserved===0){ 
-            dispatch(FillClientData(parsedfirstReserveClientData));
-        }
-        }
-        if (parsedData) {
-             dispatch(FillClientData(parsedData));
-         }
-            
+     const savedData = localStorage.getItem('activeBookingClient');
+     console.log("savedData",savedData)
+     if (savedData) {
+        const parsedData = JSON.parse(savedData);
+        dispatch(FillClientData(parsedData));
+    }
 
  }, [dispatch]);
 
@@ -123,19 +113,20 @@ const SavedData=async()=>{
 
 const calcutlateDownpayment=()=>{
     //في حالة اول مرة اسجل بيانات للحجز 
-    const totalamount=db_b.bookingClients[0].NegotiationPrice;
+    const totalamount=db_b.initialClientData.NegotiationPrice;
     if(db_b.bookingClient.BookingID===0 ){
        dispatch(caluclateDownPayment(totalamount));
     }
     else{
  // ياخد قيمة الحجز المدخلة الجديده ويحسب قيمة المقدم منها ويضع القيمة الجديده(API)في حالة انه جايب بيانات من
-        const newtotalPrice=db_b.bookingClient.NegotiationPrice;
+        const newtotalPrice=db_b.initialClientData.NegotiationPrice;
         dispatch(calculatenewDownPayment({total:newtotalPrice,newReservationAmount:reservationRef.current.value}))
-        console.log(newtotalPrice);
+        console.log("newtotalPrice",newtotalPrice);
     }
 }
 //***********************************************************************************
 const createInstallments=()=>{
+    dispatch(reservedOrnot(0))
     if(db_b.InstallmentInformation.DownPayment!=="" &&
        db_b.InstallmentInformation.FirstInstallmentDate!=="" &&
        db_b.bookingClient.ReservationAmount !=""){
@@ -172,21 +163,21 @@ const getinstallmentsData=(id)=>{
                                 <div className="row mb-4">
                                     <div className="col-md-4">
                                         <div className="final_field_group">
-                                             <input type="text" value={db_b.bookingClient.ClientID } hidden className="final_input_modern final_disabled" />
+                                             <input type="text" value={db_b.initialClientData.ClientID } hidden className="final_input_modern final_disabled" />
                                             <label className="final_label"><User size={18} /> إسم العميل</label>
-                                            <input type="text" value={db_b.bookingClient.ClientName } readOnly className="final_input_modern final_disabled" />
+                                            <input type="text" value={db_b.initialClientData.ClientName } readOnly className="final_input_modern final_disabled" />
                                         </div>
                                     </div>
                                     <div className="col-md-4">
                                         <div className="final_field_group">
                                             <label className="final_label"><Building2 size={18} /> المشروع</label>
-                                            <input type="text" value={db_b.bookingClient.ProjectName} readOnly className="final_input_modern final_disabled" />
+                                            <input type="text" value={db_b.initialClientData.ProjectName} readOnly className="final_input_modern final_disabled" />
                                         </div>
                                     </div>
                                     <div className="col-md-4">
                                         <div className="final_field_group">
                                             <label className="final_label"><Activity size={18} /> الوحدة</label>
-                                            <input type="text" value={db_b.bookingClient.Unit} readOnly className="final_input_modern final_disabled" />
+                                            <input type="text" value={db_b.initialClientData.Unit} readOnly className="final_input_modern final_disabled" />
                                         </div>
                                     </div>
                                 </div>

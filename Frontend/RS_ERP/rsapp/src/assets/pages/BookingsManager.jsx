@@ -3,9 +3,8 @@ import { UserCheck, FileEdit, Calculator, Printer, User ,ArrowLeft } from 'lucid
 import '../css/BookingsManager.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { acceptedCount, GetBookngClient} from '../redux/negotiationSlice';
-import { clearInputs, FillClientData, reservedOrnot } from '../redux/bookingSlice';
-
+import { clearInputs, FillClientData, GetBookngClient, reservedOrnot } from '../redux/bookingSlice';
+import{acceptedCount} from '../redux/negotiationSlice'
 
 const BookingsManager = () => {
    const db = useSelector((state) => state.negotiation);
@@ -16,9 +15,11 @@ const BookingsManager = () => {
  //----------------------------------------------------------
 const CompleteBooking=(index)=>{
     const selectedClient = db.acceptedRequests[index];
-   /*  dispatch(GetBookngClient(index)); */
+    const storageKey = 'activeBookingClient';
+    localStorage.removeItem(storageKey);
+    localStorage.setItem(storageKey, JSON.stringify(selectedClient));
+    dispatch(GetBookngClient(selectedClient));
     dispatch(reservedOrnot(0))
-    localStorage.setItem('cachedClientData',JSON.stringify(selectedClient));
     navigate('/complete_booking');
     dispatch(clearInputs());
 }   

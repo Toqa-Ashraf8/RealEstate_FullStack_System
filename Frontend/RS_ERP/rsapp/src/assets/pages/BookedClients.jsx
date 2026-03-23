@@ -16,9 +16,11 @@ useEffect(()=>{
 },[db_b.reservedClients])
 const editReservedClients=async(id,index)=>{
     const selectedClient=db_b.reservedClients[index];
+    const storagekey='activeBookingClient';
+    localStorage.removeItem(storagekey);
+    localStorage.setItem(storagekey, JSON.stringify(selectedClient));
     await dispatch(getreservedClientsByID(id));
     await dispatch(reservedOrnot(1));
-    localStorage.setItem('cachedClient', JSON.stringify(selectedClient));
     await navigate('/complete_booking?clientId='+id);
 }
 //----------------------------------------------------------------------
