@@ -27,7 +27,7 @@ namespace WebApp1.Controllers
             conn = new SqlConnection(_context.Database.GetConnectionString());
         }
 
-    //******************* Get Client Data Automatically to Complete Booking ************
+        //******************* Get Client Data Automatically to Complete Booking *********
         [Route("GetBookingClientData")]
         [HttpPost]
         public JsonResult GetBookingClientData([FromBody] BookingClient cl)
@@ -106,7 +106,7 @@ namespace WebApp1.Controllers
             bool saved_m = false;
             bool saved_d = false;
             bool updated = false;
-
+            string unit_status = "محجوزة";
             if (booking_id == 0)
             {
                 try
@@ -141,10 +141,12 @@ namespace WebApp1.Controllers
                         saved_m = true;
 
                     }
-
+                   
                 }
-                catch{ saved_m = false; }     
+                catch { saved_m = false; }
+                
             }
+           
             else
             {
                 try
@@ -177,6 +179,7 @@ namespace WebApp1.Controllers
                         cmd.Parameters.AddWithValue("@BookingID", booking_id);
                         cmd.ExecuteNonQuery();
                         if (conn.State == ConnectionState.Open) conn.Close();
+                        saved_m = true;
                         updated = true;
 
                     }
@@ -184,6 +187,17 @@ namespace WebApp1.Controllers
                 }
                 catch { updated = false;  }
                
+            }
+            if (saved_m == true)
+            {
+                string sqlup = "update Units set unitStatus='" + unit_status + "' where ProjectName='" + client.ProjectName + "' AND UnitName='" + client.Unit+"'";
+                using (SqlCommand cmd = new SqlCommand(sqlup, conn))
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+                    cmd.ExecuteNonQuery();
+                    if (conn.State == ConnectionState.Open) conn.Close();
+
+                }
             }
             if (client.installments.Count > 0)
             { 

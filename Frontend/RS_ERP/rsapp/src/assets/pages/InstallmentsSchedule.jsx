@@ -99,7 +99,7 @@ const saveAllData=async()=>{
                         </div>
                         <div className="mini_ins_actions">
                             <button className="mini_btn secundary" onClick={()=>navigate('/complete_booking')}><ArrowRight  size={16} /> الرجوع لصفحة الحجز</button>
-                            <button className="mini_btn btn-info" style={{color:'#fff'}} ><Printer size={16} /> طباعة</button>
+                            <button className="mini_btn btn-info" style={{color:'#fff'}} onClick={() => window.print()}><Printer size={16} /> طباعة</button>
                             <button 
                             className="mini_btn btn-success"
                             onClick={()=>saveAllData()}

@@ -48,7 +48,12 @@ const UnitsCard = () => {
                   <div style={{display:'flex',justifyContent:'space-between'}}>
                  <span><h4 className="u-card-title">{unit.unitName}</h4></span> 
                   <div className='u-card-status'>
-                    <span>{unit.unitStatus || 'غير محدد'}</span>
+                    <span style={{ 
+                    color: unit.unitStatus === 'متاحة' ? 'green' : unit.unitStatus === 'محجوزة' ? 'red' : 'gray',
+                    fontWeight: 'bold' 
+                  }}>
+                    {unit.unitStatus}
+                  </span>
                   </div>
                   </div>
                   <div className="u-card-details">

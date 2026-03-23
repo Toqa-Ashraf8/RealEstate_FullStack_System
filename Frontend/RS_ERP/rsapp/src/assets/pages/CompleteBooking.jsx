@@ -15,13 +15,15 @@ const CompleteBooking = () => {
     const db_b = useSelector((state) => state.booking);
     const dispatch = useDispatch();
     const focusRef = useRef();
-    const Clientdata = db.bookingClient;
+    const Clientdata =db_b.bookingClient; 
     const downPaymentRef=useRef();
     const navigate=useNavigate();
     const obj={...db_b.bookingClient,...db_b.InstallmentInformation}
     const reservationRef=useRef();
    
-//************************************************************************ 
+ 
+
+//************************************************************************
 const HandleChange=(e)=>{
     const {name,value}=e.target;
     dispatch(ChangevaluesOfBookingClient({[name]:value}));
@@ -61,6 +63,11 @@ const HandleChangeinstallmentValues=(e)=>{
 };
 //*******************************************************************************
 const SavedData=async()=>{
+    if (!Clientdata) {
+        toast.error("بيانات العميل غير مكتملة!");
+        return;
+    }
+    
     const client_id=Clientdata.ClientID;
     const client_name=Clientdata.ClientName;
     const project_name=Clientdata.ProjectName;
@@ -94,14 +101,17 @@ const SavedData=async()=>{
         if (focusRef.current) {
             focusRef.current.focus();
         }
-        if(db_b.reserved===0){
-            const FetchClientData = async () => {
-            await dispatch(FillClientData(Clientdata));
-        } 
-         FetchClientData();
+        const saved = localStorage.getItem('cachedClient');
+        
+      if (saved) {
+        const parsedData = JSON.parse(saved);
+        if (db_b.bookingClients.length === 0 && db_b.reserved===0) {
+            dispatch(FillClientData(parsedData));
         }
-          
- }, [dispatch, Clientdata]);
+     }       
+     console.log("saved",saved);
+ }, [dispatch, db_b.bookingClients.length]);
+
 //***********************************************************************************
 
 const calcutlateDownpayment=()=>{
@@ -111,7 +121,7 @@ const calcutlateDownpayment=()=>{
        dispatch(caluclateDownPayment(totalamount));
     }
     else{
-        // ياخد قيمة الحجز المدخلة الجديده ويحسب قيمة المقدم منها ويضع القيمة الجديده(API)في حالة انه جايب بيانات من
+ // ياخد قيمة الحجز المدخلة الجديده ويحسب قيمة المقدم منها ويضع القيمة الجديده(API)في حالة انه جايب بيانات من
         const newtotalPrice=db_b.bookingClient.NegotiationPrice;
         dispatch(calculatenewDownPayment({total:newtotalPrice,newReservationAmount:reservationRef.current.value}))
         console.log(newtotalPrice);
@@ -248,14 +258,30 @@ const getinstallmentsData=(id)=>{
                                 </div>
                             </div>
                             <div className="col-lg-4">
-                                <div className="final_image_preview_big">
-                                   
-                                        <img src={variables.URL_IMGN+db_b.nationalidImage ||variables.URL_IMGN+db_b.showreservedNationalIdPath} className="final_img_fluid" alt="" />
-                                        <div className="final_empty_msg">
-                                            <ImageIcon size={40} className="final_icon_fade" />
-                                            <p>معاينة البطاقة</p>
-                                        </div>
+                               <div className="final_image_preview_big">
+                          {(() => {
+                            const imgName = db_b.nationalidImage || db_b.bookingClient?.NationalIdImagePath;
+
+                            if (imgName && imgName !== "null") {
+                            // الحالة الأولى: لو فيه صورة
+                            return (
+                                <img 
+                                src={`${variables.URL_IMGN}/${imgName}`} 
+                                className="final_img_fluid" 
+                                alt="" 
+                                />
+                            );
+                            } else {
+                            // الحالة الثانية: لو مفيش صورة (الرسالة البديلة)
+                            return (
+                                <div className="final_empty_msg">
+                                <ImageIcon size={40} className="final_icon_fade" />
+                                <p>معاينة البطاقة</p>
                                 </div>
+                            );
+                            }
+                        })()}
+                        </div>
                             </div>
                         </div>
 
@@ -353,13 +379,28 @@ const getinstallmentsData=(id)=>{
                             </div>
                             <div className="col-lg-4">
                                 <div className="final_image_preview_big" style={{ height: '220px' }}>
-                                    
-                                        <img src={variables.URL_IMGC+db_b.checkImage || variables.URL_IMGC+db_b.showreservedCheckPath || ""} className="final_img_fluid" alt="" />
-                                        <div className="final_empty_msg" >
-                                            <FileText size={40} className="final_icon_fade" />
-                                            <p>معاينة الشيك</p>
-                                        </div>
-                                    
+                                                                {(() => {
+                                    const imgName2 = db_b.checkImage || db_b.bookingClient.CheckImagePath;
+
+                                    if (imgName2 && imgName2 !== "null") {
+                                    // الحالة الأولى: لو فيه صورة
+                                    return (
+                                        <img 
+                                        src={`${variables.URL_IMGC}/${imgName2}`} 
+                                        className="final_img_fluid" 
+                                        alt="" 
+                                        />
+                                    );
+                                    } else {
+                                    // الحالة الثانية: لو مفيش صورة (الرسالة البديلة)
+                                    return (
+                                    <div className="final_empty_msg" >
+                                                    <FileText size={40} className="final_icon_fade" />
+                                                        <p>معاينة الشيك</p>
+                                                    </div>
+                                    );
+                                    }
+                                })()}                               
                                 </div>
                             </div>
                         </div>

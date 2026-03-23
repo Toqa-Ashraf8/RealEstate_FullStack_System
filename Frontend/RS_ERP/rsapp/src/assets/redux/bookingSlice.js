@@ -33,8 +33,6 @@ const initialState = {
     bookingClientIndex:-1,
     reservedClients:[],
     reserved:-1,
-    showreservedNationalIdPath:"",
-    showreservedCheckPath:"",
 }
 //*********************************************************************** */
 export const FillClientData = createAsyncThunk("FillClientData/booking", async (Clientdata) => {
@@ -258,8 +256,6 @@ const bookingSlice = createSlice({
                 state.bookingClients=action.payload.clientdata;
                 state.InstallmentInformation=action.payload.installmentdata[0];
                 state.bookingClient=action.payload.clientdt[0];
-                state.showreservedNationalIdPath=action.payload.clientdt[0].NationalIdImagePath;
-                state.showreservedCheckPath=action.payload.clientdt[0].CheckImagePath;
                 state.InstallmentDetails=action.payload.installmentdt;
             })
             .addCase(getreservedClientsByID.rejected, (state) => {
