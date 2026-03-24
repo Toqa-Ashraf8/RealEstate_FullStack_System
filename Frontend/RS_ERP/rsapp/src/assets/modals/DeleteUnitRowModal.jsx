@@ -1,11 +1,10 @@
 import React from 'react';
 import { MdClose, MdWarning, MdDelete } from "react-icons/md";
 import '../css/DeleteUnitRowModal.css';
-import {  deleteUnitFromList, hidedeleteUnitRowModal } from '../redux/projectSlice';
+import {  deleteUnitFromList, hideDeleteUnitModal } from '../redux/projectSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const DeleteUnitRowModal = () => {
-  const db = useSelector((state) => state.projects);
   const dispatch = useDispatch();
 
   return (
@@ -13,7 +12,7 @@ const DeleteUnitRowModal = () => {
       <div className="row-modal-card">
         
         <div className="row-modal-close" 
-        onClick={()=>dispatch(hidedeleteUnitRowModal())}
+        onClick={()=>dispatch(hideDeleteUnitModal())}
         >
           <MdClose />
         </div>
@@ -29,7 +28,7 @@ const DeleteUnitRowModal = () => {
 
         <div className="row-modal-btns">
           <button className="row-btn-cancel" 
-          onClick={()=>dispatch(hidedeleteUnitRowModal())}
+          onClick={()=>dispatch(hideDeleteUnitModal())}
           >
             لا
           </button>

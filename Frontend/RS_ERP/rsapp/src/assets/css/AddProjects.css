@@ -176,6 +176,8 @@
 
 .btn_addunits { 
     margin: 40px 0;
+   /*  display: flex;
+    justify-content: flex-end; */
 }
 
 .btn_add_units {
@@ -188,9 +190,9 @@
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
     display: inline-flex;
     align-items: center;
+    box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
     gap: 10px;
 }
 

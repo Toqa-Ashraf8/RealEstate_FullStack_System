@@ -18,12 +18,11 @@ import InstallmentsSchedule from './assets/pages/InstallmentsSchedule';
 import BookedClients from './assets/pages/BookedClients';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { toast } from 'react-toastify';
 import {clearGlobalError} from './assets/redux/uiSlice'
 
 function App() {
 const dispatch = useDispatch();
-const { globalError, globalMessage } = useSelector((state) => state.ui);
+const { isLoading, globalError, globalMessage } = useSelector((state) => state.ui);
 
 useEffect(() => {
     if (globalError) {

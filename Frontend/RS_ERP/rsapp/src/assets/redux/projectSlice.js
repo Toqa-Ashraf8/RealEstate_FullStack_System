@@ -3,6 +3,7 @@ import axios from 'axios'
 import { variables } from "../variables";
 import { toast } from 'react-toastify';
 import { formatCurrency } from "../helpers";
+import { deleteProject, fetchProjectsList, fetchProjectUnits, saveCompleteProject, uploadProjectImage, uploadUnitImage } from "../projectService";
 const initialState = {
     project: {
          ProjectCode: 0, ProjectName:"", ProjectType: "-1", 
@@ -20,10 +21,7 @@ const initialState = {
     isDeleteUnitModalOpen: false,
     isDeleteProjectModalOpen: false,
     isSearchModalOpen: false,
-    // pending and rejected status
-    isLoading: false,
-    hasError: false,
-    // create status 
+    // status variables 
     unitFormMode: -1, 
     isDeleted:false, 
     saveErrorStatus: false,
@@ -32,9 +30,8 @@ const initialState = {
     unitTableRowIndex:"",
     selectedProjectRowIndex: "",
     selectedProjectCode:"",
-    
 }
-//********************************************************************************** */
+
 const projectSlice = createSlice({
     name: 'projects',
     initialState,
@@ -87,7 +84,7 @@ const projectSlice = createSlice({
             state.isDeleteUnitModalOpen = false;
         },
         calculateUnitTotalPrice: (state) => {
-            if (state.selectedUnit.TotalArea.length > 0 && state.selectedUnit.MeterPrice.length > 0) {
+            if (state.selectedUnit.TotalArea && state.selectedUnit.MeterPrice) {
                 state.calculatedUnitTotalPrice = state.selectedUnit.TotalArea * state.selectedUnit.MeterPrice;
                 state.selectedUnit.TotalPrice = state.calculatedUnitTotalPrice;
             } else {
@@ -113,80 +110,30 @@ const projectSlice = createSlice({
        
     },
     extraReducers: (builder) => {
-        builder.
-            addCase(uploadProjectImage.pending, (state) => {
-                state.loading = true;
-            })
+        builder
             .addCase(uploadProjectImage.fulfilled, (state, action) => {
-                state.loading = false;
-                state.imgName = action.payload;
-                
+             state.projectImageName = action.payload;  
             })
-            .addCase(uploadProjectImage.rejected, (state) => {
-                state.loading = false;
-                state.error = true;
-            })
-            //******************************************************* */
-            .addCase(saveCompleteProject.pending, (state) => {
-                state.loading = true;
-            })
-            .addCase(saveCompleteProject.fulfilled, (state, action) => {
-                state.loading = false;
-                state.errorSave = action.payload.errorOccured;
-                state.project.ProjectCode = action.payload.id;
 
+            .addCase(saveCompleteProject.fulfilled, (state, action) => {
+                state.saveErrorStatus = action.payload.errorOccured;
+                state.project.ProjectCode = action.payload.id;
             })
-            .addCase(saveCompleteProject.rejected, (state) => {
-                state.loading = false;
-                state.error = true;
-            })
-            //******************************************************* */
-            .addCase(uploadUnitImage.pending, (state) => {
-                state.loading = true;
-            })
+
             .addCase(uploadUnitImage.fulfilled, (state, action) => {
-                state.loading = false;
-                state.imgName_u = action.payload;
+                state.unitImageName = action.payload;
             })
-            .addCase(uploadUnitImage.rejected, (state) => {
-                state.loading = false;
-                state.error = true;
-            })
-            //******************************************************* */
-            .addCase(deleteProject.pending, (state) => {
-                state.loading = true;
-            })
+            
             .addCase(deleteProject.fulfilled, (state, action) => {
-                state.loading = false;
-                state.deleted = action.payload;
+                state.isDeleted = action.payload;
             })
-            .addCase(deleteProject.rejected, (state) => {
-                state.loading = false;
-                state.error = true;
-            })
-            //******************************************************* */
-            .addCase(fetchProjectsList.pending, (state) => {
-                state.loading = true;
-            })
+         
             .addCase(fetchProjectsList.fulfilled, (state, action) => {
-                state.loading = false;
                 state.projectsList = action.payload;
             })
-            .addCase(fetchProjectsList.rejected, (state) => {
-                state.loading = false;
-                state.error = true;
-            })
-            //******************************************************* */
-            .addCase(fetchProjectUnits.pending, (state) => {
-                state.loading = true;
-            })
+        
             .addCase(fetchProjectUnits.fulfilled, (state, action) => {
-                state.loading = false;
                 state.unitsList = action.payload;
-            })
-            .addCase(fetchProjectUnits.rejected, (state) => {
-                state.loading = false;
-                state.error = true;
             })
     }
 })

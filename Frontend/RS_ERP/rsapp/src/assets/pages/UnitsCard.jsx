@@ -2,36 +2,36 @@ import React, { useEffect } from 'react'
 import '../css/UnitsCard.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { FaRulerCombined, FaTag, FaImage, FaInfoCircle } from 'react-icons/fa';
-import { getdtlsByMaster } from '../redux/projectSlice';
 import { variables } from '../variables';
 import { formatCurrency } from '../helpers'
 import { HandCoins } from 'lucide-react';
+import { fetchProjectUnits } from '../projectService';
 const UnitsCard = () => {
-  const db = useSelector((state) => state.projects);
+  const projectState = useSelector((state) => state.projects);
   const dispatch = useDispatch();
 
   useEffect(() => {
     const Getunits = async () => {
-      if (db.fillprojectcode) {
-        await dispatch(getdtlsByMaster(db.fillprojectcode));
+      if (projectState.selectedProjectCode) {
+        await dispatch(fetchProjectUnits(projectState.selectedProjectCode));
       }
     }
     Getunits();
-  }, [db.fillprojectcode, dispatch]);
+  }, [projectState.selectedProjectCode, dispatch]);
 
  
 
   return (
     <div className="u-card-wrapper" dir="rtl">
       <div className="u-card-container">
-        {db.unitss.length === 0 ? (
+        {projectState.unitsList.length === 0 ? (
           <div className="u-card-empty">
             <FaImage size={40} color="#ccc" />
             <p>لا توجد وحدات متاحة لهذا المشروع حالياً</p>
           </div>
         ) : (
           <div className="u-card-grid">
-            {db.unitss.map((unit, index) => (
+            {projectState.unitsList.map((unit, index) => (
               <div key={index} className="u-card-item">
                 <div className="u-card-header">
                   {unit.unitImage ? (

@@ -5,7 +5,7 @@ import { selectProjectFromSearch, toggleSearchModal } from '../redux/projectSlic
 import { variables } from '../variables';
 import { fetchProjectsList, fetchProjectUnits } from '../projectService';
 const SearchProjectsModal = () => {
-  const db = useSelector((state) => state.projects);
+  const projectState = useSelector((state) => state.projects);
   const dispatch = useDispatch();
 useEffect(() => {
    const fetchData =async  () => { 
@@ -17,11 +17,11 @@ const getDataInInputs=async(i)=>{
      await dispatch(selectProjectFromSearch(i));
 }
 useEffect(() => {
-  if (db.searchRowI) {
-    dispatch(fetchProjectUnits(db.selectedProjectRowIndex));
+  if (projectState.selectedProjectRowIndex) {
+    dispatch(fetchProjectUnits(projectState.selectedProjectRowIndex));
     dispatch(toggleSearchModal(false));
   }
-}, [db.searchRowI]);
+}, [projectState.selectedProjectRowIndex]);
 
   return (
     
@@ -52,20 +52,20 @@ useEffect(() => {
                         </tr>
                     </thead>
                     <tbody>
-                        {db.projects.length===0 ?<tr><td colSpan={7} className="empty-msg">لا توجد بيانات لعرضها</td></tr>:
-                        db.projects.map((projects,i)=>
+                        {projectState.projectsList.length===0 ?<tr><td colSpan={7} className="empty-msg">لا توجد بيانات لعرضها</td></tr>:
+                        projectState.projectsList.map((project,i)=>
                         <tr key={i} onClick={()=>getDataInInputs(i)}>
-                        <td>{projects.ProjectCode}</td>
-                        <td>{projects.ProjectName}</td>
-                        <td>{projects.ProjectType}</td>
-                        <td>{projects.Location}</td>
-                        <td>{projects.TotalUnits}</td>
-                        <td>{projects.ProjectStatus}</td>
+                        <td>{project.ProjectCode}</td>
+                        <td>{project.ProjectName}</td>
+                        <td>{project.ProjectType}</td>
+                        <td>{project.Location}</td>
+                        <td>{project.TotalUnits}</td>
+                        <td>{project.ProjectStatus}</td>
                        <td>
-                                 {variables.URL_IMGP + projects.ProjectImage  ? (
+                                 {variables.URL_IMGP + project.ProjectImage  ? (
                                  <div style={{width:'50px', height:'50px', margin:'auto'}}> 
                                  <img 
-                                   src={variables.URL_IMGP + projects.ProjectImage} 
+                                   src={variables.URL_IMGP + project.ProjectImage} 
                                    alt="Project" 
                                      style={{
                                      position:'relative', 

@@ -2,17 +2,17 @@ import React from 'react';
 import { MdClose, MdWarning, MdDelete } from "react-icons/md";
 import '../css/DeleteProjectModal.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { resetProjectForm, showDeleteProjectModal } from '../redux/projectSlice';
+import { resetProjectForm, toggleDeleteProjectModal } from '../redux/projectSlice';
 import { toast } from 'react-toastify';
 import { deleteProject } from '../projectService';
 
 const DeleteProjectModal = () => {
-  const db = useSelector((state) => state.projects);
+  const projectState = useSelector((state) => state.projects);
   const dispatch = useDispatch();
 
   const DeleteAll = async () => {
-    await dispatch(deleteProject(db.project.ProjectCode));
-    await dispatch(showDeleteProjectModal(false));
+    await dispatch(deleteProject(projectState.project.ProjectCode));
+    await dispatch(toggleDeleteProjectModal(false));
     await dispatch(resetProjectForm());
     toast.error("تم حذف البيانات !", {
       theme: "colored",
@@ -23,7 +23,7 @@ const DeleteProjectModal = () => {
     <div className="delete-wrapper">
       <div className="delete-card">
         
-        <div className="delete-close-btn" onClick={() => dispatch(showDeleteProjectModal(false))}>
+        <div className="delete-close-btn" onClick={() => dispatch(toggleDeleteProjectModal(false))}>
           <MdClose />
         </div>
 
@@ -35,7 +35,7 @@ const DeleteProjectModal = () => {
           <p className="delete-description">
             هل أنت متأكد من حذف جميع بيانات هذا المشروع؟
             <br />
-            <span className="project-id">كود المشروع: {db.project?.ProjectCode}</span>
+            <span className="project-id">كود المشروع: {projectState.project?.ProjectCode}</span>
           </p>
         </div>
 
@@ -43,7 +43,7 @@ const DeleteProjectModal = () => {
            <button className="btn-action btn-yes-p" onClick={DeleteAll}>
             <MdDelete /> نعم، متأكد
           </button>
-          <button className="btn-action btn-no" onClick={() => dispatch(showDeleteProjectModal(false))}>
+          <button className="btn-action btn-no" onClick={() => dispatch(toggleDeleteProjectModal(false))}>
             لا، إلغاء
           </button>
         </div>

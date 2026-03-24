@@ -1,14 +1,14 @@
 import React from 'react'
 import '../css/UnitModal.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { calculateUnitTotalPrice, saveUnitToTable} from '../redux/projectSlice';
+import { calculateUnitTotalPrice, saveUnitToTable, setUnitData, toggleUnitModal} from '../redux/projectSlice';
 import { CiImageOn } from "react-icons/ci";
 import { variables } from '../variables';
 import { uploadUnitImage } from '../projectService';
 
 const UnitModal = () => {
 
-  const db=useSelector((state)=>state.projects);
+  const projectState=useSelector((state)=>state.projects);
   const dispatch=useDispatch();
   
 //******************************************************************* */
@@ -38,7 +38,7 @@ const HandleChangeImage=async(e)=>{
                 <div className='mdl_titles'>
                      <span
                      className='close_b'
-                     onClick={()=>dispatch(showunitMdl(false))}
+                     onClick={()=>dispatch(toggleUnitModal(false))}
                      >&times;</span>
                     <h4 className='units_title'>إضافة وحدة جديدة</h4>
                 </div>
@@ -54,7 +54,7 @@ const HandleChangeImage=async(e)=>{
                 className='form-control-modern'
                 name='serial'
                 disabled
-                value={db.selectedUnit.serial}
+                value={projectState.selectedUnit.serial}
                 onChange={HandleChangeV}
                 />
               </div>
@@ -66,7 +66,7 @@ const HandleChangeImage=async(e)=>{
                 className='form-control-modern'
                 autoFocus
                 name='unitName'
-                value={db.selectedUnit.unitName}
+                value={projectState.selectedUnit.unitName}
                 onChange={HandleChangeV}
                 autoComplete='off'
                 />
@@ -76,7 +76,7 @@ const HandleChangeImage=async(e)=>{
                 <select 
                 className='form-select-modern'
                 name='Floor'
-                value={db.selectedUnit.Floor}
+                value={projectState.selectedUnit.Floor}
                 onChange={HandleChangeV}
                 >
                   <option value="-1">-إختر-</option>
@@ -93,7 +93,7 @@ const HandleChangeImage=async(e)=>{
                 type="text" 
                 className='form-control-modern'
                 name='TotalArea'
-                value={db.selectedUnit.TotalArea}
+                value={projectState.selectedUnit.TotalArea}
                 onChange={HandleChangeV}
                 autoComplete='off'
                 />
@@ -105,7 +105,7 @@ const HandleChangeImage=async(e)=>{
                 type="text" 
                 className='form-control-modern'
                 name='MeterPrice'
-                value={db.selectedUnit.MeterPrice}
+                value={projectState.selectedUnit.MeterPrice}
                 onChange={HandleChangeV}
                 autoComplete='off'
                 onBlur={()=>dispatch(calculateUnitTotalPrice())}
@@ -117,7 +117,7 @@ const HandleChangeImage=async(e)=>{
                 type="text" 
                 className='form-control-modern'
                 name='TotalPrice'
-                value={db.selectedUnit.TotalPrice}
+                value={projectState.selectedUnit.TotalPrice}
                 onChange={HandleChangeV}
                 autoComplete='off'
                 />
@@ -143,7 +143,7 @@ const HandleChangeImage=async(e)=>{
                   <div className="img_cntu">
                     <div style={{display:'flex',alignItems:'center',justifyContent:'center',position:'relative',top:'50%'}}><span><CiImageOn size={35} /></span></div>
                    <img 
-                   src={variables.URL_IMGU+db.imgName_u} 
+                   src={variables.URL_IMGU+projectState.unitImageName} 
                    alt="" 
                    className="preview-img" 
                    style={{width:'100%',height:'100%',position:'absolute',top:'0',zIndex:'1000'}} />
@@ -159,7 +159,7 @@ const HandleChangeImage=async(e)=>{
                     >إضافة</button>
                     <button 
                     className='btn btn-danger'
-                    onClick={()=>dispatch(showunitMdl(false))}
+                    onClick={()=>dispatch(toggleUnitModal(false))}
                     >إلغاء</button>
                 </div>
             </div>

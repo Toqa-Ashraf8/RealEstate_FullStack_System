@@ -23,9 +23,14 @@ import { useDispatch, useSelector } from "react-redux";
 import UnitModal from "../modals/UnitModal";
 import { MdOutlineDomainAdd } from "react-icons/md";
 import {
+  prepareUnitModal,
+  resetProjectForm,
+  setProjectData,
+  setUnitEditingIndex,
   showDeleteUnitModal,
   toggleDeleteProjectModal,
   toggleSearchModal,
+  toggleUnitModal,
 } from "../redux/projectSlice";
 import { CiEdit } from "react-icons/ci";
 import { variables } from "../variables";
@@ -37,13 +42,14 @@ import DeleteProjectModal from "../modals/DeleteProjectModal.jsx";
 import DeleteUnitRowModal from "../modals/DeleteUnitRowModal.jsx";
 import { saveCompleteProject, uploadProjectImage } from "../projectService.js";
 const AddProjects = () => {
-  const db = useSelector((state) => state.projects);
+  const projectState = useSelector((state) => state.projects);
+  const { isLoading } = useSelector(state => state.ui);
   const dispatch = useDispatch();
   const NameRef = useRef();
-  const parms = { ...db.project, units: db.unitss };
-  //********************************************************************************* */
+  const parms = { ...projectState.project, units: projectState.unitsList };
+//********************************************************************************* */
   //--------------- Save Image ----------------------------
-  const HandleImage = async (e) => {
+  const handleImageUpload = async (e) => {
     const { name } = e.target;
     if (!e.target.files || e.target.files.length === 0) return;
     const file = e.target.files[0];
@@ -53,19 +59,18 @@ const AddProjects = () => {
     await dispatch(uploadProjectImage(formData));
     await dispatch(setProjectData({ [name]: fileName }));
   };
-  //--------------- HandleChange Master Values  ----------------------------
-  const handleChange = (e) => {
+  //--------------- HandleChange Master Inputs  ----------------------------
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     dispatch(setProjectData({ [name]: value }));
   };
-  //--------------- Clear Master Values  -----------------------------------
-  const HandleClear = () => {
+  //--------------- Clear Master Inputs  -----------------------------------
+  const handleResetForm = () => {
     dispatch(resetProjectForm());
     NameRef.current.focus();
   };
- 
   //--------------- Save Master--------------------------------------------
-  const HandleSave = async () => {
+  const handleSaveProject = async () => {
     try {
       const result = await dispatch(saveCompleteProject(parms)).unwrap();
       if (result.errorOccured) {
@@ -86,26 +91,24 @@ const AddProjects = () => {
       });
     }
   };
-
   //----------------------Add To Table Button Action----------------------
-  const AddToTable = () => {
-    dispatch(prepareUnitModal(db.unitsList.length + 1));
+  const handleOpenUnitModal = () => {
+    dispatch(prepareUnitModal(projectState.unitsList.length + 1));
     dispatch(toggleUnitModal(true));
     dispatch(setUnitEditingIndex(-1));
   };
   //-----------------------Edit Button Table Action ------------------/
-  const EditTblRow = (index) => {
+  const handleEditUnit = (index) => {
     dispatch(toggleUnitModal(true));
     dispatch(SetRowIndexvalue(index));
   };
-
-  //****************************************************************** */
+ //****************************************************************** */
   return (
     <div className="page-container">
-      {db.isUnitModalOpen && <UnitModal />}
-      {db.isDeleteUnitModalOpen && <DeleteUnitRowModal/>}
-      {db.isDeleteProjectModalOpen && <DeleteProjectModal/>}
-      {db.showmdl_s && <SearchProjectsModal />}
+      {projectState.isUnitModalOpen && <UnitModal />}
+      {projectState.isDeleteUnitModalOpen && <DeleteUnitRowModal/>}
+      {projectState.isDeleteProjectModalOpen && <DeleteProjectModal/>}
+      {projectState.isSearchModalOpen && <SearchProjectsModal />}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -118,56 +121,55 @@ const AddProjects = () => {
         </div>
 
         <div className="btns_toc_p">
-          <span
-            className="btn_c"
-            title="تنظيف"
-            onClick={() => HandleClear()}
-          >
-            <AiOutlineClear
-              size={28}
-              color="#14213d"
-            />
-          </span>
-          <span
-            className="btn_c"
-            title="إضافة جديد"
-            onClick={() => HandleClear()}
-          >
-            <MdOutlineDomainAdd
-              size={28}
-              color="#4f46e5"
-            />
-          </span>
-          <span
-            className="btn_c"
-            title="حفظ"
-            onClick={() => HandleSave()}
-          >
-            <RiSave3Fill
-              size={28}
-              color="#10b981"
-            />
-          </span>
-          <span
-            className="btn_c"
-            title="حذف"
-            onClick={() => dispatch(toggleDeleteProjectModal(true))}
-          >
-            <RiDeleteBinLine
-              size={28}
-              color="#ef4444"
-            />
-          </span>
-          <span
-            className="btn_c"
-            title="بحث"
+          <button 
+          className="icon-btn"
+          disabled={isLoading}
+          onClick={() => handleResetForm()}
+           >
+          <span className="btn_c" title="تنظيف">
+            <AiOutlineClear size={22} color="#14213d" />
+           </span>
+         </button>
+         
+          <button 
+          className="icon-btn"
+          disabled={isLoading}
+          onClick={() => handleResetForm()}
+           >
+           <span className="btn_c" title="إضافة جديد">
+             <MdOutlineDomainAdd size={22} color="#4f46e5"/>     
+           </span>
+         </button>
+           
+          <button 
+          className="icon-btn"
+          disabled={isLoading}
+           onClick={() => handleSaveProject()}
+           >
+           <span className="btn_c" title="حفظ">
+             <RiSave3Fill size={22} color="#10b981"/>     
+           </span>
+         </button>
+             
+          <button 
+          className="icon-btn"
+          disabled={isLoading}
+          onClick={() => dispatch(toggleDeleteProjectModal(true))}
+           >
+           <span className="btn_c" title="حذف">
+             <RiDeleteBinLine size={22} color="#ef4444"/>     
+           </span>
+         </button>
+             
+            <button 
+            className="icon-btn"
+            disabled={isLoading}
             onClick={() => dispatch(toggleSearchModal(true))}
-          >
-            <FaSearch
-              size={24}
-              color="#3b82f6"
-            />
-          </span>
+           >
+           <span className="btn_c" title="بحث">
+             <FaSearch size={22} color="#3b82f6"/>     
+           </span>
+         </button> 
         </div>
 
         <div className="container All_cnt">
@@ -182,8 +184,8 @@ const AddProjects = () => {
                     type="text"
                     className="form-control-modern inp_code"
                     name="ProjectCode"
-                    onChange={handleChange}
-                    value={db.project.ProjectCode || 0}
+                    onChange={handleInputChange}
+                    value={projectState.project.ProjectCode || 0}
                     disabled
                   />
                 </div>
@@ -197,8 +199,8 @@ const AddProjects = () => {
                     className="form-control-modern"
                     autoFocus
                     name="ProjectName"
-                    value={db.project.ProjectName || ""}
-                    onChange={handleChange}
+                    value={projectState.project.ProjectName || ""}
+                    onChange={handleInputChange}
                     ref={NameRef}
                     autoComplete="off"
                   />
@@ -211,8 +213,8 @@ const AddProjects = () => {
                   <select
                     className="form-select-modern"
                     name="ProjectType"
-                    value={db.project.ProjectType || ""}
-                    onChange={handleChange}
+                    value={projectState.project.ProjectType || ""}
+                    onChange={handleInputChange}
                   >
                     <option value="-1">-- إختر النوع --</option>
                     <option value="تجاري">تجاري</option>
@@ -231,8 +233,8 @@ const AddProjects = () => {
                     type="text"
                     className="form-control-modern"
                     name="Location"
-                    value={db.project.Location || ""}
-                    onChange={handleChange}
+                    value={projectState.project.Location || ""}
+                    onChange={handleInputChange}
                     autoComplete="off"
                   />
                 </div>
@@ -246,8 +248,8 @@ const AddProjects = () => {
                     placeholder="0"
                     className="form-control-modern"
                     name="TotalUnits"
-                    value={db.project.TotalUnits || 0}
-                    onChange={handleChange}
+                    value={projectState.project.TotalUnits || 0}
+                    onChange={handleInputChange}
                     autoComplete="off"
                   />
                 </div>
@@ -259,8 +261,8 @@ const AddProjects = () => {
                   <select
                     className="form-select-modern"
                     name="ProjectStatus"
-                    value={db.project.ProjectStatus || ""}
-                    onChange={handleChange}
+                    value={projectState.project.ProjectStatus || ""}
+                    onChange={handleInputChange}
                   >
                     <option value="-1">-- اختر الحالة --</option>
                     <option value="قيد الإنشاء">قيد الإنشاء</option>
@@ -281,7 +283,7 @@ const AddProjects = () => {
                       className="form-control-modern"
                       id="project-image"
                       name="ProjectImage"
-                      onChange={HandleImage}
+                      onChange={handleImageUpload}
                     />
                     <div className="custom-file-label">
                       <span>اضغط لرفع صورة المشروع</span>
@@ -296,7 +298,7 @@ const AddProjects = () => {
                   <img
                     src={
                       variables.URL_IMGP +
-                      (db.project.ProjectImage || db.imgName || "")
+                      (projectState.project.ProjectImage || projectState.projectImageName || "")
                     }
                     alt=""
                     className="preview-img"
@@ -310,7 +312,8 @@ const AddProjects = () => {
         <div className="btn_addunits">
           <button
             className="btn btn-primary btn_add_units"
-            onClick={() => AddToTable()}
+             disabled={isLoading}
+            onClick={() => handleOpenUnitModal()}
           >
             <MdAdd size={20} /> إضافة وحدات للمشروع
           </button>
@@ -331,7 +334,7 @@ const AddProjects = () => {
               </tr>
             </thead>
             <tbody>
-              {db.unitss.length === 0 ? (
+              {projectState.unitsList.length === 0 ? (
                 <tr>
                   <td
                     colSpan={8}
@@ -341,17 +344,17 @@ const AddProjects = () => {
                   </td>{" "}
                 </tr>
               ) : (
-                db.unitss.map((unitt, index) => (
+                projectState.unitsList.map((unit, index) => (
                   
                   <tr key={index}>
-                    <td>{unitt.serial}</td>
-                    <td>{unitt.unitName}</td>
-                    <td>{unitt.Floor}</td>
-                    <td>{unitt.TotalArea} م²</td>
-                    <td>{unitt.MeterPrice} ج</td>
-                    <td>{formatCurrency(unitt.TotalPrice)} ج</td>
+                    <td>{unit.serial}</td>
+                    <td>{unit.unitName}</td>
+                    <td>{unit.Floor}</td>
+                    <td>{unit.TotalArea} م²</td>
+                    <td>{unit.MeterPrice} ج</td>
+                    <td>{formatCurrency(unit.TotalPrice)} ج</td>
                     <td>
-                      {variables.URL_IMGU && unitt.unitImage ? (
+                      {variables.URL_IMGU && unit.unitImage ? (
                         <div
                           style={{
                             width: "50px",
@@ -360,7 +363,7 @@ const AddProjects = () => {
                           }}
                         >
                           <img
-                            src={variables.URL_IMGU + (unitt.unitImage || db.imgName_u)}
+                            src={variables.URL_IMGU + (unit.unitImage || projectState.unitImageName)}
                             alt="Unit"
                             style={{
                               position: "relative",
@@ -392,20 +395,20 @@ const AddProjects = () => {
                     </td>
                     <td>
                       <div className="btns_dtls">
-                        <span>
-                          <CiEdit
-                            size={25}
-                            color="blue"
-                            onClick={() => EditTblRow(index)}
-                          />
-                        </span>
-                        <span>
-                          <MdDeleteOutline
-                            size={25}
-                            color="red"
-                            onClick={() => dispatch(showDeleteUnitModal(index))}
-                          />
-                        </span>
+                       <button 
+                          className="icon-btn"
+                          disabled={isLoading}
+                          onClick={() => handleEditUnit(index)}
+                          >
+                       <CiEdit size={25} color="blue" />
+                      </button>
+                      <button 
+                          className="icon-btn"
+                          disabled={isLoading} 
+                          onClick={() => dispatch(showDeleteUnitModal(index))}
+                        > 
+                          <MdDeleteOutline size={25} color="red" />                            
+                       </button>
                       </div>
                     </td>
                   </tr>

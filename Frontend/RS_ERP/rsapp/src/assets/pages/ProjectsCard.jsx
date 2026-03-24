@@ -1,19 +1,20 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { variables } from '../variables';
-import { GetProjectCode, searchMaster } from '../redux/projectSlice';
+import { updateSelectedProjectCode} from '../redux/projectSlice';
 import '../css/ProjectsCard.css';
 import { FaMapMarkerAlt, FaBuilding, FaHome, FaStore, FaHospital, FaImage, FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { fetchProjectsList } from '../projectService';
 
 const ProjectsCard = () => {
-  const db = useSelector((state) => state.projects);
+  const projectState = useSelector((state) => state.projects);
   const dispatch = useDispatch();
   const navigate=useNavigate();
 
   //----------------------------------------------------------------------------------
   useEffect(() => {
-    dispatch(searchMaster());
+    dispatch(fetchProjectsList());
   }, [dispatch]);
 
   const getProjectIcon = (type) => {
@@ -29,17 +30,17 @@ const ProjectsCard = () => {
   return (
     <div className="arch-wrapper page-container" dir="rtl">
       <div className="arch-container ">
-        {db.projects.length === 0 ? (
+        {projectState.projectsList.length === 0 ? (
           <div className="arch-empty animate__animated animate__fadeIn">
             <FaImage size={50} />
             <h3>لا توجد مشاريع متاحة حالياً</h3>
           </div>
         ) : (
           <div className="arch-grid">
-            {db.projects.map((project, i) => (
+            {projectState.projectsList.map((project, i) => (
               <div key={i} 
               className="arch-item animate__animated animate__zoomIn" style={{ animationDelay: `${i * 0.1}s` }}
-              onClick={()=>dispatch(GetProjectCode(i))}
+              onClick={()=>dispatch(updateSelectedProjectCode(i))}
               >
                 <div className="arch-card" data-type={project.ProjectType}>
                   
