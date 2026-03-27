@@ -13,7 +13,7 @@ body {
 
 .crm_header {
     text-align: center;
-    margin: 40px 0 20px;
+    margin: 20px 0 20px;
 }
 
 .crm_title {
@@ -44,7 +44,7 @@ body {
 .main_crm {
     width: 85%; 
     max-width: 1100px;
-    margin: 30px auto;
+    margin: 20px auto;
     padding: 40px;
     border-radius: 30px;
     background: rgba(255, 255, 255, 0.8);
@@ -97,8 +97,27 @@ body {
     box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1) !important;
     outline: none;
 }
+.userName_inp{
+    width: 200px!important;
+    margin-right: 0 !important;
+    padding: 12px 15px !important;
+    border-radius: 12px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    transition: 0.3s !important;
+}
+.userName_inp:focus{
+    border-color: #4f46e5 !important;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1) !important;
+    outline: none;
+}
+.data_user{
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
 
-/* حقل الملاحظات يأخذ العرض كاملاً */
+
 .data_crm:has(.crm_notes) {
     grid-column: span 2;
 }

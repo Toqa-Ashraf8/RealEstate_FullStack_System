@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { registerUsers } from '../services/authService';
 
 const Register = () => {
-  const {user,tokenRegisterUser}=useSelector((state)=>state.auth);
+  const {user,userName}=useSelector((state)=>state.auth);
   const {isLoading}=useSelector((state)=>state.ui);
   const dispatch=useDispatch();
   const navigate=useNavigate();
@@ -37,7 +37,7 @@ const handleRegister=async()=>{
           theme: "colored",
           position: "top-left",
       });
-     navigate('/addprojects');
+     navigate('/projects');
     }
     else if(result.isExisted===true){
         toast.error("هذا البريد الإلكتروني موجود بالفعل , حاول مرة أخري", {
@@ -52,7 +52,7 @@ const handleRegister=async()=>{
     })
   }
 }
-console.log("tokenRegisterUser",tokenRegisterUser)
+
   return (
     <div className="auth-page-container">
       <motion.div 

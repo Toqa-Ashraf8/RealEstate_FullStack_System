@@ -143,10 +143,11 @@ namespace WebApp1.Controllers
                             }
 
                          string sqlin_dtls = @"insert into Negotiations (serialCode,ProjectName,Unit,OriginalPrice,NegotiationPrice,
-                                                        DiscountAmount,ClientID,ClientName,NegotiationStatus,
-                                                          NegotiationDate,checkedByAdmin) values(@serialCode,@ProjectName,@Unit,@OriginalPrice,@NegotiationPrice,
-                                                           @DiscountAmount,@ClientID,@ClientName,@NegotiationStatus,@NegotiationDate,
-                                                           @checkedByAdmin)";
+                                                          DiscountAmount,ClientID,ClientName,NegotiationStatus,
+                                                          NegotiationDate,checkedByAdmin,Requester) values(@serialCode,@ProjectName,@Unit,@OriginalPrice,
+                                                           @NegotiationPrice,@DiscountAmount
+                                                           ,@ClientID,@ClientName,@NegotiationStatus,@NegotiationDate,
+                                                           @checkedByAdmin,@Requester)";
                             using (SqlCommand cmd = new SqlCommand(sqlin_dtls, conn))
                             {
                                 if (conn.State == ConnectionState.Closed) conn.Open();
@@ -164,6 +165,7 @@ namespace WebApp1.Controllers
                                     cmd.Parameters.AddWithValue("@NegotiationStatus", neg.NegotiationStatus);
                                     cmd.Parameters.AddWithValue("@NegotiationDate", neg.NegotiationDate);
                                     cmd.Parameters.AddWithValue("@checkedByAdmin", neg.checkedByAdmin);
+                                    cmd.Parameters.AddWithValue("@Requester", neg.Requester);
                                     cmd.ExecuteNonQuery();
                                     nullData = false;
                                 }

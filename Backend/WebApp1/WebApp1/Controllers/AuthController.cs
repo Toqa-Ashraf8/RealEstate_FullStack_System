@@ -1,6 +1,5 @@
 ﻿using Azure.Core;
 using BCrypt.Net;
-using BCrypt.Net;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Http;
@@ -9,18 +8,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
 using System.Data;
 using System.Data.SqlClient;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Security.Cryptography.Xml;
 using System.Text;
 using WebApp1.EF;
 using WebApp1.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+//using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApp1.Controllers
 {
@@ -95,7 +92,10 @@ namespace WebApp1.Controllers
                 signingCredentials: creds
             );
             if (conn.State == ConnectionState.Open) conn.Close();
-            var data = new { token = new JwtSecurityTokenHandler().WriteToken(token) , role=user.Role};
+            var data = new { token = new JwtSecurityTokenHandler().WriteToken(token) , 
+                             role=user.Role, 
+                             user=user.UserName
+                            };
             return new JsonResult(data);
 
         }
@@ -108,6 +108,7 @@ namespace WebApp1.Controllers
             bool isNull = false;
             string savedPassword = "";
             string user_role = "";
+            string user_name = "";
             if (userData == null) 
             {
                 isNull = true;
@@ -126,6 +127,7 @@ namespace WebApp1.Controllers
             {
                 savedPassword = dt.Rows[0]["Password"].ToString();
                 user_role = dt.Rows[0]["Role"].ToString();
+                user_name= dt.Rows[0]["UserName"].ToString();
 
             }
             
@@ -156,7 +158,10 @@ namespace WebApp1.Controllers
                 signingCredentials: creds
             );
             if (conn.State == ConnectionState.Open) conn.Close();
-            var data = new { token = new JwtSecurityTokenHandler().WriteToken(token),role= user_role };
+            var data = new { token = new JwtSecurityTokenHandler().WriteToken(token),
+                             role= user_role,
+                             user= user_name 
+                            };
             return new JsonResult(data);
 
         }

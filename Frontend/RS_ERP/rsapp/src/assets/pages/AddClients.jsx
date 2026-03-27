@@ -63,11 +63,12 @@ const AddClients = () => {
     isDeleteNegotiationModalOpen,
     isSearchClientsModalOpen
   }= useSelector((state) => state.clients);
+  const {userName}=useSelector((state)=>state.auth);
   const {isLoading}=useSelector((state)=>state.ui);
   const dispatch = useDispatch();
   const nameRef = useRef();
   const codeRef = useRef();
-  
+    
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     dispatch(setClientData({[name]:value}));
@@ -93,27 +94,24 @@ const AddClients = () => {
 const handleEditNegotiation=(index)=>{
 dispatch(editingNegotiationRow(index));
 }
-
-  const handleSaveClient=async()=>{
-    const parms={...client,negotiations:negotiationsList}
+const handleSaveClient=async()=>{  
+const parms={...client,negotiations:negotiationsList.map(item=>({ ...item,Requester:userName}))}
    
-  try {
-         const result = await dispatch(saveClient(parms)).unwrap();
-         if(result.nullData===false){
-            toast.success("تم حفظ البيانات بنجاح ", {
-             theme: "colored",
-             position: "top-left",
-           }); 
-         }
-          
+    try {
+     const result = await dispatch(saveClient(parms)).unwrap();
+     if(result.nullData===false){
+       toast.success("تم حفظ البيانات بنجاح ", {
+        theme: "colored",
+        position: "top-left",
+        }); 
+        }   
        } catch (error) {
          toast.error("حدث خطأ في الاتصال بالخادم", {
            theme: "colored",
            position: "top-center",
          });
-       }
+       }   
 }
-
 const handlePreviousClient=()=>{
   try {
     dispatch(fetchPreviousClient(client.ClientID))
@@ -136,9 +134,8 @@ const handleNextClient=()=>{
            position: "top-center",
     });
   }
-  console.log(client.ClientID)
 }
-console.log(client.ClientID)
+
 useEffect(()=>{
   if(nameRef.current.focus())nameRef.current.focus();
 },[])
@@ -212,6 +209,10 @@ useEffect(()=>{
         </button>
       </div>
     <div className="main_crm">
+       <div className="data_user">
+      <label className="lbl_crm"><User size={18} />المسئول</label>
+      <input type="text" className="userName_inp" disabled value={userName} />
+    </div>
   <div className="crm_cnt">
     {/* كود العميل */}
     <div className="data_crm">

@@ -28,7 +28,6 @@ const Re_Approve=(index)=>{
             {db.confirmModal && <ConfirmModal/>}
             <div className="clean-header">
                 <h2>قائمة الطلبات المستبعدة</h2>
-                <div className="clean-badge_r">{db.rejected_neg} طلب مرفوض</div>
             </div>
 
             <div className="clean-list-container">

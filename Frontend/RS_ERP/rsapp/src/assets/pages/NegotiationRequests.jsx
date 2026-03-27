@@ -72,6 +72,7 @@ const Accepted=(i)=>{
                 <table className="modern-table">
                     <thead>
                         <tr>
+                            <th>مقدم الطلب</th>
                             <th>كود العميل</th>
                             <th>العميل</th>
                             <th>المشروع / الوحدة</th>
@@ -83,6 +84,7 @@ const Accepted=(i)=>{
                     <tbody>
                         {db.Allnegotiations?.map((neg, index) => (
                             <tr key={index}  className="animate__animated animate__fadeInUp" style={{ animationDelay: `${index * 0.1}s` }}>
+                                <td>{neg.Requester}</td>
                                 <td>{neg.ClientID}</td>
                                 <td className="font-bold">{neg.ClientName}</td>
                                 <td>

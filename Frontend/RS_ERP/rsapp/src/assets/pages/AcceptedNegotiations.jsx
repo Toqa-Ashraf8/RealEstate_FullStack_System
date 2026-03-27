@@ -26,7 +26,6 @@ const Re_Reject=(index)=>{
              {db.rejectmodal && <RejectModal/>}
             <div className="acc-header">
                 <h2>قائمة الطلبات المقبولة</h2>
-                <div className="acc-badge">طلب مقبول {db.accepted_neg}</div>
             </div>
 
             <div className="acc-list-container">

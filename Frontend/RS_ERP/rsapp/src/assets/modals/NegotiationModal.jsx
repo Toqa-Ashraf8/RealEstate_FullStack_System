@@ -147,12 +147,10 @@ const addNewNegotiation=()=>{
             >
               <button className="btn btn-primary btn_addu"
               style={{marginRight:'20px'}}
-              disabled={isLoading}
               onClick={()=>addNewNegotiation()}
               >إضافة</button>
               <button 
               className="btn btn-danger"
-              disabled={isLoading}
               onClick={()=>dispatch(toggleNegotiationModal(false))}
               >إلغاء</button>
             </div>

@@ -4,7 +4,8 @@ import { loginUser, registerUsers } from '../services/authService';
 const initialState={
     user:{},
     token:sessionStorage.getItem('token'),
-    role: sessionStorage.getItem('userRole')
+    role: sessionStorage.getItem('userRole'),
+    userName:sessionStorage.getItem('name')
 }
 const authSlice=createSlice({
     name:'auth',
@@ -27,12 +28,16 @@ const authSlice=createSlice({
             }
              state.role=action.payload.role;
              sessionStorage.setItem('userRole', action.payload.role);
+             state.userName=action.payload.user;
+             sessionStorage.setItem('name',action.payload.user);
         })
         .addCase(loginUser.fulfilled,(state,action)=>{ 
             state.token = action.payload.token;
             state.role = action.payload.role;
+             state.userName=action.payload.user;
             sessionStorage.setItem('token', action.payload.token);
             sessionStorage.setItem('userRole', action.payload.role);
+            sessionStorage.setItem('name',action.payload.user);
 
         })
     }

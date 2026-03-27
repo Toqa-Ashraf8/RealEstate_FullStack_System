@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { setUserData } from '../redux/authSlice';
 
 const Login = () => {
-  const {user,token,role}=useSelector((state)=>state.auth);
+  const {user,token,role,userName}=useSelector((state)=>state.auth);
   const {isLoading}=useSelector((state)=>state.auth);
   const dispatch=useDispatch();
   const navigate=useNavigate();
@@ -32,8 +32,7 @@ const handleChangeValues=(e)=>{
           })
         }
   }
-  console.log("token",token);
-  console.log("role",role);
+
   return (
     <div className="login-page-container">
       <motion.div 
