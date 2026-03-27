@@ -29,10 +29,11 @@ In many real estate agencies, operations like unit bookings and installment trac
 * **Printable Schedules:** Generate professional installment tables for clients.
 
 ## 🛠️ Tech Stack
-* **Frontend:** React.js, Redux Toolkit (Complex State Management), Custom CSS.
-* **Backend:** .NET Core Web API (Restful Services).
+* **Frontend:** React.js, Redux Toolkit (Complex State Management),**Bootstrap**,Custom CSS.
+* **Backend:** .NET Core Web API (Restful Services),JWT Authentication.
 * **Database:** Microsoft SQL Server & Entity Framework Core.
 * **Data Visualization:** Chart.js for business analytics.
+* **Principles:** Developed with **Clean Code** standards, **SOLID Principles**, and **Testable Architecture**.
 
 ## 🏗️ Database Architecture & Logic
 The system relies on a robust relational schema:
@@ -52,7 +53,7 @@ graph TD
     C -->|Reject| D[Rejected Negotiations Phase]
     C -->|Approve| E[Client Booking Details]
     E -->|Generates| F[Automated Installment Plan]
-    F -->|Tracks| G[Monthly Payments & Financials]
+    F -->|Tracks| G[Monthly Payments]
 ```
 ## 🔧 Installation & Setup
 1. Clone the repo: `git clone https://github.com/Toqa-Ashraf8/RealEstate_FullStack_System.git`
