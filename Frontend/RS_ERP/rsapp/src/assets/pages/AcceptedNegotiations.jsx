@@ -33,8 +33,6 @@ const Re_Reject=(index)=>{
                     <div 
                     key={index} className="acc-item-row"
                     >
-                        
-                     
                         <div className="acc-section acc-client-section">
                             <div className="acc-avatar"><User size={16}/></div>
                             <div>
