@@ -1,6 +1,6 @@
 import './App.css'
 import 'animate.css';
-import { Routes,Route }from 'react-router-dom'
+import { Routes,Route, Navigate }from 'react-router-dom'
 import Header from './assets/nav/Header'
 import AddProjects from './assets/pages/AddProjects'
 import { ToastContainer, toast } from 'react-toastify';
@@ -46,7 +46,10 @@ useEffect(() => {
       />
 
     <Header />
-      <Routes>      
+      <Routes>    
+             <Route path="/" element={<Navigate to="/login" replace />} />  
+              <Route path='/register' element={<Register/>}/>
+              <Route path='/login' element={<Login/>}/>
              <Route path="/addprojects" 
               element={
               <ProtectedRoute allowedRoles={['Admin']} >  
@@ -122,8 +125,7 @@ useEffect(() => {
                   </ProtectedRoute>
                }
               />
-              <Route path='/register' element={<Register/>}/>
-              <Route path='/login' element={<Login/>}/>
+             
       </Routes>
     </>
   )

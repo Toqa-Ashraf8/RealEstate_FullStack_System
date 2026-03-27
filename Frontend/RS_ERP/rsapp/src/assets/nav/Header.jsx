@@ -3,8 +3,11 @@ import '../css/Header.css'
 import { MdOutlineRealEstateAgent } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import { MdOutlineNotifications } from "react-icons/md";
+import { useSelector } from 'react-redux';
 
 const Header = () => {
+  const {token ,role}=useSelector((state)=>state.auth);
+  if (!token) return null;
   return (
     <div dir='rtl'>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -27,11 +30,13 @@ const Header = () => {
       <ul className="navbar-nav me-auto mb-2 mb-lg-0">
         
         
-        <li className="nav-item">
+         { role==="Admin" && (
+          <li className="nav-item">
           <Link className="nav-link" to="/addprojects">
             إضافة المشاريع
           </Link>
-        </li>
+          </li> 
+        )}
         <li className="nav-item">
           <Link className="nav-link" to="/projects">
             المشاريع 
@@ -42,17 +47,18 @@ const Header = () => {
               إضافة العملاء     
           </Link>
         </li>
-       <li className="nav-item">
+        {role==="Admin" && 
+          (<li className="nav-item">
           <Link className="nav-link" to="/negotiation_requests">
            طلبات الشراء
           </Link>
-        </li>  
+          </li>  
+          )}
         <li className="nav-item">
           <Link className="nav-link" to="/booking">
               إدارة الحجوزات
           </Link>
         </li>
-       
       </ul>
     
     </div>
