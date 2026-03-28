@@ -17,8 +17,8 @@ In many real estate agencies, operations like unit bookings and installment trac
 * **Live Inventory:** A real-time display of available vs. sold units for sales teams.
 
 ### 3. Advanced Negotiation & Approval Workflow 🤝
-* **Request Initiation:** Sales employees can submit "Negotiation Requests" if a client proposes a different price or payment plan.
-* **Managerial Decision Engine:** Managers receive these requests and can **Approve, Reject, or Re-evaluate** them, ensuring a controlled sales process.
+* **Request Initiation:** Sales employees can submit "Negotiation Requests" if a client proposes a different price.
+* **Managerial Decision Engine:** Managers receive these requests and can **Approve, Reject** them, ensuring a controlled sales process.
 
 ### 4. Automated Installment & Payment Engine 📉💰
 * **Dynamic Schedule Generation:** Once a deal is approved, the system automatically generates a complete **Installment Plan** based on:
