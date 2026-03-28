@@ -37,6 +37,7 @@ const initialState = {
     selectedInstallmentrow:-1,
     isRevertPaymentModalOpen: false,
     selectedDeleteIndex: -1,
+    bookingDate:new Date().toISOString().split('T')[0]
    
 }
 //*********************************************************************** */

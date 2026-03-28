@@ -36,7 +36,8 @@ const InstallmentsSchedule = () => {
         InstallmentDetails, 
         isRevertPaymentModalOpen, 
         paymentModal,
-        reserved 
+        reserved,
+        bookingDate
     } = useSelector((state) => state.booking);
 //-----------------------------------------------------------------------------------
 const payInstallment=(i)=>{
@@ -49,6 +50,7 @@ const saveAllData=async()=>{
         ...initialClientData, 
         ...bookingClient, 
         ...InstallmentInformation, 
+        bookingDate,
         installments:InstallmentDetails.map(item => ({
             ...item,
             Paid: item.Paid ? 1 : 0 ,
@@ -57,7 +59,7 @@ const saveAllData=async()=>{
         }))
     }
  
-       try {
+      try {
            const result=await dispatch(bookingDetailRequest(data)).unwrap();
             toast.success("تم الحجز بنجاح!", {
                theme: "colored",

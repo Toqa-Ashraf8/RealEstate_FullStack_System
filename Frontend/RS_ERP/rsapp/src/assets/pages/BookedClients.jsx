@@ -1,5 +1,17 @@
 import React, { useEffect } from 'react';
-import { Users, User, Eye, Printer, Search, Calendar, Landmark, MoreVertical, ArrowUpDown,SquarePen  } from 'lucide-react';
+import { 
+    Users, 
+    User, 
+    Eye, 
+    Printer, 
+    Search, 
+    Calendar, 
+    Landmark, 
+    MoreVertical, 
+    ArrowUpDown,
+    SquarePen,
+    Trash2 
+} from 'lucide-react';
 import '../css/BookedClients.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { getreservedClients, getreservedClientsByID, reservedOrnot } from '../redux/bookingSlice';
@@ -76,6 +88,12 @@ const editReservedClients=async(id,index)=>{
                                     <div className="table_actions">
                                         <button className="action_icon view" title="تعديل" onClick={()=>editReservedClients(client.BookingID,index)}>
                                             <SquarePen  size={18} color='blue' />
+                                       </button>
+                                        <button className="action_icon view" title="حذف">
+                                            <Trash2   size={18} color='red' />
+                                       </button>
+                                        <button className="action_icon view" title="طباعة">
+                                            <Printer  size={18} color='teal' />
                                        </button>
                                     </div>
                                 </td>

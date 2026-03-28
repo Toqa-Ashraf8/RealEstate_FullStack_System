@@ -118,12 +118,12 @@ namespace WebApp1.Controllers
                                         Address,Job,ReservationAmount,PaymentMethod,
                                         CheckImagePath,DownPayment,FirstInstallmentDate,
                                         InstallmentYears,ClientID,
-                                        ClientName,ProjectName,Unit) 
+                                        ClientName,ProjectName,Unit,BookingDate) 
                                         values (@NationalID,@NationalIdImagePath,@SecondaryPhone,
                                         @Address,@Job,@ReservationAmount,@PaymentMethod,
                                         @CheckImagePath,@DownPayment,@FirstInstallmentDate,
                                         @InstallmentYears,@ClientID,
-                                        @ClientName,@ProjectName,@Unit)
+                                        @ClientName,@ProjectName,@Unit,@BookingDate)
                                         SELECT SCOPE_IDENTITY()";
                     using (SqlCommand cmd = new SqlCommand(sqlinsert, conn))
                     {
@@ -145,6 +145,7 @@ namespace WebApp1.Controllers
                         cmd.Parameters.AddWithValue("@ClientName", client.ClientName);
                         cmd.Parameters.AddWithValue("@ProjectName", client.ProjectName);
                         cmd.Parameters.AddWithValue("@Unit", client.Unit);
+                        cmd.Parameters.AddWithValue("@BookingDate", client.BookingDate);
                         booking_id = Convert.ToInt32(cmd.ExecuteScalar());
                         if (conn.State == ConnectionState.Open) conn.Close();
                         saved_m = true;

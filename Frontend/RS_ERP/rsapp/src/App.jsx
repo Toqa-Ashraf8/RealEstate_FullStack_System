@@ -21,6 +21,7 @@ import {clearGlobalError} from './assets/redux/uiSlice'
 import Register from './assets/pages/Register';
 import Login from './assets/pages/Login';
 import ProtectedRoute from './assets/components/ProtectedRoute';
+import DashboardPage from './assets/pages/DashboardPage';
 
 function App() {
 const dispatch = useDispatch();
@@ -29,7 +30,7 @@ const { isLoading, globalError, globalMessage } = useSelector((state) => state.u
 
 useEffect(() => {
     if (globalError) {
-      toast.error(globalMessage || "حدث خطأ في السيرفر");
+      toast.error(globalMessage || "حدث خطأ في السيرفر",);
       dispatch(clearGlobalError());
     }
   }, [globalError, globalMessage, dispatch]);
@@ -50,6 +51,15 @@ useEffect(() => {
              <Route path="/" element={<Navigate to="/login" replace />} />  
               <Route path='/register' element={<Register/>}/>
               <Route path='/login' element={<Login/>}/>
+           
+            <Route path="/dashboard" 
+              element={
+              <ProtectedRoute>  
+                <DashboardPage/>
+              </ProtectedRoute>
+              }
+              />
+           
              <Route path="/addprojects" 
               element={
               <ProtectedRoute allowedRoles={['Admin']} >  

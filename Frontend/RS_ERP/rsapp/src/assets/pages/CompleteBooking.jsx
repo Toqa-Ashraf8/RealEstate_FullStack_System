@@ -5,7 +5,21 @@ import '../css/CompleteBooking.css';
 import { RiSave3Fill } from "react-icons/ri";
 import { AiOutlineClear } from "react-icons/ai";
 import { FiPrinter } from "react-icons/fi";
-import { bookingDetailRequest, calculatenewDownPayment, caluclateDownPayment, ChangevaluesOfBookingClient,  clearInputs,  FillClientData, generateInstallments, getInstallmentData, getreservedClientsByID, reservedOrnot, saveChecksImages, saveNationalidImage, updateDownPaymentManual} from '../redux/bookingSlice';
+import { 
+    bookingDetailRequest, 
+    calculatenewDownPayment, 
+    caluclateDownPayment, 
+    ChangevaluesOfBookingClient,  
+    clearInputs,  
+    FillClientData, 
+    generateInstallments, 
+    getInstallmentData, 
+    getreservedClientsByID, 
+    reservedOrnot, 
+    saveChecksImages, 
+    saveNationalidImage, 
+    updateDownPaymentManual
+} from '../redux/bookingSlice';
 import { variables } from '../variables';
 import {toast} from 'react-toastify'
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +36,8 @@ const CompleteBooking = () => {
         initialClientData,
         reserved,
         nationalidImage,
-        checkImage
+        checkImage,
+        bookingDate
     }=useSelector((state)=>state.booking);
   
 const HandleChange=(e)=>{
@@ -64,15 +79,18 @@ const HandleChangeinstallmentValues=(e)=>{
 };
 
 const SavedData=async()=>{
-    if (!bookingClient) {
-        toast.error("بيانات العميل غير مكتملة!");
-        return;
-    }
     const parms={
         ...bookingClient,
         ...InstallmentInformation,
+         bookingDate,
          installments:[]};
-    try {
+
+    if (!bookingClient) {
+        toast.error("بيانات العميل غير مكتملة!");
+        return;
+    } 
+   
+     try {
         const result=await dispatch(bookingDetailRequest(parms)).unwrap();
         if(result.saved===true){
          toast.success("تم الحجز بنجاح!", {
@@ -95,6 +113,7 @@ const SavedData=async()=>{
     }
    
 }
+ 
 
 const calcutlateDownpayment=()=>{
     const totalamount=initialClientData.NegotiationPrice;
@@ -146,6 +165,7 @@ const getinstallmentsData=(id)=>{
                     <h2 className="final_main_title">استكمال بيانات الحجز والأقساط</h2>
                 </div>
               
+
                 <div className="final_content_box animate__animated animate__fadeIn">
                     <form className="final_form_body">                          
                                 <div className="row mb-4">
@@ -173,6 +193,8 @@ const getinstallmentsData=(id)=>{
                         <hr className="final_divider" />
                         <div className="row mt-4">
                             <div className="col-lg-8">
+                                <div style={{display:'flex'}}>
+                
                                 <div className="final_field_group mt-3">
                                     <label className="final_label"><Hash size={18} />كود الحجز</label>
                                     <div className="final_upload_btn">
@@ -187,6 +209,20 @@ const getinstallmentsData=(id)=>{
                                     </div>
                                 </div>
 
+                                 <div className="final_field_group mt-3 m-4">
+                                    <label className="final_label"><Calendar size={18} />تاريخ الحجز </label>
+                                    <div className="final_upload_btn">
+                                        <input 
+                                        type="text" 
+                                        style={{marginRight:'-20px'}}
+                                        className="final_input_modern final_disabled" 
+                                        name='BookingDate'
+                                        readOnly
+                                        value={bookingClient?.BookingDate || bookingDate}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                                 <div className="final_field_group">
                                     <label className="final_label"><CreditCard size={18} /> رقم البطاقة</label>
                                     <input
@@ -375,9 +411,9 @@ const getinstallmentsData=(id)=>{
                                     // الحالة الثانية: لو مفيش صورة (الرسالة البديلة)
                                     return (
                                     <div className="final_empty_msg" >
-                                                    <FileText size={40} className="final_icon_fade" />
-                                                        <p>معاينة الشيك</p>
-                                                    </div>
+                                        <FileText size={40} className="final_icon_fade" />
+                                        <p>معاينة الشيك</p>
+                                     </div>
                                     );
                                     }
                                 })()}                               
