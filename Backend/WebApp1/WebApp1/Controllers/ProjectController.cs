@@ -24,10 +24,10 @@ namespace WebApp1.Controllers
              conn=new SqlConnection(_context.Database.GetConnectionString());
 
         }
-        //***************************** Save Images Of Projects **************************
-        [Route("SaveImages")]
+        // Save Images Of Projects
+        [Route("UploadProjectImage")]
         [HttpPost]
-        public JsonResult SaveImages ([FromForm] upload_Projects_Images uploadimg)
+        public JsonResult UploadProjectImage([FromForm] upload_Projects_Images uploadimg)
 
         {
             var postedFile = uploadimg.file;
@@ -39,10 +39,10 @@ namespace WebApp1.Controllers
             }
             return new JsonResult(fileName);
         }
-        //***************************** Save Images Of Units *****************************
-        [Route("SaveImagesUnits")]
+        // Save Images Of Units 
+        [Route("UploadUnitImage")]
         [HttpPost]
-        public JsonResult SaveImagesUnits([FromForm] upload_Unit_Images imgu)
+        public JsonResult UploadUnitImage([FromForm] upload_Unit_Images imgu)
         {
             var postedFile = imgu.fileu;
             string fileName = postedFile.FileName;
@@ -54,10 +54,10 @@ namespace WebApp1.Controllers
             return new JsonResult(fileName);
         }
 
-        //********************** Save Projects (Master) With Units (Details) **************
-        [Route("SaveAll")]
+        // Save Projects (Master) With Units (Details)
+        [Route("UpsertProjectWithUnits")]
         [HttpPost]
-        public JsonResult SaveAll([FromBody]Project prj)
+        public JsonResult UpsertProjectWithUnits([FromBody]Project prj)
         {
            
             bool allFieldsAreEmpty = true;
@@ -78,9 +78,11 @@ namespace WebApp1.Controllers
                 
                 try
                 {
-                    string sqlin = @"insert into Projects (ProjectName,ProjectType,Location,TotalUnits,ProjectStatus,ProjectImage)
-                                     values(@ProjectName,@ProjectType,@Location,@TotalUnits,@ProjectStatus,@ProjectImage)
-                                       SELECT SCOPE_IDENTITY()";
+                    string sqlin = @"insert into Projects (ProjectName,ProjectType,
+                                     Location,TotalUnits,ProjectStatus,ProjectImage)
+                                     values(@ProjectName,@ProjectType,@Location,@TotalUnits,
+                                     @ProjectStatus,@ProjectImage)
+                                      SELECT SCOPE_IDENTITY()";
 
                     using (SqlCommand cmd = new SqlCommand(sqlin, conn))
                     {
@@ -107,10 +109,11 @@ namespace WebApp1.Controllers
             {
                 try
                 {
-                    string sqlup = @"update Projects set ProjectName=@ProjectName,ProjectType=@ProjectType,Location=@Location
+                    string sqlup = @"update Projects set ProjectName=@ProjectName,
+                                     ProjectType=@ProjectType,Location=@Location
                                     ,TotalUnits=@TotalUnits,ProjectStatus=@ProjectStatus,
                                      ProjectImage=@ProjectImage
-                                    where ProjectCode=@ProjectCode";
+                                     where ProjectCode=@ProjectCode";
 
                     using (SqlCommand cmd = new SqlCommand(sqlup, conn))
                     {
@@ -149,8 +152,10 @@ namespace WebApp1.Controllers
                 }
 
                 if(prj.Units !=null && prj.Units.Count > 0) { 
-                string sqlin_u = @"insert into Units (serial,unitName,Floor,TotalArea,MeterPrice,TotalPrice,unitStatus,unitImage,ProjectCode,ProjectName)
-                                 values(@serial,@unitName,@Floor,@TotalArea,@MeterPrice,@TotalPrice,@unitStatus,@unitImage,@ProjectCode,@ProjectName)";
+                string sqlin_u = @"insert into Units (serial,unitName,Floor,TotalArea,
+                                  MeterPrice,TotalPrice,unitStatus,unitImage,ProjectCode,ProjectName)
+                                  values(@serial,@unitName,@Floor,@TotalArea,@MeterPrice,
+                                  @TotalPrice,@unitStatus,@unitImage,@ProjectCode,@ProjectName)";
                     if (conn.State != ConnectionState.Open) conn.Open();
                     using (SqlCommand cmd = new SqlCommand(sqlin_u, conn))
                     {
@@ -180,11 +185,11 @@ namespace WebApp1.Controllers
                 var data = new { id = id , errorOccured = errorOccured};
                 return new JsonResult(data);
         }
-        //********************** Delete Projects (Master) With Units (Details) **************
+        // Delete Projects (Master) With Units (Details) 
 
-        [Route("DeleteAll")]
+        [Route("DeleteProject")]
         [HttpPost]
-        public JsonResult DeleteAll(int id)
+        public JsonResult DeleteProject(int id)
         {
             
             bool delOk = false;
@@ -224,10 +229,10 @@ namespace WebApp1.Controllers
             }
             return new JsonResult(delOk);
         }
-        //************************ Get Projects (Master) To Search ***************************
-        [Route("SearchMaster")]
+        //Get Projects (Master) To Search 
+        [Route("GetAllProjects")]
         [HttpGet]
-        public JsonResult SearchMaster()
+        public JsonResult GetAllProjects()
         {
             DataTable dt = new DataTable();
             string sqls = @"select * from Projects";
@@ -236,10 +241,10 @@ namespace WebApp1.Controllers
             return new JsonResult(dt);
 
         }
-        //************************ Get Units (Details) ****************************************
-        [Route("GetDtls")]
+        // Get Units (Details)
+        [Route("GetProjectUnits")]
         [HttpPost]
-        public JsonResult GetDtls(int projectId)
+        public JsonResult GetProjectUnits(int projectId)
          {
             DataTable dt = new DataTable();
             string sqlg_dtls = @"select * from Units where ProjectCode=@ProjectCode";
@@ -251,6 +256,6 @@ namespace WebApp1.Controllers
             return new JsonResult(dt);
 
         }
-        //---------------------------------------------- END -----------------------------------------------------
+       
     }
 }

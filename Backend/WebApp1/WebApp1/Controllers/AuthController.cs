@@ -17,7 +17,7 @@ using System.Security.Cryptography;
 using System.Text;
 using WebApp1.EF;
 using WebApp1.Models;
-//using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace WebApp1.Controllers
 {
@@ -61,7 +61,8 @@ namespace WebApp1.Controllers
                 if (conn.State == ConnectionState.Open) conn.Close();
             
             string sqlin = @"insert into Users (UserName,Email,Password,Role) 
-                          values(@UserName,@Email,@Password,@Role) SELECT SCOPE_IDENTITY()";
+                            values(@UserName,@Email,@Password,@Role) 
+                            SELECT SCOPE_IDENTITY()";
 
             using(SqlCommand cmdin=new SqlCommand(sqlin, conn))
             {

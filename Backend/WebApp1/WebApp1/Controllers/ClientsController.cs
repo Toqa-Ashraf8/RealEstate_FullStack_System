@@ -21,10 +21,10 @@ namespace WebApp1.Controllers
              _env=env;
             conn = new SqlConnection(_context.Database.GetConnectionString());
         }
-        //*********************** Get Projects to put in a Select **************
-        [Route("GetProjects")]
+        //Get All Projects in Database
+        [Route("GetAllProjects")]
         [HttpGet]
-        public JsonResult GetProjects()
+        public JsonResult GetAllProjects()
         {
             DataTable dt = new DataTable();
             string sqlg = "select ProjectCode,ProjectName from Projects";
@@ -33,10 +33,10 @@ namespace WebApp1.Controllers
             return new JsonResult(dt);
 
         }
-        //**************************** Get Units By Project Name *************
-        [Route("getUnits")]
+        // Get Units By Project Name 
+        [Route("GetUnitsByProject")]
         [HttpPost]
-        public JsonResult getUnits(string projectname)
+        public JsonResult GetUnitsByProject(string projectname)
         {
             DataTable dt = new DataTable();
             string sqlg = "select UnitName from Units where ProjectName ='" + projectname + "'";
@@ -46,10 +46,10 @@ namespace WebApp1.Controllers
 
         }
 
-        //***************************** Get Price Of Unit ********************
-        [Route("getPriceOfUnit")]
+        // Get Price Of Unit 
+        [Route("GetUnitPrice")]
         [HttpPost]
-        public JsonResult getPriceOfUnit(string unitname)
+        public JsonResult GetUnitPrice(string unitname)
         {
             DataTable dt = new DataTable();
             string sqlg = "select TotalPrice from Units where unitName ='" + unitname + "'";
@@ -58,10 +58,10 @@ namespace WebApp1.Controllers
             return new JsonResult(dt);
 
         }
-        //*******************Save Clients with their negotiation requests ********
-        [Route("SaveClients")]
+        //Save Clients with their negotiation requests 
+        [Route("UpsertClient")]
         [HttpPost]
-        public JsonResult SaveClients([FromBody] Client cl)
+        public JsonResult UpsertClient([FromBody] Client cl)
         {
             bool nullData = false;
             int id = Convert.ToInt32(cl.ClientID);
@@ -180,7 +180,7 @@ namespace WebApp1.Controllers
             var data = new { id = id , nullData= nullData };
             return new JsonResult(data);
         }
-        //******************* Delete Clients and their negotiations***************
+        //Delete Clients and their negotiations
         [Route("DeleteClient")]
         [HttpDelete]
         public JsonResult DeleteClient(int id)
@@ -214,10 +214,10 @@ namespace WebApp1.Controllers
             var data = new { deleted = deleted };
             return new JsonResult(data);
         }
-        //******************** Search Clients ************************************
-        [Route("SearchClients")]
+        // Search Clients 
+        [Route("GetAllClients")]
         [HttpGet]
-        public JsonResult SearchClients()
+        public JsonResult GetAllClients()
         {
             DataTable dt = new DataTable();
             string sqlg = "select * from Clients";
@@ -225,10 +225,10 @@ namespace WebApp1.Controllers
             da.Fill(dt);
             return new JsonResult(dt);
         }
-        //************************** Get negotiation of client *******************
-        [Route("GetNegotiationsByClient")]
+        // Get negotiation of client 
+        [Route("GetClientNegotiations")]
         [HttpPost]
-        public JsonResult GetNegotiationsByClient(int clientid)
+        public JsonResult GetClientNegotiations(int clientid)
         {
             DataTable dt = new DataTable();
             string sqlg = "select * from Negotiations where ClientID=@ClientID";
@@ -244,7 +244,7 @@ namespace WebApp1.Controllers
             da.Fill(dt);
             return new JsonResult(dt);
         }
-        //*************************** Get first client ***************************
+        // Get first client 
         [Route("GetFirstClient")]
         [HttpGet]
         public JsonResult GetFirstClient()
@@ -272,7 +272,7 @@ namespace WebApp1.Controllers
             
             
         }
-        //************************** Get last Client *****************************
+        //Get last Client
         [Route("GetLastClient")]
         [HttpGet]
         public JsonResult GetLastClient()
@@ -297,10 +297,10 @@ namespace WebApp1.Controllers
             var data = new { dt = dt, negotiations_l = negotiations_l, isnull= isnull };
             return new JsonResult(data);
         }
-        //************************ Get Next Client *******************************
-        [Route("GetNextClient")]
+        // Get Next Client 
+        [Route("GetNextClientById")]
         [HttpPost]
-        public JsonResult GetNextClient(int id)
+        public JsonResult GetNextClientById(int id)
         {
             bool empty_db = false;
             DataTable dt_all = new DataTable();
@@ -374,10 +374,10 @@ namespace WebApp1.Controllers
             var data = new { dt = dt, negotiations_n = negotiations_n,islast=islast , empty_db = empty_db };
             return new JsonResult(data);
         }
-        //******************************* Get Previous Client ********************
-        [Route("GetpreviousClient")]
+        // Get Previous Client 
+        [Route("GetPreviousClientById")]
         [HttpPost]
-        public JsonResult GetpreviousClient(int id)
+        public JsonResult GetPreviousClientById(int id)
         {
             DataTable dt = new DataTable();
             DataTable dt_all = new DataTable();
@@ -452,7 +452,7 @@ namespace WebApp1.Controllers
             var data = new { dt = dt, negotiations_p = negotiations_p,isfirst=isfirst , empty_db = empty_db };
             return new JsonResult(data);
         }
-        //----------------------------------------------- END ------------------------------------------------------
+       
 
     }
 }

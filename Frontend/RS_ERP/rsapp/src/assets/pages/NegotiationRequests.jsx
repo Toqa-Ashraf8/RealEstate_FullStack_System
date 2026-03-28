@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { acceptedCount, ChangeConditionOfRequest, DefineApproveRow, DefineRejectRow, GetAllnegotiations, GetClientDetails, negotiationCount, rejectedCount, rejectedRequests_show, showconfirmModal, showModal_reject } from '../redux/negotiationSlice';
+import { acceptedCount, ChangeConditionOfRequest, DefineApproveRow, DefineRejectRow, GetClientDetails, getPendingNegotiations, negotiationCount, rejectedCount, rejectedRequests_show, showconfirmModal, showModal_reject } from '../redux/negotiationSlice';
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { CgCloseR } from "react-icons/cg";
 import 'animate.css';
@@ -35,7 +35,7 @@ const Accepted=(i)=>{
       const Fetch=async()=>{
         try {
            await dispatch(negotiationCount());
-           await dispatch(GetAllnegotiations());
+           await dispatch(getPendingNegotiations());
            await dispatch(rejectedCount());
            await dispatch(acceptedCount());
 

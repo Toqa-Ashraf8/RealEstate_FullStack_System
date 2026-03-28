@@ -4,22 +4,22 @@ import { variables } from "../variables";
 
 
 export const fetchProjects = createAsyncThunk("fetchProjects/clients", async () => {
-    const resp = await axios.get(variables.CLIENTS_API + "GetProjects")
+    const resp = await axios.get(variables.CLIENTS_API + "GetAllProjects")
         .then((res) => res.data);
     return resp;
 })
 export const fetchUnitsByProject = createAsyncThunk("fetchUnitsByProject/clients", async (projectname) => {
-    const resp = await axios.post(variables.CLIENTS_API + "getUnits?projectname=" + projectname)
+    const resp = await axios.post(variables.CLIENTS_API + "GetUnitsByProject?projectname=" + projectname)
         .then((res) => res.data);
     return resp;
 })
 export const fetchPriceByUnit = createAsyncThunk("fetchPriceByUnit/clients", async (unitname) => {
-    const resp = await axios.post(variables.CLIENTS_API + "getPriceOfUnit?unitname=" + unitname)
+    const resp = await axios.post(variables.CLIENTS_API + "GetUnitPrice?unitname=" + unitname)
         .then((res) => res.data);
     return resp;
 })
 export const saveClient=createAsyncThunk("saveClient/clients",async(parms)=>{
-    const resp=await axios.post(variables.CLIENTS_API+"SaveClients",parms)
+    const resp=await axios.post(variables.CLIENTS_API+"UpsertClient",parms)
         .then((res)=>res.data);
     return resp;
 })
@@ -29,12 +29,12 @@ export const deleteClientData=createAsyncThunk("deleteClientData/clients",async(
     return resp;
 })
 export const fetchClients=createAsyncThunk("fetchClients/clients",async()=>{
-    const resp=await axios.get(variables.CLIENTS_API+"SearchClients")
+    const resp=await axios.get(variables.CLIENTS_API+"GetAllClients")
     .then((res)=>res.data);
     return resp;
 })
 export const fetchNegotiationsByClient=createAsyncThunk("fetchNegotiationsByClient/clients",async(clientid)=>{
-    const resp=await axios.post(variables.CLIENTS_API+"GetNegotiationsByClient?ClientID="+clientid)
+    const resp=await axios.post(variables.CLIENTS_API+"GetClientNegotiations?ClientID="+clientid)
     .then((res)=>res.data);
     return resp;
 })
@@ -49,12 +49,12 @@ export const fetchLastClient=createAsyncThunk("fetchLastClient/clients",async()=
     return resp;
 })
 export const fetchNextClient=createAsyncThunk("fetchNextClient/clients",async(id)=>{
-    const resp=await axios.post(variables.CLIENTS_API+"GetNextClient?id="+id)
+    const resp=await axios.post(variables.CLIENTS_API+"GetNextClientById?id="+id)
     .then((res)=>res.data);
     return resp;
 })
 export const fetchPreviousClient=createAsyncThunk("fetchPreviousClient/clients",async(id)=>{
-    const resp=await axios.post(variables.CLIENTS_API+"GetpreviousClient?id="+id)
+    const resp=await axios.post(variables.CLIENTS_API+"GetPreviousClientById?id="+id)
     .then((res)=>res.data);
     return resp;
 })

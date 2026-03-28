@@ -46,12 +46,12 @@ export const FillClientData = createAsyncThunk("FillClientData/booking", async (
     return resp;
 })
 export const saveNationalidImage = createAsyncThunk("saveNationalidImage/booking", async (formData) => {
-    const resp = await axios.post(variables.BOOKINGS_API + "SaveNationalID_Images", formData)
+    const resp = await axios.post(variables.BOOKINGS_API + "NationalIdUploadRequest", formData)
         .then((res) => res.data);
     return resp;
 })
 export const saveChecksImages = createAsyncThunk("saveChecksImages/booking", async (formData_) => {
-    const resp = await axios.post(variables.BOOKINGS_API + "SaveChecks_Images", formData_)
+    const resp = await axios.post(variables.BOOKINGS_API + "CheckUploadRequest", formData_)
         .then((res) => res.data);
     return resp;
 })
@@ -62,27 +62,27 @@ export const generateInstallments = createAsyncThunk("generateInstallments/booki
     return resp;
 })
 export const saveinstallmentCheck = createAsyncThunk("saveinstallmentCheck/booking", async (formData) => {
-    const resp = await axios.post(variables.BOOKINGS_API + "SaveInstallmentChecks_Images", formData)
+    const resp = await axios.post(variables.BOOKINGS_API + "InstallmentCheckUploadRequest", formData)
         .then((res) => res.data);
     return resp;
 })
-export const saveBookingandInstallment = createAsyncThunk("saveBookingandInstallment/booking", async (sentdata) => {
-    const resp = await axios.post(variables.BOOKINGS_API + "SaveBookingClient", sentdata)
+export const bookingDetailRequest = createAsyncThunk("bookingDetailRequest/booking", async (sentdata) => {
+    const resp = await axios.post(variables.BOOKINGS_API + "BookingDetailRequest", sentdata)
         .then((res) => res.data);
     return resp;
 })
-export const changetoReserved = createAsyncThunk("changetoReserved/booking", async (row) => {
-    const resp = await axios.post(variables.BOOKINGS_API + "ChangeToReserved", row)
+export const confirmReservation = createAsyncThunk("confirmReservation/booking", async (row) => {
+    const resp = await axios.post(variables.BOOKINGS_API + "ConfirmReservation", row)
         .then((res) => res.data);
     return resp;
 })
 export const getreservedClients = createAsyncThunk("getreservedClients/booking", async () => {
-    const resp = await axios.get(variables.BOOKINGS_API + "GetReservedClients")
+    const resp = await axios.get(variables.BOOKINGS_API + "GetAllReservedClients")
         .then((res) => res.data);
     return resp;
 })
 export const getreservedClientsByID = createAsyncThunk("getreservedClientsByID/booking", async (id) => {
-    const resp = await axios.post(variables.BOOKINGS_API + "GetReservedClients_byID?id="+id)
+    const resp = await axios.post(variables.BOOKINGS_API + "GetReservedClientById?id="+id)
         .then((res) => res.data);
     return resp;
 })

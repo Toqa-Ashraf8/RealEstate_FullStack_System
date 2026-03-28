@@ -26,32 +26,32 @@ const initialState={
         deleteModal:false,
 }
 export const negotiationCount=createAsyncThunk("negotiationCount/negotiaion",async()=>{
-    const resp=await axios.get(variables.NEGOTIATIONS_API+"GetNegotationsCount")
+    const resp=await axios.get(variables.NEGOTIATIONS_API+"GetPendingNegotiationsCount")
     .then((res)=>res.data);
     return resp;
 })
-export const GetAllnegotiations=createAsyncThunk("GetAllnegotiations/negotiaion",async()=>{
-    const resp=await axios.get(variables.NEGOTIATIONS_API+"GetNegotiations")
+export const getPendingNegotiations=createAsyncThunk("getPendingNegotiations/negotiaion",async()=>{
+    const resp=await axios.get(variables.NEGOTIATIONS_API+"GetPendingNegotiations")
     .then((res)=>res.data);
     return resp;
 })
 export const SaveRequestByAdmin=createAsyncThunk("SaveRequestByAdmin/negotiaion",async(acceptedrow)=>{
-    const resp=await axios.post(variables.NEGOTIATIONS_API+"saveNegotiations_ByAdmin",acceptedrow)
+    const resp=await axios.post(variables.NEGOTIATIONS_API+"ProcessNegotiationReview",acceptedrow)
     .then((res)=>res.data);
     return resp;
 })
 export const rejectedCount=createAsyncThunk("rejectedCount/negotiaion",async()=>{
-    const resp=await axios.get(variables.NEGOTIATIONS_API+"rejected_Requests")
+    const resp=await axios.get(variables.NEGOTIATIONS_API+"GetRejectedNegotiations")
     .then((res)=>res.data);
     return resp;
 })
 export const acceptedCount=createAsyncThunk("acceptedCount/negotiaion",async()=>{
-    const resp=await axios.get(variables.NEGOTIATIONS_API+"accepted_Requests")
+    const resp=await axios.get(variables.NEGOTIATIONS_API+"GetApprovedNegotiations")
     .then((res)=>res.data);
     return resp;
 })
 export const ApprovedtoReject=createAsyncThunk("ApprovedtoReject/negotiaion",async(approvedRequest)=>{
-    const resp=await axios.post(variables.NEGOTIATIONS_API+"Approved_Rejected",approvedRequest)
+    const resp=await axios.post(variables.NEGOTIATIONS_API+"UpdateNegotiationReview",approvedRequest)
     .then((res)=>res.data);
     return resp;
 })

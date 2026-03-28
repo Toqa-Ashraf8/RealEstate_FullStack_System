@@ -21,9 +21,9 @@ namespace WebApp1.Controllers
             _env = env;
             conn = new SqlConnection(_context.Database.GetConnectionString());
         }
-        [Route("GetNegotationsCount")]
+        [Route("GetPendingNegotiationsCount")]
         [HttpGet]
-        public JsonResult GetNegotationsCount()
+        public JsonResult GetPendingNegotiationsCount()
         {
             string query = "SELECT COUNT(*) FROM Negotiations where checkedByAdmin=0";
 
@@ -37,10 +37,10 @@ namespace WebApp1.Controllers
             }
 
         }
-        //************************ Get Count Number Of Unchecked Requests By Admin *********
-        [Route("GetNegotiations")]
+        // Get Count Number Of Unchecked Requests By Admin 
+        [Route("GetPendingNegotiations")]
         [HttpGet]
-        public JsonResult GetNegotiations()
+        public JsonResult GetPendingNegotiations()
         {
           
             DataTable dt = new DataTable();
@@ -49,10 +49,10 @@ namespace WebApp1.Controllers
             da.Fill(dt);
             return new JsonResult(dt);
         }
-        //********************** Approve Or Reject Negotiation Request By Admin ************
-        [Route("saveNegotiations_ByAdmin")]
+        //Approve Or Reject Negotiation Request By Admin 
+        [Route("ProcessNegotiationReview")]
         [HttpPost]
-        public JsonResult saveNegotiations_ByAdmin([FromBody] Rejected_negotiations_phase ph)
+        public JsonResult ProcessNegotiationReview([FromBody] Rejected_negotiations_phase ph)
         {
             bool saved = false;
             bool cond = Convert.ToBoolean(ph.NegotiationCondition);
@@ -143,10 +143,10 @@ namespace WebApp1.Controllers
             var data = new { saved = saved };
             return new JsonResult(data);
         }
-        //********************* Re_Approve Or Re_Reject Negotiation Request By Admin *******
-        [Route("Approved_Rejected")]
+        // Re_Approve Or Re_Reject Negotiation Request By Admin 
+        [Route("UpdateNegotiationReview")]
         [HttpPost]
-        public JsonResult Approved_Rejected([FromBody] Rejected_negotiations_phase ph2)
+        public JsonResult UpdateNegotiationReview([FromBody] Rejected_negotiations_phase ph2)
         {
             bool cond = Convert.ToBoolean(ph2.NegotiationCondition);
             string rejectstatement = "مرفوض";
@@ -155,17 +155,20 @@ namespace WebApp1.Controllers
             try
             {
                 string sqlMerge = @" MERGE INTO Rejected_negotiations_phases AS Target
-                                 USING (SELECT @ClientID AS CID, @ProjectName AS PN, @Unit AS U) AS Source
-                                ON (Target.ClientID = Source.CID AND Target.ProjectName = Source.PN AND Target.Unit = Source.U)
-                            WHEN MATCHED THEN
-                                UPDATE SET 
-                                NegotiationCondition = @NegotiationCondition,
-                                SuggestedPrice = @SuggestedPrice,
-                                ReasonOfReject = @ReasonOfReject,
-                                CheckedDate = @CheckedDate
-                           WHEN NOT MATCHED THEN
-                    INSERT (ClientID, ProjectName, Unit, NegotiationCondition, SuggestedPrice, ReasonOfReject, CheckedDate)
-                    VALUES (@ClientID, @ProjectName, @Unit, @NegotiationCondition, @SuggestedPrice, @ReasonOfReject, @CheckedDate);";
+                                     USING (SELECT @ClientID AS CID, @ProjectName AS PN, @Unit AS U) AS Source
+                                     ON (Target.ClientID = Source.CID AND Target.ProjectName = Source.PN AND 
+                                     Target.Unit = Source.U)
+                                     WHEN MATCHED THEN
+                                     UPDATE SET 
+                                     NegotiationCondition = @NegotiationCondition,
+                                     SuggestedPrice = @SuggestedPrice,
+                                     ReasonOfReject = @ReasonOfReject,
+                                     CheckedDate = @CheckedDate
+                                     WHEN NOT MATCHED THEN
+                                     INSERT (ClientID, ProjectName, Unit, NegotiationCondition, 
+                                     SuggestedPrice, ReasonOfReject, CheckedDate)
+                                     VALUES (@ClientID, @ProjectName, @Unit, @NegotiationCondition, 
+                                     @SuggestedPrice, @ReasonOfReject, @CheckedDate);";
 
                 using (SqlCommand cmd = new SqlCommand(sqlMerge, conn))
                 {
@@ -186,7 +189,8 @@ namespace WebApp1.Controllers
 
                     try
                     {
-                        string sqlup = @"update Negotiations set NegotiationStatus='" + rejectstatement + "' where ClientID=@ClientID AND ProjectName=@ProjectName AND Unit=@Unit";
+                        string sqlup = @"update Negotiations set NegotiationStatus='" + rejectstatement + "' " +
+                                        "where ClientID=@ClientID AND ProjectName=@ProjectName AND Unit=@Unit";
                         using (SqlCommand cmd = new SqlCommand(sqlup, conn))
                         {
                             if (conn.State == ConnectionState.Closed) conn.Open();
@@ -211,7 +215,8 @@ namespace WebApp1.Controllers
 
                     try
                     {
-                        string sqlup = @"update Negotiations set NegotiationStatus='" + approvedstatement + "' where ClientID=@ClientID AND ProjectName=@ProjectName AND Unit=@Unit";
+                        string sqlup = @"update Negotiations set NegotiationStatus='" + approvedstatement + "' " +
+                                        "where ClientID=@ClientID AND ProjectName=@ProjectName AND Unit=@Unit";
                         using (SqlCommand cmd = new SqlCommand(sqlup, conn))
                         {
                             if (conn.State == ConnectionState.Closed) conn.Open();
@@ -240,10 +245,10 @@ namespace WebApp1.Controllers
 
             return new JsonResult(updated);
         }
-        //************************* Get Rejected Requests And Their Count Number **********
-        [Route("rejected_Requests")]
+        // Get Rejected Requests And Their Count Number
+        [Route("GetRejectedNegotiations")]
         [HttpGet]
-        public JsonResult rejected_Requests()
+        public JsonResult GetRejectedNegotiations()
         {
             int count = 0;
             DataTable dt = new DataTable();
@@ -257,10 +262,10 @@ namespace WebApp1.Controllers
             var data = new { count = count, dt = dt };
             return new JsonResult(data);
         }
-        //************************ Get Accepted Requests And Their Count Number ***********
-        [Route("accepted_Requests")]
+        // Get Accepted Requests And Their Count Number 
+        [Route("GetApprovedNegotiations")]
         [HttpGet]
-        public JsonResult accepted_Requests()
+        public JsonResult GetApprovedNegotiations()
         {
             int count_a = 0;
             DataTable dt = new DataTable();
@@ -275,7 +280,7 @@ namespace WebApp1.Controllers
             return new JsonResult(data);
 
         }
-        //------------------------------------------- END ------------------------------------------------
+       
        
 
     }

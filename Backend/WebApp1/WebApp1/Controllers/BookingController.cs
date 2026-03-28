@@ -27,7 +27,7 @@ namespace WebApp1.Controllers
             conn = new SqlConnection(_context.Database.GetConnectionString());
         }
 
-        //******************* Get Client Data Automatically to Complete Booking *********
+        // Get Client Data Automatically to Complete Booking
         [Route("GetBookingClientData")]
         [HttpPost]
         public JsonResult GetBookingClientData([FromBody] BookingClient cl)
@@ -37,8 +37,10 @@ namespace WebApp1.Controllers
             if (id > 0){
 
             
-            string sqlget = @"select * from Negotiations where ClientID=@ClientID AND ProjectName=@ProjectName
-                              AND Unit=@Unit";
+            string sqlget = @"select * from Negotiations 
+                             where ClientID=@ClientID AND 
+                             ProjectName=@ProjectName AND
+                             Unit=@Unit";
                     using(SqlCommand cmd=new SqlCommand(sqlget, conn))
                     {
                         if (conn.State == ConnectionState.Closed) conn.Open();
@@ -54,10 +56,10 @@ namespace WebApp1.Controllers
             }
             return new JsonResult(dt);
         }
-        //***************************** Save NationalID Cards Images *******************
-        [Route("SaveNationalID_Images")]
+        //Save NationalID Cards Images 
+        [Route("NationalIdUploadRequest")]
         [HttpPost]
-        public JsonResult SaveNationalID_Images([FromForm] upload_NationalID_Images cardimg)
+        public JsonResult NationalIdUploadRequest ([FromForm] upload_NationalID_Images cardimg)
         {
             var postedFile = cardimg.formFile;
             string fileName = postedFile.FileName;
@@ -68,10 +70,10 @@ namespace WebApp1.Controllers
             }
             return new JsonResult(fileName);
         }
-        //***************************** Save Client Checks Images ******************************
-        [Route("SaveChecks_Images")]
+        //Save Client Checks Images
+        [Route("CheckUploadRequest")]
         [HttpPost]
-        public JsonResult SaveChecks_Images([FromForm] upload_Checks_Images checkimg)
+        public JsonResult CheckUploadRequest([FromForm] upload_Checks_Images checkimg)
         {
             var postedFile = checkimg.file_c;
             string fileName = postedFile.FileName;
@@ -82,10 +84,10 @@ namespace WebApp1.Controllers
             }
             return new JsonResult(fileName);
         }
-        //***************************** Save Installment Checks Images ****************************
-        [Route("SaveInstallmentChecks_Images")]
+        //Save Installment Checks Images 
+        [Route("InstallmentCheckUploadRequest")]
         [HttpPost]
-        public JsonResult SaveInstallmentChecks_Images([FromForm] upload_Installment_Checks check)
+        public JsonResult InstallmentCheckUploadRequest([FromForm] upload_Installment_Checks check)
         {
             var postedFile = check.checkfile;
             string fileName=postedFile.FileName;
@@ -97,10 +99,10 @@ namespace WebApp1.Controllers
             return new JsonResult(fileName);
 
         }
-        //*************************** Save Booking Client Data ********************************
-        [Route("SaveBookingClient")]
+        //Save Booking Client Data 
+        [Route("BookingDetailRequest")]
         [HttpPost]
-        public JsonResult SaveBookingClient([FromBody] ClientBookingDetail client)
+        public JsonResult BookingDetailRequest([FromBody] ClientBookingDetail client)
         {
             int booking_id = Convert.ToInt32(client.BookingID);
             bool saved_m = false;
@@ -111,12 +113,18 @@ namespace WebApp1.Controllers
             {
                 try
                 {
-                    string sqlinsert = @"insert into ClientBookingDetails (NationalID,NationalIdImagePath,SecondaryPhone,Address,Job,ReservationAmount,PaymentMethod,
-                                    CheckImagePath,DownPayment,FirstInstallmentDate,InstallmentYears,ClientID,
-                                    ClientName,ProjectName,Unit) 
-                                    values (@NationalID,@NationalIdImagePath,@SecondaryPhone,@Address,@Job,@ReservationAmount,@PaymentMethod,
-                                           @CheckImagePath,@DownPayment,@FirstInstallmentDate,@InstallmentYears,
-                                           @ClientID,@ClientName,@ProjectName,@Unit)SELECT SCOPE_IDENTITY()";
+                    string sqlinsert = @"insert into ClientBookingDetails
+                                        (NationalID,NationalIdImagePath,SecondaryPhone,
+                                        Address,Job,ReservationAmount,PaymentMethod,
+                                        CheckImagePath,DownPayment,FirstInstallmentDate,
+                                        InstallmentYears,ClientID,
+                                        ClientName,ProjectName,Unit) 
+                                        values (@NationalID,@NationalIdImagePath,@SecondaryPhone,
+                                        @Address,@Job,@ReservationAmount,@PaymentMethod,
+                                        @CheckImagePath,@DownPayment,@FirstInstallmentDate,
+                                        @InstallmentYears,@ClientID,
+                                        @ClientName,@ProjectName,@Unit)
+                                        SELECT SCOPE_IDENTITY()";
                     using (SqlCommand cmd = new SqlCommand(sqlinsert, conn))
                     {
                         if (conn.State == ConnectionState.Closed) conn.Open();
@@ -128,7 +136,8 @@ namespace WebApp1.Controllers
                         cmd.Parameters.AddWithValue("@Job", client.Job);
                         cmd.Parameters.AddWithValue("@ReservationAmount", client.ReservationAmount);
                         cmd.Parameters.AddWithValue("@PaymentMethod", client.PaymentMethod);
-                        cmd.Parameters.AddWithValue("@CheckImagePath", string.IsNullOrEmpty(client.CheckImagePath) ? DBNull.Value : client.CheckImagePath);
+                        cmd.Parameters.AddWithValue("@CheckImagePath", 
+                        string.IsNullOrEmpty(client.CheckImagePath) ? DBNull.Value : client.CheckImagePath);
                         cmd.Parameters.AddWithValue("@DownPayment", client.DownPayment);
                         cmd.Parameters.AddWithValue("@FirstInstallmentDate", client.FirstInstallmentDate);
                         cmd.Parameters.AddWithValue("@InstallmentYears", client.InstallmentYears);
@@ -151,12 +160,15 @@ namespace WebApp1.Controllers
             {
                 try
                 {
-                    string updatedata = @"update ClientBookingDetails set NationalID=@NationalID,NationalIdImagePath=@NationalIdImagePath,
-                                     SecondaryPhone=@SecondaryPhone,Address=@Address,Job=@Job,ReservationAmount=@ReservationAmount,
-                                     PaymentMethod=@PaymentMethod,CheckImagePath=@CheckImagePath,DownPayment=@DownPayment,
-                                     FirstInstallmentDate=@FirstInstallmentDate,InstallmentYears=@InstallmentYears,
-                                     ClientID=@ClientID,ClientName=@ClientName,ProjectName=@ProjectName,Unit=@Unit 
-                                     where BookingID=@BookingID";
+                    string updatedata = @"update ClientBookingDetails set NationalID=@NationalID,
+                                          NationalIdImagePath=@NationalIdImagePath,
+                                          SecondaryPhone=@SecondaryPhone,Address=@Address,
+                                          Job=@Job,ReservationAmount=@ReservationAmount,
+                                          PaymentMethod=@PaymentMethod,CheckImagePath=@CheckImagePath,
+                                          DownPayment=@DownPayment ,FirstInstallmentDate=@FirstInstallmentDate,
+                                          InstallmentYears=@InstallmentYears,ClientID=@ClientID,
+                                          ClientName=@ClientName,ProjectName=@ProjectName,Unit=@Unit 
+                                          where BookingID=@BookingID";
                     using (SqlCommand cmd = new SqlCommand(updatedata, conn))
                     {
                         if (conn.State == ConnectionState.Closed) conn.Open();
@@ -168,7 +180,8 @@ namespace WebApp1.Controllers
                         cmd.Parameters.AddWithValue("@Job", client.Job);
                         cmd.Parameters.AddWithValue("@ReservationAmount", client.ReservationAmount);
                         cmd.Parameters.AddWithValue("@PaymentMethod", client.PaymentMethod);
-                        cmd.Parameters.AddWithValue("@CheckImagePath", string.IsNullOrEmpty(client.CheckImagePath) ? DBNull.Value : client.CheckImagePath);
+                        cmd.Parameters.AddWithValue("@CheckImagePath", 
+                        string.IsNullOrEmpty(client.CheckImagePath) ? DBNull.Value : client.CheckImagePath);
                         cmd.Parameters.AddWithValue("@DownPayment", client.DownPayment);
                         cmd.Parameters.AddWithValue("@FirstInstallmentDate", client.FirstInstallmentDate);
                         cmd.Parameters.AddWithValue("@InstallmentYears", client.InstallmentYears);
@@ -190,10 +203,15 @@ namespace WebApp1.Controllers
             }
             if (saved_m == true)
             {
-                string sqlup = "update Units set unitStatus='" + unit_status + "' where ProjectName='" + client.ProjectName + "' AND UnitName='" + client.Unit+"'";
+                string sqlup = "update Units set unitStatus='" + unit_status + "'" +
+                               " where ProjectName=@ProjectName AND" +
+                               " UnitName=@Unit";
                 using (SqlCommand cmd = new SqlCommand(sqlup, conn))
                 {
                     if (conn.State == ConnectionState.Closed) conn.Open();
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@ProjectName", client.ProjectName);
+                    cmd.Parameters.AddWithValue("@Unit", client.Unit);
                     cmd.ExecuteNonQuery();
                     if (conn.State == ConnectionState.Open) conn.Close();
 
@@ -215,10 +233,13 @@ namespace WebApp1.Controllers
                     try
                     {
                        
-                        string insert_installments = @"insert into Installments (InstallmentNumber,DueDate,Months,MonthlyAmount,
-                                                      Paid,PaymentType,CheckImage,BookingID) values 
-                                                      (@InstallmentNumber,@DueDate,@Months,@MonthlyAmount,@Paid,@PaymentType,@CheckImage,
-                                                       @BookingID)"; 
+                        string insert_installments = @"insert into Installments 
+                                                     (InstallmentNumber,DueDate,Months,MonthlyAmount,
+                                                     Paid,PaymentType,CheckImage,BookingID) values 
+                                                     (@InstallmentNumber,@DueDate,@Months,
+                                                     @MonthlyAmount,@Paid,@PaymentType,
+                                                     @CheckImage,@BookingID)"; 
+                                                    
                        
                         using(SqlCommand cmd=new SqlCommand(insert_installments, conn))
                         {
@@ -229,8 +250,10 @@ namespace WebApp1.Controllers
                             cmd.Parameters.AddWithValue("@Months", item.Months);
                             cmd.Parameters.AddWithValue("@MonthlyAmount", item.MonthlyAmount);
                             cmd.Parameters.AddWithValue("@Paid", item.Paid);
-                            cmd.Parameters.AddWithValue("@PaymentType", string.IsNullOrEmpty(item.PaymentType) ? DBNull.Value : item.PaymentType);
-                            cmd.Parameters.AddWithValue("@CheckImage", string.IsNullOrEmpty(item.CheckImage) ? DBNull.Value : item.CheckImage);
+                            cmd.Parameters.AddWithValue("@PaymentType", 
+                            string.IsNullOrEmpty(item.PaymentType) ? DBNull.Value : item.PaymentType);
+                            cmd.Parameters.AddWithValue("@CheckImage", 
+                            string.IsNullOrEmpty(item.CheckImage) ? DBNull.Value : item.CheckImage);
                             cmd.Parameters.AddWithValue("@BookingID", booking_id);
                             cmd.ExecuteNonQuery();
                             saved_d = true;
@@ -241,11 +264,15 @@ namespace WebApp1.Controllers
                     catch{ saved_d = false;}
                 } 
             }
-            var data = new { saved_m = saved_m, booking_id = booking_id, updated=updated,saved_d=saved_d};
+            var data = new { saved_m = saved_m, 
+                             booking_id = booking_id, 
+                             updated=updated,
+                             saved_d=saved_d
+                            };
             return new JsonResult(data);
 
         }
-        //*************************** Generate installment Table *******************************
+        //Generate installment Table 
         [Route("GenerateInstallments")]
         [HttpPost]
         public JsonResult GenerateInstallments([FromBody]InstallmentDetails request)
@@ -278,14 +305,16 @@ namespace WebApp1.Controllers
             return new JsonResult(installments);
 
         }
-        //*************************** Updated Negotiation Requests to Reserved ******************
-        [Route("ChangeToReserved")]
+        //Updated Negotiation Requests to Reserved 
+        [Route("ConfirmReservation")]
         [HttpPost]
-        public JsonResult ChangeToReserved([FromBody] NegotiationViewModel neg)
+        public JsonResult ConfirmReservation([FromBody] NegotiationViewModel neg)
         {
             bool saved = false;
-            string sqlup = @"Update Negotiations set Reserved=1 where ClientID=@ClientID AND ProjectName=@ProjectName
-                            And Unit=@Unit";
+            string sqlup = @"Update Negotiations set Reserved=1 
+                             where ClientID=@ClientID AND 
+                             ProjectName=@ProjectName AND
+                             Unit=@Unit";
             using(SqlCommand cmd=new SqlCommand(sqlup, conn))
             {
                 if (conn.State == ConnectionState.Closed) conn.Open();
@@ -299,10 +328,10 @@ namespace WebApp1.Controllers
             }
             return new JsonResult(saved);
         }
-        //*************************** Get Reserved Data ******************************************
-        [Route("GetReservedClients")]
+        //Get Reserved Data
+        [Route("GetAllReservedClients")]
         [HttpGet]
-        public JsonResult GetReservedClients()
+        public JsonResult GetAllReservedClients()
         {
             DataTable dt = new DataTable();
             string sqls = "Select * from reserved_clients_details where 1=1";
@@ -316,9 +345,10 @@ namespace WebApp1.Controllers
             if (conn.State == ConnectionState.Open) conn.Close();
             return new JsonResult(dt);
         }
-        [Route("GetReservedClients_byID")]
+        //Get Rserved Clients with Installments to enable editing data 
+        [Route("GetReservedClientById")]
         [HttpPost]
-        public JsonResult GetReservedClients_byID(int id)
+        public JsonResult GetReservedClientById(int id)
         {
             var clientdata = new List<BookingClient>();
             var installmentdata = new List<InstallmentData>();
@@ -361,7 +391,11 @@ namespace WebApp1.Controllers
                 da.Fill(installmentdt);
             }
             if (conn.State == ConnectionState.Open) conn.Close();
-            var data = new { clientdata = clientdata, installmentdata= installmentdata, clientdt = clientdt, installmentdt= installmentdt };
+            var data = new { clientdata = clientdata, 
+                             installmentdata= installmentdata, 
+                             clientdt = clientdt, 
+                             installmentdt= installmentdt 
+                           };
             return new JsonResult(data);
         }
        
