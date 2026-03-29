@@ -19,11 +19,12 @@ namespace WebApp1.Models
         public DateTime? FirstInstallmentDate { get; set; }
         public int? InstallmentYears { get; set; }
         [ForeignKey("ClientID")]
-        public int ClientID { get; set; }
-        public string ClientName { get; set; }
-        public string ProjectName { get; set; }
-        public string Unit { get; set; }
-        public DateTime BookingDate { get; set; }
+        public int? ClientID { get; set; }
+        public string? ClientName { get; set; }
+        public string? ProjectName { get; set; }
+        public string? Unit { get; set; }
+        public DateTime? BookingDate { get; set; }
+        public Boolean? Reserved { get; set; }
         public List<Installment> installments { get; set; }
 
     }

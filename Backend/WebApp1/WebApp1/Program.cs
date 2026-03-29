@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
@@ -33,6 +34,11 @@ builder.Services.AddDbContext<DataContext>(options =>
         builder.Configuration.GetConnectionString("connT")
     )
 );
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 
 //Enable JWT 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));

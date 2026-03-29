@@ -19,7 +19,7 @@ const UnitsCard = () => {
     Getunits();
   }, [projectState.selectedProjectCode, dispatch]);
 
- 
+ console.log("projectState.unitsList",projectState.unitsList)
 
   return (
     <div className="u-card-wrapper" dir="rtl">
@@ -46,12 +46,13 @@ const UnitsCard = () => {
                   <div style={{display:'flex',justifyContent:'space-between'}}>
                  <span><h4 className="u-card-title">{unit.unitName}</h4></span> 
                   <div className='u-card-status'>
-                    <span style={{ 
-                    color: unit.ReservedStatus ===true ? 'green' : unit.ReservedStatus === false ? 'red' : 'gray',
-                    fontWeight: 'bold' 
-                  }}>
-                    {!unit.ReservedStatus ? 'محجوزة' : 'متاحة'}
-                  </span>
+                    
+                    {unit.ReservedStatus===false ? 
+                     (<span style={{fontWeight:'bold',color:'green'}}>متاحة</span>)
+                    :
+                    (<span style={{fontWeight:'bold',color:'red'}}>محجوزة</span>)
+                    }
+                  
                   </div>
                   </div>
                   <div className="u-card-details">

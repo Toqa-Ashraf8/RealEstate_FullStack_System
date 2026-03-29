@@ -39,9 +39,17 @@ namespace WebApp1.Controllers
         public JsonResult GetUnitsByProject(string projectname)
         {
             DataTable dt = new DataTable();
-            string sqlg = "select UnitName from Units where ProjectName ='" + projectname + "'";
-            SqlDataAdapter da = new SqlDataAdapter(sqlg, conn);
-            da.Fill(dt);
+            string sqlg = @"select UnitName from Project_Available_Units where ProjectName=@ProjectName AND ReservedStatus=0";
+            using(SqlCommand cmd=new SqlCommand(sqlg, conn))
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+                cmd.Parameters.Clear();
+                cmd.Parameters.AddWithValue("@ProjectName", projectname);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+            }
+            if (conn.State == ConnectionState.Closed) conn.Open();
+           
             return new JsonResult(dt);
 
         }
@@ -142,12 +150,16 @@ namespace WebApp1.Controllers
 
                             }
 
-                         string sqlin_dtls = @"insert into Negotiations (serialCode,ProjectName,Unit,OriginalPrice,NegotiationPrice,
-                                                          DiscountAmount,ClientID,ClientName,NegotiationStatus,
-                                                          NegotiationDate,checkedByAdmin,Requester) values(@serialCode,@ProjectName,@Unit,@OriginalPrice,
-                                                           @NegotiationPrice,@DiscountAmount
-                                                           ,@ClientID,@ClientName,@NegotiationStatus,@NegotiationDate,
-                                                           @checkedByAdmin,@Requester)";
+                         string sqlin_dtls = @"insert into  Negotiations 
+                                                            (serialCode,ClientID,ClientName,ProjectName,
+                                                            Unit,OriginalPrice,
+                                                            NegotiationPrice, DiscountAmount,NegotiationStatus,
+                                                            NegotiationDate,checkedByAdmin,Requester,Reserved) 
+                                                            values(@serialCode,@ClientID,@ClientName,@ProjectName,@Unit,@OriginalPrice,
+                                                            @NegotiationPrice,@DiscountAmount
+                                                           ,@NegotiationStatus,
+                                                            @NegotiationDate,
+                                                           @checkedByAdmin,@Requester,@Reserved)";
                             using (SqlCommand cmd = new SqlCommand(sqlin_dtls, conn))
                             {
                                 if (conn.State == ConnectionState.Closed) conn.Open();
@@ -155,22 +167,24 @@ namespace WebApp1.Controllers
                                 {
                                     cmd.Parameters.Clear();
                                     cmd.Parameters.AddWithValue("@serialCode", neg.serialCode);
+                                    cmd.Parameters.AddWithValue("@ClientID", id);
+                                    cmd.Parameters.AddWithValue("@ClientName", cl.ClientName);
                                     cmd.Parameters.AddWithValue("@projectName", neg.ProjectName);
                                     cmd.Parameters.AddWithValue("@Unit", neg.Unit);
                                     cmd.Parameters.AddWithValue("@OriginalPrice", neg.OriginalPrice);
                                     cmd.Parameters.AddWithValue("@NegotiationPrice", neg.NegotiationPrice);
                                     cmd.Parameters.AddWithValue("@DiscountAmount", neg.DiscountAmount);
-                                    cmd.Parameters.AddWithValue("@ClientID", id);
-                                    cmd.Parameters.AddWithValue("@ClientName", cl.ClientName);
                                     cmd.Parameters.AddWithValue("@NegotiationStatus", neg.NegotiationStatus);
                                     cmd.Parameters.AddWithValue("@NegotiationDate", neg.NegotiationDate);
                                     cmd.Parameters.AddWithValue("@checkedByAdmin", neg.checkedByAdmin);
                                     cmd.Parameters.AddWithValue("@Requester", neg.Requester);
-                                    cmd.ExecuteNonQuery();
+                                    cmd.Parameters.AddWithValue("@Reserved", neg.Reserved);
+                                    cmd.ExecuteScalar();
+                                    if (conn.State == ConnectionState.Open) conn.Close();
                                     nullData = false;
                                 }
                                    
-                              if (conn.State == ConnectionState.Open) conn.Close();
+                              
                         } 
                                
                         }

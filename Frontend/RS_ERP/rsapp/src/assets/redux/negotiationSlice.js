@@ -10,7 +10,8 @@ const initialState={
         detailsOfRow:{},
         negotiationRow:{ClientID:"",ProjectName:"",
                         Unit:"",NegotiationCondition:0,SuggestedPrice:0,
-                        ReasonOfReject:"",CheckedDate:new Date().toISOString()},
+                        ReasonOfReject:"",CheckedDate:new Date().toISOString()
+                        ,Reserved:0},
         confirmModal:false,
         savedRequest:false,
         rejected_neg:0,

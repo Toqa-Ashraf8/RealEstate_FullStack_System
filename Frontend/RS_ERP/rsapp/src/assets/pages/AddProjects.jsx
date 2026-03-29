@@ -80,7 +80,8 @@ const AddProjects = () => {
   
   const handleSaveProject = async () => {
      const parms = { ...project, units:unitsList.map(item=>({...item,ReservedStatus:0}))};
-    try {
+     console.log("parms",parms);
+     try {
       const result = await dispatch(saveCompleteProject(parms)).unwrap();
       if (result.errorOccured) {
         toast.error("أدخل بيانات لإتمام عملية الحفظ!", {
@@ -98,7 +99,7 @@ const AddProjects = () => {
         theme: "colored",
         position: "top-left",
       });
-    }
+    } 
   };
 
   const handleOpenUnitModal = () => {

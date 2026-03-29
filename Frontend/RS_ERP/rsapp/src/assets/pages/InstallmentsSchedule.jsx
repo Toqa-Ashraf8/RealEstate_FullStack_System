@@ -58,14 +58,13 @@ const saveAllData=async()=>{
             CheckImage: item.CheckImage || ""
         }))
     }
- 
       try {
            const result=await dispatch(bookingDetailRequest(data)).unwrap();
             toast.success("تم الحجز بنجاح!", {
                theme: "colored",
                position: "top-left",
            });
-           await dispatch(confirmReservation(initialClientData));
+        await dispatch(confirmReservation(initialClientData));
        } 
        catch (error) {
            toast.error("حدث خطأ في الاتصال الخادم", {

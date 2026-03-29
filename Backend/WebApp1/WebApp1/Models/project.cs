@@ -12,7 +12,7 @@ namespace WebApp1.Models
         public int? TotalUnits { get; set; }
         public string? ProjectStatus { get; set; }
         public string? ProjectImage { get; set; }
-        public List<Unit>Units { get; set; }  
+        public List<Unit> units { get; set; }
      
 
     }

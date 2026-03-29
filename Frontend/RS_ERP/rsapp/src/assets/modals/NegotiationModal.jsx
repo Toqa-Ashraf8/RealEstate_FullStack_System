@@ -10,7 +10,7 @@ import {
 } from "../redux/clientSlice";
 import { fetchPriceByUnit, fetchProjects, fetchUnitsByProject } from "../services/clientService";
 const NegotiationModal = () => {
-const {negotiation,projects,units}= useSelector((state) => state.clients);
+const {negotiation,projects,units,selectedProjectId}= useSelector((state) => state.clients);
 const {isLoading}=useSelector((state)=>state.ui);
 const dispatch = useDispatch();
 const negotiationPriceRef=useRef();
@@ -36,8 +36,8 @@ const addNewNegotiation=()=>{
  useEffect(()=>{
     negotiationPriceRef.current.focus();
     if(negotiation.ProjectName!==-1 && negotiation.ProjectName){
-        dispatch(fetchProjects());
-        dispatch(fetchUnitsByProject(negotiation.ProjectName))
+       dispatch(fetchProjects());
+        dispatch(fetchUnitsByProject(negotiation.ProjectName));
     }
  },[dispatch])
 
@@ -68,7 +68,11 @@ const addNewNegotiation=()=>{
                       onChange={handleInputsChange} 
                       >
                         <option value="-1">-إختر-</option>
-                        {projects.map((project, index) => <option key={index} value={project.ProjectName}>{project.ProjectName}</option>)}
+                        {projects.map((project) => 
+                        <option key={project.ProjectCode} value={project.ProjectName}>
+                            {project.ProjectName}
+                        </option>
+                      )}
                       </select>
                   </div> 
                   <div>
@@ -78,7 +82,11 @@ const addNewNegotiation=()=>{
                       <label className="lbl_crm"> الوحدة</label>
                       <select className="crm_select select-unit" name="Unit" value={negotiation.Unit || ""} onChange={handleInputsChange}>
                         <option value="-1">-إختر-</option>
-                        {units.map((unit, index) => <option key={index} value={unit.UnitName}>{unit.UnitName }</option>)}
+                        {units?.map((unit, index) => 
+                        <option key={index} value={unit.UnitName}>
+                          {unit.UnitName}
+                        </option>
+                      )}
                       </select>
                     </div>
                   )}

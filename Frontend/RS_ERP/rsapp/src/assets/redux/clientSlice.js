@@ -23,7 +23,7 @@ const initialState = {
                   OriginalPrice:"",NegotiationPrice:"",DiscountAmount:"",
                  NegotiationStatus:"في انتظار موافقة الإدارة",
                  NegotiationDate:new Date().toISOString().split('T')[0],
-                 checkedByAdmin:0, Reserved:0},
+                 checkedByAdmin:0},
     negotiationsList:[], 
     units: [],
     totalUnitPrice:{},
@@ -34,6 +34,7 @@ const initialState = {
     isSearchClientsModalOpen:false,
     isDeleteNegotiationModalOpen:false,
     deletedStatus:false,
+  
 }
 
 const clientSlice = createSlice({
@@ -101,7 +102,8 @@ const clientSlice = createSlice({
         confirmDeleteNegotiation:(state,action)=>{
             state.negotiationsList=state.negotiationsList.filter((items,index)=> index !==state.selectedNegotiationIndex);
             state.isDeleteNegotiationModalOpen=false;
-        }
+        },
+       
       
     },
     extraReducers: (builder) => {
@@ -221,7 +223,7 @@ export const {
     editingNegotiationRow,
     toggleDeleteNegotiaionModal,
     selectedDeleteNegotiationRow,
-    confirmDeleteNegotiation
+    confirmDeleteNegotiation,
 } = clientSlice.actions;
 const clientReducer = clientSlice.reducer;
 export default clientReducer;

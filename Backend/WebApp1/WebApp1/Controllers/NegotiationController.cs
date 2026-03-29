@@ -44,7 +44,7 @@ namespace WebApp1.Controllers
         {
           
             DataTable dt = new DataTable();
-            string sqlg = "select * from Negotiations_2 where checkedByAdmin=0";
+            string sqlg = "select * from Negotiations where checkedByAdmin=0";
             SqlDataAdapter da = new SqlDataAdapter(sqlg, conn);
             da.Fill(dt);
             return new JsonResult(dt);
@@ -252,7 +252,7 @@ namespace WebApp1.Controllers
         {
             int count = 0;
             DataTable dt = new DataTable();
-            string sqld = "select * from Negotiations_2 where NegotiationCondition=0";
+            string sqld = "select * from Negotiations_2 where NegotiationCondition=0 AND checkedByAdmin=0";
             SqlDataAdapter da = new SqlDataAdapter(sqld, conn);
             da.Fill(dt);
             if (dt.Rows.Count > 0)
@@ -269,7 +269,7 @@ namespace WebApp1.Controllers
         {
             int count_a = 0;
             DataTable dt = new DataTable();
-            string sqld = "select * from Negotiations_2 where NegotiationCondition=1 AND Reserved=0";
+            string sqld = "select * from Negotiations_2 where NegotiationCondition=1 AND checkedByAdmin=1 AND Reserved=0";
             SqlDataAdapter da = new SqlDataAdapter(sqld, conn);
             da.Fill(dt);
             if (dt.Rows.Count > 0)

@@ -14,7 +14,8 @@ const initialState = {
         Job:"",
         ReservationAmount: 0,
         PaymentMethod: "-1",
-        CheckImagePath: ""
+        CheckImagePath: "",
+        Reserved:1
     },
     initialClientData:{},
     bookingClients: [],
@@ -221,9 +222,9 @@ const bookingSlice = createSlice({
                 state.successSaveBookingData=action.payload.saved_m;
                 state.successSaveInstallmentData=action.payload.saved_d;
             })
-            .addCase(confirmReservation.fulfilled, (state, action) => {
+          /*   .addCase(confirmReservation.fulfilled, (state, action) => {
                 state.loading = false;
-            })
+            }) */
          
             .addCase(getreservedClients.fulfilled, (state, action) => {
                 state.reservedClients=action.payload;

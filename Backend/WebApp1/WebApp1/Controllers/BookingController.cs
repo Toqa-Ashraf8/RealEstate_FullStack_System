@@ -117,12 +117,12 @@ namespace WebApp1.Controllers
                                         Address,Job,ReservationAmount,PaymentMethod,
                                         CheckImagePath,DownPayment,FirstInstallmentDate,
                                         InstallmentYears,ClientID,
-                                        ClientName,ProjectName,Unit,BookingDate) 
+                                        ClientName,ProjectName,Unit,BookingDate,Reserved) 
                                         values (@NationalID,@NationalIdImagePath,@SecondaryPhone,
                                         @Address,@Job,@ReservationAmount,@PaymentMethod,
                                         @CheckImagePath,@DownPayment,@FirstInstallmentDate,
                                         @InstallmentYears,@ClientID,
-                                        @ClientName,@ProjectName,@Unit,@BookingDate)
+                                        @ClientName,@ProjectName,@Unit,@BookingDate,@Reserved)
                                         SELECT SCOPE_IDENTITY()";
                     using (SqlCommand cmd = new SqlCommand(sqlinsert, conn))
                     {
@@ -145,6 +145,7 @@ namespace WebApp1.Controllers
                         cmd.Parameters.AddWithValue("@ProjectName", client.ProjectName);
                         cmd.Parameters.AddWithValue("@Unit", client.Unit);
                         cmd.Parameters.AddWithValue("@BookingDate", client.BookingDate);
+                        cmd.Parameters.AddWithValue("@Reserved", client.Reserved);
                         booking_id = Convert.ToInt32(cmd.ExecuteScalar());
                         if (conn.State == ConnectionState.Open) conn.Close();
                         saved_m = true;
@@ -168,6 +169,7 @@ namespace WebApp1.Controllers
                                           DownPayment=@DownPayment ,FirstInstallmentDate=@FirstInstallmentDate,
                                           InstallmentYears=@InstallmentYears,ClientID=@ClientID,
                                           ClientName=@ClientName,ProjectName=@ProjectName,Unit=@Unit 
+                                          ,BookingDate=@BookingDate ,Reserved=@Reserved
                                           where BookingID=@BookingID";
                     using (SqlCommand cmd = new SqlCommand(updatedata, conn))
                     {
@@ -189,6 +191,8 @@ namespace WebApp1.Controllers
                         cmd.Parameters.AddWithValue("@ClientName", client.ClientName);
                         cmd.Parameters.AddWithValue("@ProjectName", client.ProjectName);
                         cmd.Parameters.AddWithValue("@Unit", client.Unit);
+                        cmd.Parameters.AddWithValue("@BookingDate", client.BookingDate);
+                        cmd.Parameters.AddWithValue("@Reserved", client.Reserved);
                         cmd.Parameters.AddWithValue("@BookingID", booking_id);
                         cmd.ExecuteNonQuery();
                         if (conn.State == ConnectionState.Open) conn.Close();
@@ -216,6 +220,7 @@ namespace WebApp1.Controllers
                     if (conn.State == ConnectionState.Open) conn.Close();
 
                 }
+               
             }
             if (client.installments.Count > 0)
             { 
@@ -315,12 +320,12 @@ namespace WebApp1.Controllers
                              where ClientID=@ClientID AND 
                              ProjectName=@ProjectName AND
                              Unit=@Unit";
-            using(SqlCommand cmd=new SqlCommand(sqlup, conn))
+            using (SqlCommand cmd = new SqlCommand(sqlup, conn))
             {
                 if (conn.State == ConnectionState.Closed) conn.Open();
                 cmd.Parameters.Clear();
                 cmd.Parameters.AddWithValue("@ClientID", neg.ClientID);
-                cmd.Parameters.AddWithValue("@ProjectName",neg.ProjectName);
+                cmd.Parameters.AddWithValue("@ProjectName", neg.ProjectName);
                 cmd.Parameters.AddWithValue("@Unit", neg.Unit);
                 cmd.ExecuteNonQuery();
                 if (conn.State == ConnectionState.Open) conn.Close();
@@ -334,7 +339,7 @@ namespace WebApp1.Controllers
         public JsonResult GetAllReservedClients()
         {
             DataTable dt = new DataTable();
-            string sqls = "Select * from reserved_clients_details where 1=1";
+            string sqls = "Select * from reserved_clients_details where Reserved=1";
             using (SqlCommand cmd = new SqlCommand(sqls, conn))
             {
                 if (conn.State == ConnectionState.Closed) conn.Open();

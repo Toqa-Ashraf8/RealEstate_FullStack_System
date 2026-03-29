@@ -151,27 +151,29 @@ namespace WebApp1.Controllers
                     if (conn.State != ConnectionState.Closed) conn.Close();
                 }
 
-                if(prj.Units !=null && prj.Units.Count > 0) { 
+                if(prj.units !=null && prj.units.Count > 0) { 
                 string sqlin_u = @"insert into Units (serial,unitName,Floor,TotalArea,
-                                  MeterPrice,TotalPrice,unitStatus,unitImage,ProjectCode,ProjectName,ReservedStatus)
+                                  MeterPrice,TotalPrice,unitImage,ProjectCode,ProjectName,ReservedStatus)
                                   values(@serial,@unitName,@Floor,@TotalArea,@MeterPrice,
-                                  @TotalPrice,@unitStatus,@unitImage,@ProjectCode,@ProjectName,@ReservedStatus)";
-                    if (conn.State != ConnectionState.Open) conn.Open();
+                                  @TotalPrice,@unitImage,@ProjectCode,@ProjectName,@ReservedStatus)";
+                   
                     using (SqlCommand cmd = new SqlCommand(sqlin_u, conn))
-                    {
-                        foreach (var unit in prj.Units)
+                    { 
+                        if (conn.State != ConnectionState.Open) conn.Open();
+                        foreach (var unit in prj.units)
                         {
                             cmd.Parameters.Clear();
-                            cmd.Parameters.Add("@serial", SqlDbType.Int).Value = unit.serial;
+                            
+                            cmd.Parameters.Add("@serial", SqlDbType.Int).Value =unit.serial;
                             cmd.Parameters.Add("@unitName", SqlDbType.NVarChar).Value = unit.unitName ;
-                            cmd.Parameters.Add("@Floor", SqlDbType.NVarChar).Value = unit.Floor;
-                            cmd.Parameters.Add("@TotalArea", SqlDbType.Decimal).Value =  Convert.ToDecimal(unit.TotalArea) ;                         
-                            cmd.Parameters.Add("@MeterPrice", SqlDbType.Int).Value =  Convert.ToInt32(unit.MeterPrice) ;                        
-                            cmd.Parameters.Add("@TotalPrice", SqlDbType.Float).Value =  Convert.ToDouble(unit.TotalPrice);
-                            cmd.Parameters.AddWithValue("@unitImage", string.IsNullOrEmpty(unit.unitImage) ? DBNull.Value : unit.unitImage);
-                            cmd.Parameters.Add("@ProjectCode", SqlDbType.Int).Value = id;                          
-                            cmd.Parameters.Add("@ProjectName", SqlDbType.NVarChar).Value =prj.ProjectName ;
-                            cmd.Parameters.Add("@ReservedStatus", SqlDbType.Bit).Value=unit.ReservedStatus;
+                            cmd.Parameters.Add("@Floor", SqlDbType.NVarChar).Value = unit.Floor ;
+                            cmd.Parameters.Add("@TotalArea", SqlDbType.Decimal).Value = unit.TotalArea ;
+                            cmd.Parameters.Add("@MeterPrice", SqlDbType.Int).Value = unit.MeterPrice;
+                            cmd.Parameters.Add("@TotalPrice", SqlDbType.Decimal).Value = unit.TotalPrice; 
+                            cmd.Parameters.Add("@unitImage", SqlDbType.NVarChar).Value = string.IsNullOrEmpty(unit.unitImage) ? DBNull.Value : unit.unitImage;
+                            cmd.Parameters.Add("@ProjectCode", SqlDbType.Int).Value = id;
+                            cmd.Parameters.Add("@ProjectName", SqlDbType.NVarChar).Value = prj.ProjectName ;
+                            cmd.Parameters.Add("@ReservedStatus", SqlDbType.Bit).Value = Convert.ToBoolean(unit.ReservedStatus);
                             cmd.ExecuteNonQuery();
                         }
                     }

@@ -8,8 +8,8 @@ export const fetchProjects = createAsyncThunk("fetchProjects/clients", async () 
         .then((res) => res.data);
     return resp;
 })
-export const fetchUnitsByProject = createAsyncThunk("fetchUnitsByProject/clients", async (projectname) => {
-    const resp = await axios.post(variables.CLIENTS_API + "GetUnitsByProject?projectname=" + projectname)
+export const fetchUnitsByProject = createAsyncThunk("fetchUnitsByProject/clients", async (name) => {
+    const resp = await axios.post(variables.CLIENTS_API + "GetUnitsByProject?projectname=" + name)
         .then((res) => res.data);
     return resp;
 })
