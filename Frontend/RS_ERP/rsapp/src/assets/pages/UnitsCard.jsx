@@ -40,8 +40,6 @@ const UnitsCard = () => {
                     <div className="u-card-no-img"><FaImage size={24} /></div>
                   )}
                   <div className="u-card-badge">{unit.Floor}</div>
-                  
-                  
                 </div>
 
                 <div className="u-card-info">
