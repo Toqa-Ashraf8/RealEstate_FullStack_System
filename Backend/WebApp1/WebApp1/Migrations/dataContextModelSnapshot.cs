@@ -25,8 +25,11 @@ namespace WebApp1.Migrations
 
             modelBuilder.Entity("Unit", b =>
                 {
-                    b.Property<int?>("serial")
+                    b.Property<int>("UnitID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UnitID"));
 
                     b.Property<string>("Floor")
                         .IsUnicode(true)
@@ -45,11 +48,17 @@ namespace WebApp1.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("ReservedStatus")
+                        .HasColumnType("bit");
+
                     b.Property<float?>("TotalArea")
                         .HasColumnType("real");
 
                     b.Property<float?>("TotalPrice")
                         .HasColumnType("real");
+
+                    b.Property<int?>("serial")
+                        .HasColumnType("int");
 
                     b.Property<string>("unitImage")
                         .IsUnicode(true)
@@ -59,11 +68,7 @@ namespace WebApp1.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("unitStatus")
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("serial");
+                    b.HasKey("UnitID");
 
                     b.HasIndex("ProjectCode1");
 
@@ -72,11 +77,11 @@ namespace WebApp1.Migrations
 
             modelBuilder.Entity("WebApp1.Models.Client", b =>
                 {
-                    b.Property<int>("ClientID")
+                    b.Property<int?>("ClientID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("ClientID"));
 
                     b.Property<string>("ClientName")
                         .IsUnicode(true)
@@ -108,7 +113,6 @@ namespace WebApp1.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookingID"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
@@ -116,7 +120,6 @@ namespace WebApp1.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CheckImagePath")
-                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
@@ -128,32 +131,28 @@ namespace WebApp1.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DownPayment")
+                    b.Property<int?>("DownPayment")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("FirstInstallmentDate")
+                    b.Property<DateTime?>("FirstInstallmentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("InstallmentYears")
+                    b.Property<int?>("InstallmentYears")
                         .HasColumnType("int");
 
                     b.Property<string>("Job")
-                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NationalID")
-                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NationalIdImagePath")
-                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentMethod")
-                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
@@ -162,11 +161,10 @@ namespace WebApp1.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ReservationAmount")
+                    b.Property<int?>("ReservationAmount")
                         .HasColumnType("int");
 
                     b.Property<string>("SecondaryPhone")
-                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
@@ -188,34 +186,32 @@ namespace WebApp1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InstallmentID"));
 
-                    b.Property<int>("BookingID")
+                    b.Property<int?>("BookingID")
                         .HasColumnType("int");
 
                     b.Property<string>("CheckImage")
-                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ClientBookingDetailBookingID")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DueDate")
+                    b.Property<DateTime?>("DueDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("InstallmentNumber")
+                    b.Property<int?>("InstallmentNumber")
                         .HasColumnType("int");
 
-                    b.Property<int>("MonthlyAmount")
+                    b.Property<int?>("MonthlyAmount")
                         .HasColumnType("int");
 
-                    b.Property<int>("Months")
+                    b.Property<int?>("Months")
                         .HasColumnType("int");
 
-                    b.Property<bool>("Paid")
+                    b.Property<bool?>("Paid")
                         .HasColumnType("bit");
 
                     b.Property<string>("PaymentType")
-                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
@@ -228,30 +224,34 @@ namespace WebApp1.Migrations
 
             modelBuilder.Entity("WebApp1.Models.Negotiation", b =>
                 {
-                    b.Property<int>("serialCode")
+                    b.Property<int>("NegotiationID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NegotiationID"));
 
                     b.Property<int>("ClientID")
                         .HasColumnType("int");
 
                     b.Property<string>("ClientName")
+                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("DiscountAmount")
+                    b.Property<decimal?>("DiscountAmount")
                         .HasColumnType("decimal(5,2)");
 
                     b.Property<DateTime>("NegotiationDate")
                         .HasColumnType("date");
 
-                    b.Property<int>("NegotiationPrice")
+                    b.Property<int?>("NegotiationPrice")
                         .HasColumnType("int");
 
                     b.Property<string>("NegotiationStatus")
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OriginalPrice")
+                    b.Property<int?>("OriginalPrice")
                         .HasColumnType("int");
 
                     b.Property<string>("ProjectName")
@@ -273,7 +273,10 @@ namespace WebApp1.Migrations
                     b.Property<bool>("checkedByAdmin")
                         .HasColumnType("bit");
 
-                    b.HasKey("serialCode");
+                    b.Property<int?>("serialCode")
+                        .HasColumnType("int");
+
+                    b.HasKey("NegotiationID");
 
                     b.HasIndex("ClientID");
 
@@ -339,11 +342,10 @@ namespace WebApp1.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ReasonOfReject")
-                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SuggestedPrice")
+                    b.Property<int?>("SuggestedPrice")
                         .HasColumnType("int");
 
                     b.Property<string>("Unit")

@@ -32,7 +32,6 @@ const initialState = {
     unitFormMode: -1, 
     isDeleted:false, 
     saveErrorStatus: false,
-    isAvailableUnit:"متاحة",
     //set row indexs and row id 
     unitTableRowIndex:"",
     selectedProjectRowIndex: "",
@@ -61,7 +60,7 @@ const projectSlice = createSlice({
             state.unitImageName = '';
             state.selectedUnit = {};
             state.selectedUnit.serial = action.payload;
-            state.selectedUnit.unitStatus=state.isAvailableUnit;
+           
         },
         setUnitEditingIndex:(state,action)=>{
             state.unitFormMode = action.payload;

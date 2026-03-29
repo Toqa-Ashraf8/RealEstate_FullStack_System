@@ -153,9 +153,9 @@ namespace WebApp1.Controllers
 
                 if(prj.Units !=null && prj.Units.Count > 0) { 
                 string sqlin_u = @"insert into Units (serial,unitName,Floor,TotalArea,
-                                  MeterPrice,TotalPrice,unitStatus,unitImage,ProjectCode,ProjectName)
+                                  MeterPrice,TotalPrice,unitStatus,unitImage,ProjectCode,ProjectName,ReservedStatus)
                                   values(@serial,@unitName,@Floor,@TotalArea,@MeterPrice,
-                                  @TotalPrice,@unitStatus,@unitImage,@ProjectCode,@ProjectName)";
+                                  @TotalPrice,@unitStatus,@unitImage,@ProjectCode,@ProjectName,@ReservedStatus)";
                     if (conn.State != ConnectionState.Open) conn.Open();
                     using (SqlCommand cmd = new SqlCommand(sqlin_u, conn))
                     {
@@ -168,10 +168,10 @@ namespace WebApp1.Controllers
                             cmd.Parameters.Add("@TotalArea", SqlDbType.Decimal).Value =  Convert.ToDecimal(unit.TotalArea) ;                         
                             cmd.Parameters.Add("@MeterPrice", SqlDbType.Int).Value =  Convert.ToInt32(unit.MeterPrice) ;                        
                             cmd.Parameters.Add("@TotalPrice", SqlDbType.Float).Value =  Convert.ToDouble(unit.TotalPrice);
-                            cmd.Parameters.Add("@unitStatus", SqlDbType.NVarChar).Value = unit.unitStatus;
                             cmd.Parameters.AddWithValue("@unitImage", string.IsNullOrEmpty(unit.unitImage) ? DBNull.Value : unit.unitImage);
                             cmd.Parameters.Add("@ProjectCode", SqlDbType.Int).Value = id;                          
                             cmd.Parameters.Add("@ProjectName", SqlDbType.NVarChar).Value =prj.ProjectName ;
+                            cmd.Parameters.Add("@ReservedStatus", SqlDbType.Bit).Value=unit.ReservedStatus;
                             cmd.ExecuteNonQuery();
                         }
                     }

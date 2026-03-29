@@ -108,7 +108,6 @@ namespace WebApp1.Controllers
             bool saved_m = false;
             bool saved_d = false;
             bool updated = false;
-            string unit_status = "محجوزة";
             if (booking_id == 0)
             {
                 try
@@ -204,9 +203,9 @@ namespace WebApp1.Controllers
             }
             if (saved_m == true)
             {
-                string sqlup = "update Units set unitStatus='" + unit_status + "'" +
-                               " where ProjectName=@ProjectName AND" +
-                               " UnitName=@Unit";
+                string sqlup = @"update Units set ReservedStatus=1 where
+                                 ProjectName=@ProjectName AND 
+                                 UnitName=@Unit";
                 using (SqlCommand cmd = new SqlCommand(sqlup, conn))
                 {
                     if (conn.State == ConnectionState.Closed) conn.Open();

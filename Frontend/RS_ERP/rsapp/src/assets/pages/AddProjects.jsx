@@ -79,7 +79,7 @@ const AddProjects = () => {
   };
   
   const handleSaveProject = async () => {
-     const parms = { ...project, units:unitsList };
+     const parms = { ...project, units:unitsList.map(item=>({...item,ReservedStatus:0}))};
     try {
       const result = await dispatch(saveCompleteProject(parms)).unwrap();
       if (result.errorOccured) {
