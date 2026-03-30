@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { 
     Users, 
     User, 
@@ -14,31 +14,69 @@ import {
 } from 'lucide-react';
 import '../css/BookedClients.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { getreservedClients, getreservedClientsByID, reservedOrnot } from '../redux/bookingSlice';
+import { deleteBookingData, deleteBookingRow, getreservedClients, getreservedClientsByID, reservedOrnot } from '../redux/bookingSlice';
 import { useNavigate } from 'react-router-dom';
+import { useReactToPrint } from 'react-to-print';
+import BookingsReport from '../reports/BookingsReport';
+import { changeUnitAvailableStatus } from '../services/projectService';
 
 const BookedClients = () => {
-
     const db_b=useSelector((state)=>state.booking);
     const dispatch=useDispatch();
     const navigate=useNavigate();
-//---------------------------------------------------------------------
+   
+   
+const handlePrint = useReactToPrint({
+        contentRef: () => componentRef,
+        documentTitle: 'تقرير_حجز_عميل',
+});
+
 useEffect(()=>{ 
     dispatch(getreservedClients());
-},[db_b.reservedClients])
+},[])
 const editReservedClients=async(id,index)=>{
     const selectedClient=db_b.reservedClients[index];
-    const storagekey='activeBookingClient';
-    localStorage.removeItem(storagekey);
-    localStorage.setItem(storagekey, JSON.stringify(selectedClient));
+    localStorage.setItem('activeBookingClient', JSON.stringify(selectedClient));
     await dispatch(getreservedClientsByID(id));
-    await dispatch(reservedOrnot(1));
+     dispatch(reservedOrnot(1));
     await navigate('/complete_booking?clientId='+id);
 }
-//----------------------------------------------------------------------
+const printReport = async (index, id) => {
+    try {
+        await dispatch(getreservedClientsByID(id)).unwrap();
+        dispatch(reservedOrnot(1)); 
+        handlePrint();  
+        navigate('/bookingreport');
+        
+    } catch (error) {
+        console.error("Failed to fetch client details", error);
+    }
+}
+
+const deleteBooking=async(index)=>{
+  const selectedBookingId=db_b.reservedClients[index].BookingID;
+  const reservedUnitName=db_b.reservedClients[index].Unit;
+    try {
+        const result= await dispatch(deleteBookingData(selectedBookingId)).unwrap();
+        if(result.isDeleted){
+             toast.success("تم حذف الحجز بنجاح!", {
+             theme: "colored",
+             position: "top-left",
+            }); 
+        await dispatch(changeUnitAvailableStatus(reservedUnitName));
+        dispatch(deleteBookingRow(index));
+        }
+       
+    } catch (error) {
+        toast.error("حدث خطأ في الاتال بالخادم!", {
+        theme: "colored",
+        position: "top-left",
+       });
+    }
+}
     return (
-        <div className="booked_list_wrapper">
-            <div className="booked_list_header">
+        <div className="booked_list_wrapper">      
+          <div className="booked_list_header">
                 <div className="booked_list_title_area">
                     <h2><Users size={24} /> سجل الحجوزات المكتملة</h2>
                     <p>إدارة واستعراض{db_b.reservedClients.length}عقد مبرم</p>
@@ -86,13 +124,26 @@ const editReservedClients=async(id,index)=>{
                               
                                 <td>
                                     <div className="table_actions">
-                                        <button className="action_icon view" title="تعديل" onClick={()=>editReservedClients(client.BookingID,index)}>
+                                        <button 
+                                        className="action_icon view" 
+                                        title="تعديل" 
+                                        onClick={()=>editReservedClients(client.BookingID,index)}>
                                             <SquarePen  size={18} color='blue' />
                                        </button>
-                                        <button className="action_icon view" title="حذف">
+
+                                        <button 
+                                        className="action_icon view" 
+                                        title="حذف"
+                                        onClick={()=>deleteBooking(index)}
+                                        >
                                             <Trash2   size={18} color='red' />
                                        </button>
-                                        <button className="action_icon view" title="طباعة">
+
+                                        <button 
+                                        className="action_icon view" 
+                                        title="طباعة"
+                                        onClick={()=>printReport(index,client.BookingID)}
+                                        >
                                             <Printer  size={18} color='teal' />
                                        </button>
                                     </div>
@@ -102,6 +153,7 @@ const editReservedClients=async(id,index)=>{
                     </tbody>
                 </table>
             </div>
+             
         </div>
     );
 };

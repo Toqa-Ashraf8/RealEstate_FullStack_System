@@ -38,8 +38,9 @@ const initialState = {
     selectedInstallmentrow:-1,
     isRevertPaymentModalOpen: false,
     selectedDeleteIndex: -1,
-    bookingDate:new Date().toISOString().split('T')[0]
-   
+    bookingDate:new Date().toISOString().split('T')[0],
+    isDeletedBooking:false
+
 }
 //*********************************************************************** */
 export const FillClientData = createAsyncThunk("FillClientData/booking", async (Clientdata) => {
@@ -85,6 +86,11 @@ export const getreservedClients = createAsyncThunk("getreservedClients/booking",
 })
 export const getreservedClientsByID = createAsyncThunk("getreservedClientsByID/booking", async (id) => {
     const resp = await axios.post(variables.BOOKINGS_API + "GetReservedClientById?id="+id)
+        .then((res) => res.data);
+    return resp;
+})
+export const deleteBookingData = createAsyncThunk("deleteBookingData/booking", async (id) => {
+    const resp = await axios.delete(variables.BOOKINGS_API + "DeleteBookingData?bookingid="+id)
         .then((res) => res.data);
     return resp;
 })
@@ -195,6 +201,10 @@ const bookingSlice = createSlice({
          state.selectedDeleteIndex = -1;
        }
       },
+      deleteBookingRow:(state,action)=>{
+        state.reservedClients=state.reservedClients.filter((client,index)=>index!==action.payload);
+      }
+     
 
     },
     extraReducers: (builder) => {
@@ -225,7 +235,6 @@ const bookingSlice = createSlice({
           /*   .addCase(confirmReservation.fulfilled, (state, action) => {
                 state.loading = false;
             }) */
-         
             .addCase(getreservedClients.fulfilled, (state, action) => {
                 state.reservedClients=action.payload;
             })
@@ -234,6 +243,10 @@ const bookingSlice = createSlice({
                 state.bookingClient=action.payload.clientdt[0];
                 state.InstallmentDetails=action.payload.installmentdt;
             })  
+            .addCase(deleteBookingData.fulfilled, (state, action) => {
+                state.isDeletedBooking=action.payload;
+            })
+           
     }
 })
 export const {
@@ -254,8 +267,9 @@ export const {
     setPendingPayment,
     confirmpaidStatus,
     openRevertModal,
-    confirmRevertPayment
- 
+    confirmRevertPayment,
+    deleteBookingRow
+
 } = bookingSlice.actions;
 const bookingReducer = bookingSlice.reducer;
 export default bookingReducer;

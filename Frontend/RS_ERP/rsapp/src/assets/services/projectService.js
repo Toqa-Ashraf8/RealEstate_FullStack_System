@@ -32,3 +32,8 @@ export const fetchProjectUnits = createAsyncThunk("fetchProjectUnits/projects", 
         .then((res) => res.data);
     return resp;
 })
+export const changeUnitAvailableStatus = createAsyncThunk("changeUnitAvailableStatus/projects", async (unit) => {
+    const resp = await axios.post(variables.PROJECTS_API + "SetUnitAvailable?unit=" + unit)
+        .then((res) => res.data);
+    return resp;
+})

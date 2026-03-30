@@ -63,6 +63,11 @@ const Header = () => {
           <Link className="nav-link" to="/booking">
               إدارة الحجوزات
           </Link>
+        </li> 
+        <li className="nav-item">
+          <Link className="nav-link" to="/clientpage">
+               العملاء 
+          </Link>
         </li>
       </ul>
     {token && <HeaderActions/>}

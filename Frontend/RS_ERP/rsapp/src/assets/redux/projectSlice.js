@@ -4,6 +4,7 @@ import { variables } from "../variables";
 import { toast } from 'react-toastify';
 import { formatCurrency } from "../helpers";
 import { 
+    changeUnitAvailableStatus,
     deleteProject, 
     fetchProjectsList, 
     fetchProjectUnits, 
@@ -32,6 +33,7 @@ const initialState = {
     unitFormMode: -1, 
     isDeleted:false, 
     saveErrorStatus: false,
+    isUpdated:false,
     //set row indexs and row id 
     unitTableRowIndex:"",
     selectedProjectRowIndex: "",
@@ -143,6 +145,9 @@ const projectSlice = createSlice({
         
             .addCase(fetchProjectUnits.fulfilled, (state, action) => {
                 state.unitsList = action.payload;
+            })
+            .addCase(changeUnitAvailableStatus.fulfilled, (state, action) => {
+                state.isUpdated = action.payload;
             })
     }
 })

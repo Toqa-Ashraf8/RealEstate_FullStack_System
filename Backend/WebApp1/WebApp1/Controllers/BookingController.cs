@@ -403,6 +403,50 @@ namespace WebApp1.Controllers
                            };
             return new JsonResult(data);
         }
-       
+
+        [Route("DeleteBookingData")]
+        [HttpDelete]
+        public JsonResult DeleteBookingData(int bookingid)
+        {
+            bool isDeleted = false;
+            try
+            {
+                string deleteInstallment = "delete Installments where BookingID=@BookingID";
+                if (conn.State == ConnectionState.Closed) conn.Open();
+                using (SqlCommand cmd = new SqlCommand(deleteInstallment, conn))
+                { 
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@BookingID", bookingid);
+                    int rows = cmd.ExecuteNonQuery();
+                    isDeleted = true;
+                    
+                }
+                if (isDeleted)
+                {
+                    string deleteClient = "delete ClientBookingDetails where BookingID=@BookingID";
+                    using (SqlCommand cmd = new SqlCommand(deleteClient, conn))
+                    {
+                        cmd.Parameters.Clear();
+                        cmd.Parameters.AddWithValue("@BookingID", bookingid);
+                        int rows = cmd.ExecuteNonQuery();
+                        isDeleted = (rows > 0);
+                    }
+                }
+                
+            }
+            catch (Exception)
+            {
+
+                return new JsonResult(new { message = "حدث خطأ أثناء مسح الحجز" });
+            }
+            finally
+            {
+                if (conn.State == ConnectionState.Open) conn.Close();
+            }
+
+            return new JsonResult(isDeleted);
+        }
+
+
     }
 }

@@ -1,6 +1,23 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { User,  CreditCard,  Phone,  MapPin,  FilePenLine ,Banknote,CircleDollarSign,Building2, BriefcaseBusiness , Calendar,Image as ImageIcon, CheckCircle,  FileText, Hash,  Activity ,  NotepadText  } from 'lucide-react';
+import { 
+    User,  
+    CreditCard, 
+    Phone,  
+    MapPin,  
+    FilePenLine ,
+    Banknote,
+    CircleDollarSign,
+    Building2, 
+    BriefcaseBusiness , 
+    Calendar,
+    Image as ImageIcon, 
+    CheckCircle,  
+    FileText, 
+    Hash,  
+    Activity ,  
+    NotepadText  
+} from 'lucide-react';
 import '../css/CompleteBooking.css';
 import { RiSave3Fill } from "react-icons/ri";
 import { AiOutlineClear } from "react-icons/ai";
@@ -221,7 +238,10 @@ const getinstallmentsData=(id)=>{
                                         className="final_input_modern final_disabled" 
                                         name='BookingDate'
                                         readOnly
-                                        value={bookingClient?.BookingDate.split('T')[0] || bookingDate}
+                                        value={bookingClient && bookingClient.BookingDate? 
+                                               bookingClient.BookingDate.split('T')[0] 
+                                              : bookingDate
+                                             }
                                         />
                                     </div>
                                 </div>
