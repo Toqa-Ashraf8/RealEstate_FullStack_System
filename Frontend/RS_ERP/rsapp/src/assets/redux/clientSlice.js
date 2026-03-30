@@ -14,7 +14,7 @@ import {
     fetchProjects, 
     fetchUnitsByProject, 
     saveClient 
-} from "../services/clientService";
+} from "../../services/clientService";
 const initialState = {
     client: { ClientID: 0, ClientName: "", PhoneNumber: "", ClientStatus: "-1",Notes: ""},
     clientsList: [],

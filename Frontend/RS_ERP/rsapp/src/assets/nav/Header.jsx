@@ -1,5 +1,5 @@
 import React from 'react'
-import '../css/Header.css'
+import './Header.css'
 import { MdOutlineRealEstateAgent } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import { MdOutlineNotifications } from "react-icons/md";

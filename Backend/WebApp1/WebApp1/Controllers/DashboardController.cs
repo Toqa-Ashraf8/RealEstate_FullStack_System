@@ -119,7 +119,7 @@ namespace WebApp1.Controllers
         {
             DataTable dt = new DataTable();
             int negotiationCount;
-            string sqlg = "select * from Negotiations";
+            string sqlg = "select * from Negotiations where checkedByAdmin=0";
             SqlDataAdapter da = new SqlDataAdapter(sqlg, conn);
             da.Fill(dt);
             if (dt.Rows.Count > 0)

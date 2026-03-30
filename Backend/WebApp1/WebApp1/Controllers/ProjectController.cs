@@ -243,14 +243,14 @@ namespace WebApp1.Controllers
             return new JsonResult(dt);
 
         }
-        // Get Units (Details)
+        // Get Units (Display in cards)
         [Route("GetProjectUnits")]
         [HttpPost]
         public JsonResult GetProjectUnits(int projectId)
          {
             DataTable dt = new DataTable();
-            string sqlg_dtls = @"select * from Units where ProjectCode=@ProjectCode";
-            SqlCommand cmd = new SqlCommand(sqlg_dtls, conn);
+            string sqlg = @"select * from Units where ProjectCode=@ProjectCode";
+            SqlCommand cmd = new SqlCommand(sqlg, conn);
             cmd.Parameters.Clear();
             cmd.Parameters.AddWithValue("@ProjectCode", projectId);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -258,6 +258,54 @@ namespace WebApp1.Controllers
             return new JsonResult(dt);
 
         }
-       
+        //Get Units (details)
+        [Route("GetUnitsByProject")]
+        [HttpPost]
+        public JsonResult GetUnitsByProject(int Id)
+        {
+            DataTable dt = new DataTable();
+            string sqlg_dtls = @"select * from Units where ProjectCode=@ProjectCode";
+            SqlCommand cmd = new SqlCommand(sqlg_dtls, conn);
+            cmd.Parameters.Clear();
+            cmd.Parameters.AddWithValue("@ProjectCode", Id);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            da.Fill(dt);
+            return new JsonResult(dt);
+
+        }
+
+        [Route("SetUnitAvailable")]
+        [HttpPost]
+        public JsonResult SetUnitAvailable(string unit)
+        {
+            bool isUpdated = false;
+            try
+            {
+                string sqlp = "Update Units set ReservedStatus=0 where unitName=@unitName";
+                using (SqlCommand cmd = new SqlCommand(sqlp, conn))
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@unitName", unit);
+                    cmd.ExecuteNonQuery();
+                    isUpdated = true;
+
+                }
+            }
+            catch (Exception)
+            {
+
+                return new JsonResult(new { message = "حدث خطأ أثناء تغيير الحالة " });
+            }
+            finally
+            {
+                if (conn.State == ConnectionState.Open) conn.Close();
+
+            }
+            return new JsonResult(isUpdated);
+            
+        }
+
+
     }
 }

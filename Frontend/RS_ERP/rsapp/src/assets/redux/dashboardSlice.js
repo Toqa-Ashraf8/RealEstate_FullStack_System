@@ -1,5 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { availableUnitsCount, fetchClientsCount, fetchMonthlyReservations, fetchNegotiationsCount, fetchProjectsCount, fetchProjectsUnitsStats, reservedUnitsCount } from "../services/dashboardServices";
+import { 
+    availableUnitsCount, 
+    fetchClientsCount, 
+    fetchMonthlyReservations, 
+    fetchNegotiationsCount, 
+    fetchProjectsCount, 
+    fetchProjectsUnitsStats, 
+    reservedUnitsCount 
+} from "../../services/dashboardServices"; 
 
 const initialState={
     projectsUnitsCounts:[],

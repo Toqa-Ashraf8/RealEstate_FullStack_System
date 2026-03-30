@@ -2,28 +2,28 @@ import './App.css'
 import 'animate.css';
 import { Routes,Route, Navigate }from 'react-router-dom'
 import Header from './assets/nav/Header'
-import AddProjects from './assets/pages/AddProjects'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer,toast } from 'react-toastify';
+import Register from './features/user/Register';
+import Login from './features/user/Login';
+import DashboardPage from './features/dashboard/DashboardPage';
+import AddProjects from './features/projects/pages/AddProjects';
+import ProjectsCard from './features/projects/pages/ProjectsCard';
+import UnitsCard from './features/units/UnitsCard';
+import BookingsManager from './features/booking/complete/BookingsManager';
+import NegotiationRequests from './features/negotiations/pages/NegotiationRequests'
+import AddClients from './features/clients/pages/AddClients';
+import RejectedNegotiations from './features/negotiations/pages/RejectedNegotiations';
+import AcceptedNegotiations from './features/negotiations/pages/AcceptedNegotiations';
+import CompleteBooking from './features/booking/complete/CompleteBooking';
+import InstallmentsSchedule from './features/booking/complete/InstallmentsSchedule';
+import BookedClients from './features/booking/booked/BookedClients';
+import ClientsPage from './features/dashboardClient/ClientsPage';
+import BookingsReport from './assets/reports/BookingsReport';
+import ProtectedRoute from './components/ProtectedRoute';
 import 'react-toastify/dist/ReactToastify.css';
-import ProjectsCard from './assets/pages/ProjectsCard'
-import NegotiationRequests from './assets/pages/NegotiationRequests'
-import RejectedNegotiations from './assets/pages/RejectedNegotiations';
-import AcceptedNegotiations from './assets/pages/AcceptedNegotiations';
-import BookingsManager from './assets/pages/BookingsManager';
-import UnitsCard from './assets/pages/UnitsCard';
-import AddClients from './assets/pages/AddClients';
-import CompleteBooking from './assets/pages/CompleteBooking';
-import InstallmentsSchedule from './assets/pages/InstallmentsSchedule';
-import BookedClients from './assets/pages/BookedClients';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useRef } from 'react';
 import {clearGlobalError} from './assets/redux/uiSlice'
-import Register from './assets/pages/Register';
-import Login from './assets/pages/Login';
-import ProtectedRoute from './assets/components/ProtectedRoute';
-import DashboardPage from './assets/pages/DashboardPage';
-import ClientsPage from './assets/pages/ClientsPage';
-import BookingsReport from './assets/reports/BookingsReport';
 
 
 function App() {

@@ -8,10 +8,11 @@ import {
     deleteProject, 
     fetchProjectsList, 
     fetchProjectUnits, 
+    fetchUnitsDetails, 
     saveCompleteProject, 
     uploadProjectImage, 
     uploadUnitImage 
-} from "../services/projectService";
+} from "../../services/projectService";
 const initialState = {
     project: {
          ProjectCode: 0, ProjectName:"", ProjectType: "-1", 
@@ -20,6 +21,7 @@ const initialState = {
     projectsList: [],
     selectedUnit: {},
     unitsList: [], 
+    displayUnitsList: [],
     //set variables
     projectImageName: "", 
     unitImageName: "",
@@ -144,6 +146,9 @@ const projectSlice = createSlice({
             })
         
             .addCase(fetchProjectUnits.fulfilled, (state, action) => {
+                state.displayUnitsList = action.payload;
+            }) 
+            .addCase(fetchUnitsDetails.fulfilled, (state, action) => {
                 state.unitsList = action.payload;
             })
             .addCase(changeUnitAvailableStatus.fulfilled, (state, action) => {

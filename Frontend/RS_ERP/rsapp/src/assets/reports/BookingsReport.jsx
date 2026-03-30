@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/BookingsReport.css';
+import './BookingsReport.css';
 import { variables } from '../variables';
 import { Printer } from 'lucide-react';
 
