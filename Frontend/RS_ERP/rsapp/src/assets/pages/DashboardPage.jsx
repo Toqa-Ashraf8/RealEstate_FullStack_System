@@ -2,26 +2,45 @@ import React, { useEffect } from 'react';
 import '../css/DashboardPage.css'; 
 import ProjectsUnitsBarChart from '../components/ProjectsUnitsBarChart'; 
 import DailyBookingChart from '../components/DailyBookingChart'; 
-import { useDispatch } from 'react-redux';
-import { fetchMonthlyReservations, fetchProjectsUnitsStats } from '../services/dashboardServices';
+import { useDispatch, useSelector } from 'react-redux';
+import { 
+  availableUnitsCount,
+  fetchClientsCount, 
+  fetchMonthlyReservations, 
+  fetchNegotiationsCount, 
+  fetchProjectsCount, 
+  fetchProjectsUnitsStats, 
+  reservedUnitsCount
+} from '../services/dashboardServices';
 
 const DashboardPage = () => {
   const dispatch=useDispatch();
+  const {
+    projectsCount,
+    clientsCount,
+    negotiationsCount,
+    reservedUnits,
+    availableUnits
+  }=useSelector((state)=>state.dashboard);
   const stats = [
-    { title: "عدد المشاريع", value: "12" },
-    { title: "إجمالي العملاء", value: "1,240" },
-    { title: "طلبات الشراء", value: "85" },
-    { title: "وحدات محجوزة", value: "42" },
-    { title: "وحدات متاحة", value: "156" },
+    { title: "عدد المشاريع", value: projectsCount },
+    { title: "إجمالي العملاء", value: clientsCount },
+    { title: "طلبات الشراء", value: negotiationsCount},
+    { title: "وحدات محجوزة", value: reservedUnits },
+    { title: "وحدات متاحة", value: availableUnits },
   ];
 
-  /* const projectsUnitsData = [45, 80, 20, 55]; 
-  const bookingDailyData = [5, 12, 8, 45];  */
+
 useEffect(()=>{
   const fetchData=async()=>{
    await Promise.all([
       dispatch(fetchProjectsUnitsStats()),
-      dispatch(fetchMonthlyReservations())
+      dispatch(fetchMonthlyReservations()),
+      dispatch(fetchProjectsCount()),
+      dispatch(fetchClientsCount()),
+      dispatch(fetchNegotiationsCount()),
+      dispatch(reservedUnitsCount()),
+      dispatch(availableUnitsCount())
     ]);
   }
   fetchData();
@@ -29,8 +48,6 @@ useEffect(()=>{
 
   return (
     <div className="dashboard-main-wrapper" dir="rtl">
-      
- 
       <div className="stats-container">
         {stats.map((item, index) => (
           <div key={index} className="custom-stat-box">
@@ -42,8 +59,6 @@ useEffect(()=>{
 
   
       <div className="charts-flex-row">
-        
-     
         <div className="chart-item-box">
           <div className="chart-inner-card">
             <div className="chart-top-bar">
@@ -55,7 +70,6 @@ useEffect(()=>{
           </div>
         </div>
 
-        {/* الكارت الشمال */}
         <div className="chart-item-box">
           <div className="chart-inner-card">
             <div className="chart-top-bar">

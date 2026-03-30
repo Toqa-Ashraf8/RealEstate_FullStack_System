@@ -25,11 +25,11 @@ const handleChangeValues=(e)=>{
         if(token){
           sessionStorage.setItem('token',token);
           sessionStorage.setItem('userRole',role);
-          navigate('/addprojects');
           toast.success("تم تسجيل الدخول بنجاح! مرحبا بك",{
             theme:"colored",
             position:"top-left"
           })
+          navigate('/addprojects');
         }
   }
 

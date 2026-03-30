@@ -64,7 +64,7 @@
     height: 34px;
 }
 
-/* الخانات بتصميم حديث */
+
 .form-control-modern, .form-select-modern {
     flex: 1;
     padding: 14px 20px;
@@ -84,7 +84,7 @@
     background: #fff;
 }
 
-/* تصميم خاص لرفع الملفات */
+
 .file-input-wrapper {
     position: relative;
     flex: 1;
@@ -111,7 +111,7 @@
     font-weight: 600;
 }
 
-/* مربع معاينة الصورة */
+
 .img_cnt {
     width: 100%;
     height: 500px;
@@ -140,19 +140,21 @@
     margin-bottom: 15px;
 }
 
-/* أزرار الإجراءات الجانبية */
+
 .btns_toc_p {
-    position: fixed!important;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    right: 20px; 
-    top: 58%; 
-    transform: translateY(-50%); 
+    position: relative;
+    width: 90px;
+    float: right;
+    top:130px;
+    margin-right: 10px;
     background: white;
     padding: 15px;
     border-radius: 25px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    z-index: 1000;
 }
 
 .btn_c {
@@ -176,12 +178,11 @@
 
 .btn_addunits { 
     margin: 40px 0;
-   /*  display: flex;
-    justify-content: flex-end; */
+  
 }
 
 .btn_add_units {
-    padding: 18px 45px;
+    padding: 15px 40px;
     background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
     color: white;
     border: none;
@@ -192,6 +193,7 @@
     transition: all 0.3s ease;
     display: inline-flex;
     align-items: center;
+    margin-right: 40px;
     box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
     gap: 10px;
 }
@@ -260,18 +262,10 @@
     cursor: pointer;
     gap: 20px!important;
 }
-/* Responsive */
+
 @media (max-width: 992px) {
     .row { flex-direction: column; }
     .col-8, .col-4 { width: 100% !important; }
     .img_cnt { height: 300px; margin-top: 30px; }
- /*    .btns_toc { 
-        position: relative; 
-        flex-direction: row; 
-        right: auto; 
-        top: auto; 
-        transform: none; 
-        justify-content: center;
-        margin-bottom: 30px;
-    } */
+ 
 }

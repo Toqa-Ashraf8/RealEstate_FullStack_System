@@ -1,9 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchMonthlyReservations, fetchProjectsUnitsStats } from "../services/dashboardServices";
+import { availableUnitsCount, fetchClientsCount, fetchMonthlyReservations, fetchNegotiationsCount, fetchProjectsCount, fetchProjectsUnitsStats, reservedUnitsCount } from "../services/dashboardServices";
 
 const initialState={
     projectsUnitsCounts:[],
-    reservationstatistics:[]
+    reservationstatistics:[],
+    projectsCount:"",
+    clientsCount:"",
+    negotiationsCount:"",
+    reservedUnits:"",
+    availableUnits:"",
+
 }
 const dashboardSlice=createSlice({
     name:'dashboard',
@@ -20,6 +26,21 @@ const dashboardSlice=createSlice({
         })
         .addCase(fetchMonthlyReservations.fulfilled,(state,action)=>{
             state.reservationstatistics=action.payload;
+        })
+        .addCase(fetchProjectsCount.fulfilled,(state,action)=>{
+            state.projectsCount=action.payload;
+        })
+        .addCase(fetchClientsCount.fulfilled,(state,action)=>{
+            state.clientsCount=action.payload;
+        }) 
+        .addCase(fetchNegotiationsCount.fulfilled,(state,action)=>{
+            state.negotiationsCount=action.payload;
+        })
+        .addCase(reservedUnitsCount.fulfilled,(state,action)=>{
+            state.reservedUnits=action.payload;
+        })
+        .addCase(availableUnitsCount.fulfilled,(state,action)=>{
+            state.availableUnits=action.payload;
         })
     }
 })

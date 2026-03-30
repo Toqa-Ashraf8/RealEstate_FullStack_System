@@ -122,7 +122,10 @@ const calcutlateDownpayment=()=>{
     }
     else{
         const newtotalPrice=initialClientData.NegotiationPrice;
-        dispatch(calculatenewDownPayment({total:newtotalPrice,newReservationAmount:reservationRef.current.value}))
+        dispatch(calculatenewDownPayment({
+            total:newtotalPrice,
+            newReservationAmount:reservationRef.current.value
+        }))
     }
 }
 
@@ -218,7 +221,7 @@ const getinstallmentsData=(id)=>{
                                         className="final_input_modern final_disabled" 
                                         name='BookingDate'
                                         readOnly
-                                        value={bookingClient?.BookingDate || bookingDate}
+                                        value={bookingClient?.BookingDate.split('T')[0] || bookingDate}
                                         />
                                     </div>
                                 </div>

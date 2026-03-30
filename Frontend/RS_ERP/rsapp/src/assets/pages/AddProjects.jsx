@@ -114,23 +114,8 @@ const AddProjects = () => {
   };
 
   return (
-    <div className="page-container">
-      {isUnitModalOpen && <UnitModal />}
-      {isDeleteUnitModalOpen && <UnitDeleteModal/>}
-      {isDeleteProjectModalOpen && <ProjectDeleteModal/>}
-      {isSearchModalOpen && <SearchProjectsModal />}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="add-project-wrapper"
-        dir="rtl"
-      >
-        <div className="form-header">
-          <h2 className="p_title">إضافة مشروع عقاري جديد</h2>
-        </div>
-
-        <div className="btns_toc_p">
+    <div>
+ <div className="btns_toc_p">
           <button 
           className="icon-btn"
           disabled={isLoading}
@@ -182,6 +167,24 @@ const AddProjects = () => {
          </button> 
         </div>
 
+
+    <div className="page-container">
+      {isUnitModalOpen && <UnitModal />}
+      {isDeleteUnitModalOpen && <UnitDeleteModal/>}
+      {isDeleteProjectModalOpen && <ProjectDeleteModal/>}
+      {isSearchModalOpen && <SearchProjectsModal />}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="add-project-wrapper"
+        dir="rtl"
+      >
+        <div className="form-header">
+          <h2 className="p_title">إضافة مشروع عقاري جديد</h2>
+        </div>
+
+       
         <div className="container All_cnt">
           <div className="main_cnt">
             <div className="row align-items-start">
@@ -428,6 +431,7 @@ const AddProjects = () => {
           </table>
         </div>
       </motion.div>
+    </div>
     </div>
   );
 };
