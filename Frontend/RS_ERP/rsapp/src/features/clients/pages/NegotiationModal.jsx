@@ -20,11 +20,15 @@ const handleInputsChange=(e)=>{
     const{name,value}=e.target;
      if (e.target.name === "ProjectCode") {
       const selectedValue = e.target.value;
+      const selectedProject = projects.find(u => u.ProjectCode === parseInt(selectedValue));
       if (e.target.value !== "-1") dispatch(fetchUnitsByProject(selectedValue));
+      dispatch(setNegotiationData({ProjectName:selectedProject.ProjectName}));
     }
      if(e.target.name === "UnitID"){
           const unitvalue=e.target.value;
+          const selectedUnit = units.find(u => u.UnitID === parseInt(unitvalue));
         if (e.target.value !== "-1") dispatch(fetchPriceByUnit(unitvalue));
+         dispatch(setNegotiationData({unitName:selectedUnit.unitName}));
          negotiationPriceRef.current.focus();
       }
     dispatch(setNegotiationData({[name]:value}));
@@ -93,12 +97,8 @@ console.log("negotition",negotiation);
                       onChange={handleInputsChange}>
                         <option value="-1">-إختر-</option>
                         {units?.map((unit, index) => 
-                        <option key={index} value={unit.UnitID}> {unit.unitName}
-                          <input 
-                          value={unit.unitName} 
-                          name="unitName"
-                          onChange={handleInputsChange}
-                          disabled/>
+                        <option key={index} value={unit.UnitID}>
+                           {unit.unitName} 
                         </option>
                       )}
                       </select>

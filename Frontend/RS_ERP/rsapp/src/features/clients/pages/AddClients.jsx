@@ -298,7 +298,6 @@ useEffect(()=>{
         <MdNavigateNext  size={22} />
         </span>
    </button>
-
     <button 
           className="icon-btn"
           disabled={isLoading}
@@ -336,8 +335,8 @@ useEffect(()=>{
                negotiationsList.map((neg,index)=>
               <tr key={index}>
                 <td>{neg.serialCode}</td>
-                <td>{}</td>
-                <td>{units?.map(unit=>unit.unitName)}</td>
+                <td>{neg.ProjectName}</td>
+                <td>{neg.unitName}</td>
                 <td>{neg.OriginalPrice} ج</td>
                 <td>{neg.NegotiationPrice} ج</td>
                 <td>{neg.DiscountAmount} %</td>

@@ -158,12 +158,12 @@ namespace WebApp1.Controllers
                             }
 
                          string sqlin_dtls = @"insert into  Negotiations 
-                                                            (serialCode,ClientID,ClientName,ProjectCode,
-                                                            UnitID,OriginalPrice,
+                                                            (serialCode,ClientID,ClientName,ProjectCode,ProjectName,
+                                                            UnitID,unitName,OriginalPrice,
                                                             NegotiationPrice, DiscountAmount,NegotiationStatus,
                                                             NegotiationDate,checkedByAdmin,Requester,Reserved) 
                                                             values(@serialCode,@ClientID,@ClientName,@ProjectCode,
-                                                            @UnitID,@OriginalPrice,
+                                                            @ProjectName,@UnitID,@unitName,@OriginalPrice,
                                                             @NegotiationPrice,@DiscountAmount
                                                            ,@NegotiationStatus,@NegotiationDate,
                                                            @checkedByAdmin,@Requester,@Reserved)";
@@ -177,7 +177,9 @@ namespace WebApp1.Controllers
                                     cmd.Parameters.AddWithValue("@ClientID", id);
                                     cmd.Parameters.AddWithValue("@ClientName", cl.ClientName);
                                     cmd.Parameters.AddWithValue("@ProjectCode", neg.ProjectCode);
+                                    cmd.Parameters.AddWithValue("@ProjectName", neg.ProjectName);
                                     cmd.Parameters.AddWithValue("@UnitID", neg.UnitID);
+                                    cmd.Parameters.AddWithValue("@unitName", neg.unitName);
                                     cmd.Parameters.AddWithValue("@OriginalPrice", neg.OriginalPrice);
                                     cmd.Parameters.AddWithValue("@NegotiationPrice", neg.NegotiationPrice);
                                     cmd.Parameters.AddWithValue("@DiscountAmount", neg.DiscountAmount);
@@ -253,17 +255,15 @@ namespace WebApp1.Controllers
         public JsonResult GetClientNegotiations(int clientid)
         {
             DataTable dt = new DataTable();
-            string sqlg = "select * from Negotiations where ClientID=@ClientID";
+            string sqlg = "select * from Negotiation_details where ClientID=@ClientID";
             SqlCommand cmd = new SqlCommand(sqlg, conn);
             
-                cmd.Parameters.Clear();
-                cmd.Parameters.AddWithValue("@ClientID", clientid);
+            cmd.Parameters.Clear();
+            cmd.Parameters.AddWithValue("@ClientID", clientid);
             if (conn.State == ConnectionState.Closed) conn.Open();
-            cmd.ExecuteNonQuery();
-            if (conn.State == ConnectionState.Open) conn.Close();
-          
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             da.Fill(dt);
+            if (conn.State == ConnectionState.Open) conn.Close();
             return new JsonResult(dt);
         }
         // Get first client 

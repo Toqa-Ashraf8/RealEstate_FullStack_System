@@ -20,6 +20,7 @@ const initialState={
 //
 selectedRequest:{
     ClientID:"",
+    ClientName:"",
     ProjectCode:"",
     UnitID:"",
     NegotiationCondition:0,
