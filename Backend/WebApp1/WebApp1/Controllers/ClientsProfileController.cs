@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using WebApp1.EF;
 using WebApp1.Models;
 namespace WebApp1.Controllers
@@ -38,29 +39,67 @@ namespace WebApp1.Controllers
         [HttpPost]
         public JsonResult GetClientDetails(int clientid)
         {
+           
             DataTable bookingdt = new DataTable();
-            DataTable unitdt = new DataTable();
-            //var cd = new List<ClientBookingDetail>();
-            string sqlg = @"select * from ClientFullDetails where ClientID=@ClientID";
-            if (conn.State== ConnectionState.Closed) conn.Open();
-            using (SqlCommand cmd = new SqlCommand(sqlg, conn))
+            DataTable dt = new DataTable();
+            var units_installments = new List<UnitInstallments>();
+
+            string sqld = @"select * from ClientFullDetails where ClientID=@ClientID";
+            if (conn.State == ConnectionState.Closed) conn.Open();
+            using (SqlCommand cmd = new SqlCommand(sqld, conn))
             {
-                cmd.Parameters.Clear();
                 cmd.Parameters.AddWithValue("@ClientID", clientid);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(bookingdt);
-              
             }
-            
+                string sqlg = @"SELECT 
+                                b.BookingID, 
+                                b.UnitID, 
+                                b.unitName, 
+                                b.ProjectName,
+                                b.BookingDate,
+                                (SELECT i.DueDate, i.MonthlyAmount, i.Paid 
+                                 FROM ClientUnitsBookings i 
+                                 WHERE i.BookingID = b.BookingID 
+                                 FOR JSON PATH) AS InstallmentsJson
+                                 FROM ClientFullDetails b
+                                 WHERE b.ClientID = @ClientID";
+
+            using (SqlCommand cmd2 = new SqlCommand(sqlg, conn))
+            {
+                cmd2.Parameters.AddWithValue("@ClientID", clientid);
+                SqlDataAdapter da2 = new SqlDataAdapter(cmd2);
+                da2.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                 
+                    string json = row["InstallmentsJson"].ToString();
+                    var installmentsList = string.IsNullOrEmpty(json)
+                        ? new List<Installment>()
+                        : Newtonsoft.Json.JsonConvert.DeserializeObject<List<Installment>>(json);
+                    units_installments.Add(new UnitInstallments
+                    {
+                        BookingID = Convert.ToInt32(row["BookingID"]),
+                        UnitID = Convert.ToInt32(row["UnitID"]),
+                        unitName = row["unitName"].ToString(),
+                        ProjectName = row["ProjectName"].ToString(),
+                        Installments = installmentsList // القائمة نزلت جاهزة هنا!
+                    });
+                }
+            }
+
             if (conn.State == ConnectionState.Open) conn.Close();
-            var data = new { bookingdt = bookingdt, unitdt = unitdt };
+
+            var data = new
+            {
+                clientData=bookingdt,
+                bookedUnitsData = units_installments // بيانات الوحدات بالـ Nested Installments للجدول
+            };
+
             return new JsonResult(data);
-
-
-
-
         }
-
+    
 
     }
 }

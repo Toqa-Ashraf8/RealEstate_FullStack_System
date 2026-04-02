@@ -21,6 +21,7 @@ namespace WebApp1.Models
              public int? ProjectCode { get; set; }
              public string? ProjectName { get; set; }
              public Boolean? ReservedStatus { get; set; }
+            
 
     }
 }

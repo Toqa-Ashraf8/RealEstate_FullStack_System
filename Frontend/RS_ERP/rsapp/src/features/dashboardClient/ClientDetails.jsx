@@ -14,25 +14,12 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-
+import { variables } from '../../assets/variables';
 const ClientDetails = () => {
-    const {bookingData}=useSelector((state)=>state.clientsProfile);
+    const {bookingData,bookedUnitsData}=useSelector((state)=>state.clientsProfile);
     const navigate = useNavigate();
     const [openUnitIndex, setOpenUnitIndex] = useState(null);
-
-  
-    const mockBookedUnits = [
-        {
-            unitName: "شقة A-102",
-            ProjectName: "كمبوند النخيل",
-            BookingDate: "2026-01-15",
-            installments: [
-                { DueDate: "2026-04-01", Amount: 5000, IsPaid: true },
-                { DueDate: "2026-05-01", Amount: 5000, IsPaid: false }
-            ]
-        }
-    ];
-
+console.log('bookingData',bookingData)
     return (
         <div className="erp-container animate-fade">
             <div className="erp-header">
@@ -49,32 +36,33 @@ const ClientDetails = () => {
                 </div>
                 
                 <div className="details-main-layout">
-                
+                {bookingData.map((c)=>
+                <>
                     <div className="info-section">
                         <div className="inputs-grid">
                             <div className="input-group">
                                 <label><Hash size={13}/> كود العميل</label>
-                                <input type="text" value={bookingData.ClientID} readOnly />
+                                <input type="text" value={c.ClientID} readOnly />
                             </div>
                             <div className="input-group">
                                 <label><User size={13}/> الاسم بالكامل</label>
-                                <input type="text" value={bookingData.ClientName} readOnly />
+                                <input type="text" value={c.ClientName} readOnly />
                             </div>
                             <div className="input-group">
                                 <label>الرقم القومي</label>
-                                <input type="text" value={bookingData.NationalID} readOnly />
+                                <input type="text" value={c.NationalID} readOnly />
                             </div>
                             <div className="input-group">
                                 <label><Phone size={13}/>1 رقم الهاتف</label>
-                                <input type="text" value={bookingData.PhoneNumber} readOnly />
+                                <input type="text" value={c.PhoneNumber} readOnly />
                             </div>
                             <div className="input-group">
                                 <label><Phone size={13}/>2 رقم الهاتف</label>
-                                <input type="text" value={bookingData.SecondaryPhone} readOnly />
+                                <input type="text" value={c.SecondaryPhone} readOnly />
                             </div>
                             <div className="input-group full-width">
                                 <label><MapPin size={13}/> العنوان</label>
-                                <input type="text" value={bookingData.Address} readOnly />
+                                <input type="text" value={c.Address} readOnly />
                             </div>
                         </div>
                     </div>
@@ -84,16 +72,20 @@ const ClientDetails = () => {
                             <ImageIcon size={14} /> صورة البطاقة الشخصية
                         </label>
                         <div className="id-card-frame">
-                            <img src={bookingData.NationalIdImagePath} alt="" className="id-card-image" />
+                            <img src={variables.NATIONAL_ID_IMAGES_URL+c.NationalIdImagePath} alt="" className="id-card-image" />
                             <button className="btn-zoom-overlay">
                                 <ExternalLink size={12}/> تكبير الصورة
                             </button>
                         </div>
                     </div>
-                </div>
+                   
+                    </>
+                    )}               
+                   </div>
+               
             </div>
 
-           {/*  <div className="erp-card">
+            <div className="erp-card">
                 <div className="card-header">
                     <Home size={18} /> الوحدات المحجوزة
                 </div>
@@ -103,19 +95,20 @@ const ClientDetails = () => {
                             <tr>
                                 <th>اسم الوحدة</th>
                                 <th>المشروع</th>
-                                <th>تاريخ الحجز</th>
+                               {/*  <th>تاريخ الحجز</th> */}
                                 <th style={{ textAlign: 'center' }}>الأقساط</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {mockBookedUnits.map((unit, index) => (
+                            {bookedUnitsData.map((unit, index) => (
                                 <React.Fragment key={index}>
                                     <tr>
                                         <td><span className="client-name-text">{unit.unitName}</span></td>
                                         <td>{unit.ProjectName}</td>
-                                        <td>{unit.BookingDate}</td>
+                                        {/* <td>{unit.BookingDate}</td> */}
                                         <td style={{ textAlign: 'center' }}>
-                                            <button className="btn-tiny" onClick={() => setOpenUnitIndex(openUnitIndex === index ? null : index)}>
+                                            <button className="btn-tiny" 
+                                            onClick={() => setOpenUnitIndex(openUnitIndex === index ? null : index)}>
                                                 <CreditCard size={14} /> {openUnitIndex === index ? "إخفاء" : "عرض"}
                                             </button>
                                         </td>
@@ -138,14 +131,14 @@ const ClientDetails = () => {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {unit.installments.map((inst, i) => (
+                                                            {unit.Installments.map((inst, i) => (
                                                                 <tr key={i}>
                                                                     <td>{i + 1}</td>
-                                                                    <td>{inst.DueDate}</td>
-                                                                    <td>{inst.Amount.toLocaleString()} ج.م</td>
+                                                                    <td>{inst.DueDate.split('T')[0]}</td>
+                                                                    <td>{inst.MonthlyAmount.toLocaleString()} ج.م</td>
                                                                     <td>
-                                                                        <span className={`status-text ${inst.IsPaid ? 'مدفوع' : 'متأخر'}`}>
-                                                                            {inst.IsPaid ? 'مدفوع' : 'مستحق'}
+                                                                        <span className={`status-text ${inst.Paid ? 'مدفوع' : 'متأخر'}`}>
+                                                                            {inst.Paid ? 'مدفوع' : 'مستحق'}
                                                                         </span>
                                                                     </td>
                                                                 </tr>
@@ -161,7 +154,7 @@ const ClientDetails = () => {
                         </tbody>
                     </table>
                 </div>
-            </div> */}
+            </div> 
         </div>
     );
 };
