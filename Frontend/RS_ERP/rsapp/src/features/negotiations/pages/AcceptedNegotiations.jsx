@@ -26,6 +26,7 @@ const rejectApprovedRequest=(index)=>{
         }
         fetchData();
     }, [dispatch]);
+console.log("acceptedRequests",acceptedRequests)
 
     return (
         <div className="acc-page-wrapper">
@@ -49,7 +50,7 @@ const rejectApprovedRequest=(index)=>{
 
                 
                         <div className="acc-section acc-unit-section">
-                            <p><Tag size={12} /> {req.ProjectName} - {req.Unit}</p>
+                            <p><Tag size={12} /> {req.ProjectName} - {req.unitName}</p>
                             <p className="acc-price">العرض: {req.NegotiationPrice}</p>
                         </div>
                         <div className="section date-section">

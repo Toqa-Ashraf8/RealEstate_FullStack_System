@@ -32,7 +32,7 @@ useEffect(() => {
     }
     fetchData();
 }, [dispatch]);
-
+console.log("rejectedRequests",rejectedRequests)
     return (
         <div className="clean-page-wrapper">
            {isConfirmModalOpen && <ConfirmModal/>} 
@@ -53,7 +53,7 @@ useEffect(() => {
                         </div>
 
                         <div className="section unit-section">
-                            <p><Tag size={12} /> {req.ProjectName || ""} - {req.Unit || ""}</p>
+                            <p><Tag size={12} /> {req.ProjectName || ""} - {req.unitName || ""}</p>
                             <p className="rejected-price_r">العرض: {req.NegotiationPrice || ""}</p>
                         </div>
 

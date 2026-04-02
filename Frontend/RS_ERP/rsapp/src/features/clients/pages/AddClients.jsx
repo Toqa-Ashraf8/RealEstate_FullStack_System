@@ -99,8 +99,7 @@ dispatch(editingNegotiationRow(index));
 const handleSaveClient=async()=>{  
 const parms={...client,negotiations:negotiationsList.map(item=>({ ...item,Requester:userName}))}
 
-
-     try {
+      try {
      const result = await dispatch(saveClient(parms)).unwrap();
      if(result.nullData===false){
        toast.success("تم حفظ البيانات بنجاح ", {

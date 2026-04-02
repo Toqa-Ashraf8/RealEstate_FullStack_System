@@ -26,8 +26,7 @@ selectedRequest:{
     NegotiationCondition:0,
     SuggestedPrice:0,
     ReasonOfReject:"",
-    CheckedDate:new Date().toISOString()
-    ,Reserved:0
+    Reserved:0
 },
  isRejectModalOpen:false,
  isConfirmModalOpen:false,
@@ -36,12 +35,12 @@ selectedRequest:{
  selectedAcceptedNegotiation:{},
  selectedRejectedNegotiation:{},
  //
- isUpdatedSuccessfully:false,
  isSavedSuccessfully:false,
  //if approved=1 -- Approve Negotiation / rejected=1 -- Reject Negotiation
     approved:0,
     rejected:0,
     CurrentDate:new Date().toISOString().split('T')[0],
+    acceptedNeogitationId:-1
 }
 
 const negotiationSlice=createSlice({
@@ -76,36 +75,37 @@ const negotiationSlice=createSlice({
        
         // تحويل طلب مقبول لطلب مرفوض
         selectAcceptedForUpdate:(state,action)=>{
-            const row=state.acceptedRequests[action.payload];
-             if(row.NegotiationCondition===true){
-                row.NegotiationCondition=0;
+            state.selectedAcceptedNegotiation=state.acceptedRequests[action.payload];
+             if(state.selectedAcceptedNegotiation.NegotiationCondition===true){
+                state.selectedAcceptedNegotiation.NegotiationCondition=0;
              }
-             state.selectedAcceptedNegotiation=row;
         },
         // عند اعاده رفض الطلب نرسل قيم المودال (سبب الرفض - سعر المقترح ) مع الطلب المقبول 
         updateAcceptedNegotiationData:(state,action)=>{
-            state.selectedAcceptedNegotiation=
-            {...state.selectedAcceptedNegotiation,...action.payload}
-           
+            state.selectedAcceptedNegotiation={...state.selectedAcceptedNegotiation,...action.payload} 
         },
+      
         //اذا كانت القيمة 1 الطلب مقبول وليس هناك قيم مودال رفض 
         prepareApproveAction:(state,action)=>{
             state.approved=action.payload;
             state.selectedRequest.ReasonOfReject="";
             state.selectedRequest.SuggestedPrice=0;
         },
-        //اختيار سطر من اللبات المفروضة لتحويل الي مقبول
+        //اختيار سطر من الطلبات المفروضة لتحويل الي مقبول
           selectRejectedForUpdate:(state,action)=>{
-            const row=state.rejectedRequests[action.payload];
-             if(row.NegotiationCondition===false){
-                row.NegotiationCondition=1;
+            state.selectedRejectedNegotiation=state.rejectedRequests[action.payload];
+             if(state.selectedRejectedNegotiation.NegotiationCondition===false){
+                state.selectedRejectedNegotiation.NegotiationCondition=1;
              }
-             state.selectedRejectedNegotiation=row;
         },
         // لو كانت قيمة rejected=1 تحويله لمرفوض
          prepareRejectAction:(state,action)=>{
             state.rejected=action.payload;     
         },
+        filterAcceptedRequests:(state,action)=>{
+
+            state.acceptedRequests=state.acceptedRequests.filter(neg=>neg.NegotiationID!==action.payload)
+        }
        
     },
    
@@ -120,9 +120,9 @@ const negotiationSlice=createSlice({
         .addCase(processNegotiationReview.fulfilled,(state,action)=>{
             state.isSavedSuccessfully=action.payload.saved;
             if(state.isSavedSuccessfully){
-                const pendingUnit=state.selectedRequest.Unit;
+                const pendingUnit=state.selectedRequest.UnitID;
                 state.pendingRequests = 
-                state.pendingRequests.filter(neg => neg.Unit !== pendingUnit);
+                state.pendingRequests.filter(neg => neg.UnitID !== pendingUnit);
                 if (state.pendingCount > 0) {
                    state.pendingCount -= 1;
                    
@@ -144,19 +144,19 @@ const negotiationSlice=createSlice({
          state.acceptedRequests=action.payload.dt;
         })
         .addCase(updateNegotiationStatus.fulfilled,(state,action)=>{
-            state.isUpdatedSuccessfully=action.payload;
-            if(state.isUpdatedSuccessfully===true){
-                const acceptedUnit=state.selectedAcceptedNegotiation.Unit;
-                const rejectedUnit=state.selectedRejectedNegotiation.Unit;
-                state.acceptedRequests = 
-                state.acceptedRequests.filter(neg => neg.Unit !== acceptedUnit);
-                state.rejectedRequests =
-                 state.rejectedRequests.filter(neg => neg.Unit !== rejectedUnit);
-                if (state.pendingCount > 0) {
-                   state.pendingCount -= 1;
-                 }
-               state.selectedRequest = initialState.selectedRequest;
-             }
+            const NegotiaitionIdToRemove = action.meta.arg.NegotiaionID; 
+            if(action.payload.Re_Approved===true){
+             state.rejectedRequests = state.rejectedRequests.filter(neg => neg.NegotiaionID !== NegotiaitionIdToRemove); 
+            }
+            else if(action.payload.Re_Rejected===true){
+             state.acceptedRequests = state.acceptedRequests.filter(neg => neg.NegotiaionID !== NegotiaitionIdToRemove); 
+            }
+             if (state.pendingCount > 0) {
+                 state.pendingCount -= 1;
+            }
+               
+             state.selectedRejectedNegotiation = {};
+             state.selectedAcceptedNegotiation = {};
         })
     }
 })
@@ -172,6 +172,7 @@ export const{
     prepareApproveAction,
     prepareRejectAction,
     selectRejectedForUpdate,
+    filterAcceptedRequests
 }=negotiationSlice.actions;
 const negotiationReducer=negotiationSlice.reducer;
 export default negotiationReducer;

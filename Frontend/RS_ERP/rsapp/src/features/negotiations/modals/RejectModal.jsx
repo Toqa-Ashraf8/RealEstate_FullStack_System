@@ -37,7 +37,6 @@ const closeRejectModal=()=>{
 }
 const confirmRejection=async()=>{
      const row={...selectedAcceptedNegotiation,CheckedDate:CurrentDate}
-   
     try{
     if(rejected===0){
     await dispatch(processNegotiationReview(row)).unwrap();

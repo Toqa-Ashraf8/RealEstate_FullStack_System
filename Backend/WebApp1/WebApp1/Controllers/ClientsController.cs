@@ -255,7 +255,7 @@ namespace WebApp1.Controllers
         public JsonResult GetClientNegotiations(int clientid)
         {
             DataTable dt = new DataTable();
-            string sqlg = "select * from Negotiation_details where ClientID=@ClientID";
+            string sqlg = "select * from Negotiations where ClientID=@ClientID";
             SqlCommand cmd = new SqlCommand(sqlg, conn);
             
             cmd.Parameters.Clear();

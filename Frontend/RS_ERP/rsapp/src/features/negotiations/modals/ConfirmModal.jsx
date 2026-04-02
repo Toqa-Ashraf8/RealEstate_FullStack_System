@@ -19,22 +19,24 @@ const dispatch = useDispatch();
 
     
 const acceptRequest = async () => {
-const acceptedrow = {...selectedRequest,CheckedDate:CurrentDate};
-console.log("acceptedrow",acceptedrow)
-   try {
+  const dataSource = (rejected === 1) ? selectedRejectedNegotiation : selectedRequest;
+ const acceptedrow = {...dataSource,CheckedDate:CurrentDate};
+
+    try {
     if (rejected === 0) {
       await dispatch(processNegotiationReview(acceptedrow)).unwrap();
       toast.success("تم قبول الطلب!");
     } 
     else if (rejected === 1) {
-      await dispatch(updateNegotiationStatus(selectedRejectedNegotiation)).unwrap();
+      await dispatch(updateNegotiationStatus(dataSource)).unwrap();
       toast.success("تم تحديث الطلب!");
     }
     dispatch(toggleConfirmModal(false));
   } 
   catch (error) {
     toast.warning("حدث خطأ أثناء الحفظ");
-  }   
+  }    
+ 
 };
 
   return (

@@ -19,15 +19,13 @@ const negotiationPriceRef=useRef();
 const handleInputsChange=(e)=>{
     const{name,value}=e.target;
      if (e.target.name === "ProjectCode") {
-      const selectedValue = e.target.value;
-      const selectedProject = projects.find(u => u.ProjectCode === parseInt(selectedValue));
-      if (e.target.value !== "-1") dispatch(fetchUnitsByProject(selectedValue));
+      const selectedProject = projects.find(u => u.ProjectCode === parseInt(e.target.value));
+      if (e.target.value !== "-1") dispatch(fetchUnitsByProject(e.target.value));
       dispatch(setNegotiationData({ProjectName:selectedProject.ProjectName}));
     }
      if(e.target.name === "UnitID"){
-          const unitvalue=e.target.value;
-          const selectedUnit = units.find(u => u.UnitID === parseInt(unitvalue));
-        if (e.target.value !== "-1") dispatch(fetchPriceByUnit(unitvalue));
+        const selectedUnit = units.find(u => u.UnitID === parseInt(e.target.value));
+        if (e.target.value !== "-1") dispatch(fetchPriceByUnit(e.target.value));
          dispatch(setNegotiationData({unitName:selectedUnit.unitName}));
          negotiationPriceRef.current.focus();
       }
@@ -45,7 +43,7 @@ const addNewNegotiation=()=>{
         dispatch(fetchUnitsByProject(negotiation.ProjectCode));
     }
  },[dispatch])
-console.log("negotition",negotiation);
+
   return (
     <div dir="rtl">
       <div className="modaln">
