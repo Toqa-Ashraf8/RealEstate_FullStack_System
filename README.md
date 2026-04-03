@@ -31,21 +31,37 @@ In many real estate agencies, operations like unit bookings and installment trac
   <br>
 </p>
 
-### 4. Automated Installment & Payment Engine 
-* **Dynamic Schedule Generation:** Once a deal is approved, the system automatically generates a complete **Installment Plan** based on:
-    * Total Agreed Price.
-    * Number of years.
-    * Payment frequency (Monthly/Quarterly).
-* **Payment Tracking:** Employees can log each payment, attach digital receipts/vouchers, and update the installment status in real-time.
-* **Printable Schedules:** Generate professional installment tables for clients.
+### 4. Automated Installment & Payment Engine
+* **Dynamic Schedule Generation:** Once a deal is approved, the system automatically calculates and generates a complete **Installment Plan** based on:
+    * Total Agreed Price and Down Payment.
+    * Repayment period (Number of years).
+    * Payment frequency.
+* **Payment Status Management:** Real-time tracking of each installment status:
+    * **Due (مستحق):** Automatically flagged for upcoming payments.
+    * **Paid (مدفوع):** Updated instantly upon payment confirmation.
+* **Automated Record Archiving:** Finalized deals are automatically moved to the **Completed Bookings** section for historical tracking and reporting.
+* **Professional Reporting:** Generate and print high-quality, branded installment schedules and booking vouchers for clients.
   
-  <p align="center">
-  <img src="screenshots/Booking.png" width="48%" />
-  <img src="screenshots/Installments.png" width="48%" />
-</p>
-<p align="center">
-  <em>Interfaces for Booking Completion (Left) and Installment Management Schedule (Right)</em>
-</p>
+<table style="width: 100%; border-collapse: collapse; border: none; table-layout: fixed;">
+  <tr>
+    <td style="width: 25%; padding: 5px; text-align: center; border: none; vertical-align: top;">
+      <img src="screenshots/Booking.png" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" alt="Booking Completion">
+      <p style="font-size: 0.85em; margin-top: 10px;"><em>1. <strong>Booking Completion:</strong> Collecting client IDs, cheques, and deal details.</em></p>
+    </td>
+    <td style="width: 25%; padding: 5px; text-align: center; border: none; vertical-align: top;">
+      <img src="screenshots/Installments.png" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" alt="Installment Schedule">
+      <p style="font-size: 0.85em; margin-top: 10px;"><em>2. <strong>Installment Plan:</strong> Real-time dynamic payment schedule management.</em></p>
+    </td>
+    <td style="width: 25%; padding: 5px; text-align: center; border: none; vertical-align: top;">
+      <img src="screenshots/354_1x_shots_so.png" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" alt="Completed Bookings">
+      <p style="font-size: 0.85em; margin-top: 10px;"><em>3. <strong>Completed Bookings:</strong> Tracking finalized deals in the master records.</em></p>
+    </td>
+    <td style="width: 25%; padding: 5px; text-align: center; border: none; vertical-align: top;">
+      <img src="screenshots/724_1x_shots_so.png" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" alt="Printed Voucher">
+      <p style="font-size: 0.85em; margin-top: 10px;"><em>4. <strong>Booking Voucher:</strong> Professional printable receipt with transaction data.</em></p>
+    </td>
+  </tr>
+</table>
 
 ##  Tech Stack
 * **Frontend:** React.js, Redux Toolkit (Complex State Management),**Bootstrap**,Custom CSS.
