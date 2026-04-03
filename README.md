@@ -84,7 +84,7 @@ The system relies on a highly normalized relational schema to ensure data integr
 
 ```mermaid
 graph TD
-A[Employee] -->|Registers| B(Client Data & Purchases)
+A[Employee] -->|Registers| B(Client Data and Purchases)
 B -->|Submit| C{Admin/Manager}
 C -->|Reject| D[Rejected Negotiations]
 C -->|Approve| E[Client Booking Details]
