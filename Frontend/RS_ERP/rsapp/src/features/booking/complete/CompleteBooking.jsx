@@ -106,7 +106,7 @@ const SavedData=async()=>{
         return;
     } 
    
-     try {
+  /*    try {
         const result=await dispatch(bookingDetailRequest(parms)).unwrap();
         if(result.saved===true){
          toast.success("تم الحجز بنجاح!", {
@@ -126,7 +126,7 @@ const SavedData=async()=>{
             theme: "colored",
             position: "top-left",
         });
-    } 
+    }  */
    
 }
 
@@ -163,9 +163,10 @@ const getinstallmentsData=(id)=>{
     }
 }
    useEffect(() => {
-        if (focusRef.current) {
-            focusRef.current.focus();
-        } 
+    if (focusRef.current) 
+    {
+     focusRef.current.focus();
+    } 
      const savedData = localStorage.getItem('activeBookingClient');
      if (savedData) {
         const parsedData = JSON.parse(savedData);
