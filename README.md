@@ -29,6 +29,7 @@ The system implements a secure multi-user environment where each role (Admin vs.
     </td>
   </tr>
 </table>
+
 * **Secure Auth**: Integrated **JWT Authentication** and **BCrypt** password hashing for robust data protection.
 * **Admin Dashboard**: High-level overview with **Charts & Analytics** (Sales performance, unit availability, and project statistics).
 <p align="center">
@@ -36,6 +37,7 @@ The system implements a secure multi-user environment where each role (Admin vs.
   <br />
   <em>The Main Dashboard provides real-time insights into project availability and booking activity using Chart.js.</em>
 </p>
+
 * **Managerial Controls**: Exclusive access to approve/reject negotiation requests and manage project configurations.
 * **Employee/Sales Portal**: Tools to register clients, browse units, and initiate formal negotiation/purchase requests.
   
