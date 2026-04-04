@@ -79,6 +79,14 @@ In many real estate agencies, operations like unit bookings and installment trac
   </tr>
 </table>
 
+## 🛠️ Future Logic Enhancements & Roadmap
+While the core functionality is fully operational, I have identified several key areas for future logic refinement to further enhance data integrity and user experience:
+
+* **Dynamic Price Validation:** Implementing a safe range for "Suggested Price" inputs to prevent negative discount rates and ensure logical pricing boundaries during negotiations.
+* **Negotiation Data Consistency:** Automating the cleanup of related records in `Rejected_Negotiation_Phases` whenever a negotiation is reset, preventing duplicate log entries for the same unit.
+* **Down Payment Safety Bounds:** Adding a validation layer to ensure the "Booking Amount" never exceeds the total "Agreed Price," preventing negative balances in installment schedules.
+* **Smart Installment Rounding:** Implementing a custom rounding algorithm (e.g., to the nearest 50 or 100 EGP) to ensure clean and professional payment schedules.
+
 ##  Tech Stack
 * **Frontend:** React.js, Redux Toolkit (Complex State Management),**Bootstrap**,Custom CSS.
 * **Backend:** .NET Core Web API (RESTful Services), JWT Authentication, ADO.NET & Entity Framework Core (Hybrid Data Access Layer)
