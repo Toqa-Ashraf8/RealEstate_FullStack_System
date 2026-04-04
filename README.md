@@ -11,35 +11,31 @@ The system implements a secure multi-user environment where each role (Admin vs.
 
 <table style="width: 100%; border-collapse: collapse; border: none; table-layout: fixed;">
   <tr>
-    <td style="width: 25%; padding: 5px; text-align: center; border: none; vertical-align: top;">
+    <td style="width: 20%; padding: 5px; text-align: center; border: none; vertical-align: top;">
       <img src="screenshots/login.png" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" alt="Login Screen">
-      <p style="font-size: 0.85em; margin-top: 10px;"><em>1. <b>Secure Login:</b> Access point for registered staff.</em></p>
+      <p style="font-size: 0.8em; margin-top: 10px;"><em>1. <b>Login:</b> Secure staff access.</em></p>
     </td>
-    <td style="width: 25%; padding: 5px; text-align: center; border: none; vertical-align: top;">
+    <td style="width: 20%; padding: 5px; text-align: center; border: none; vertical-align: top;">
       <img src="screenshots/register.png" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" alt="Register Screen">
-      <p style="font-size: 0.85em; margin-top: 10px;"><em>2. <b>Staff Registration:</b> Secure onboarding for new employees.</em></p>
+      <p style="font-size: 0.8em; margin-top: 10px;"><em>2. <b>Registration:</b> Staff onboarding.</em></p>
     </td>
-    <td style="width: 25%; padding: 5px; text-align: center; border: none; vertical-align: top;">
+    <td style="width: 20%; padding: 5px; text-align: center; border: none; vertical-align: top;">
       <img src="screenshots/adminShown.png" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" alt="Admin Navigation">
-      <p style="font-size: 0.85em; margin-top: 10px;"><em>3. <b>Admin Navbar:</b> Full access to analytics and project setup.</em></p>
+      <p style="font-size: 0.8em; margin-top: 10px;"><em>3. <b>Admin View:</b> Full system access.</em></p>
     </td>
-    <td style="width: 25%; padding: 5px; text-align: center; border: none; vertical-align: top;">
+    <td style="width: 20%; padding: 5px; text-align: center; border: none; vertical-align: top;">
       <img src="screenshots/employeeShown.png" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" alt="Employee Navigation">
-      <p style="font-size: 0.85em; margin-top: 10px;"><em>4. <b>Employee Navbar:</b> Streamlined view focused on sales and clients.</em></p>
+      <p style="font-size: 0.8em; margin-top: 10px;"><em>4. <b>Staff View:</b> Sales-focused portal.</em></p>
+    </td>
+    <td style="width: 20%; padding: 5px; text-align: center; border: none; vertical-align: top;">
+      <img src="screenshots/adminDashboard.png" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" alt="Admin Dashboard">
+      <p style="font-size: 0.8em; margin-top: 10px;"><em>5. <b>Analytics:</b> Live data visualization.</em></p>
     </td>
   </tr>
 </table>
 
-* **Secure Auth**: Integrated **JWT Authentication** and **BCrypt** password hashing for robust data protection.
-* **Admin Dashboard**: High-level overview with **Charts & Analytics** (Sales performance, unit availability, and project statistics).
-<p align="center">
-  <img src="screenshots/adminDashboard.png" width="850" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" alt="Admin Dashboard">
-  <br />
-  <em>The Main Dashboard provides real-time insights into project availability and booking activity using Chart.js.</em>
-</p>
-
-* **Managerial Controls**: Exclusive access to approve/reject negotiation requests and manage project configurations.
-* **Employee/Sales Portal**: Tools to register clients, browse units, and initiate formal negotiation/purchase requests.
+* **Security & Auth:** Robust protection using **JWT** and **BCrypt** hashing.
+* **Role-Specific Portals:** Tailored Dashboards for Admins (Analytics via **Chart.js**) and Employees (Sales & Client Management).
   
 ### 2. Project & Unit Inventory (Master-Detail) 
 * **Master-Detail Architecture:** Administrators can create projects and dynamically add associated units with detailed specifications (Area, Floor, Price, Images, and Status).
