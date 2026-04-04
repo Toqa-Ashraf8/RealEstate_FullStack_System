@@ -12,11 +12,11 @@ The system implements a secure multi-user environment where each role (Admin vs.
 <table style="width: 100%; border-collapse: collapse; border: none; table-layout: fixed;">
   <tr>
     <td style="width: 25%; padding: 5px; text-align: center; border: none; vertical-align: top;">
-      <img src="screenshots/login.jpg" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" alt="Login Screen">
+      <img src="screenshots/login.png" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" alt="Login Screen">
       <p style="font-size: 0.85em; margin-top: 10px;"><em>1. <b>Secure Login:</b> Access point for registered staff.</em></p>
     </td>
     <td style="width: 25%; padding: 5px; text-align: center; border: none; vertical-align: top;">
-      <img src="screenshots/register.jpg" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" alt="Register Screen">
+      <img src="screenshots/register.png" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" alt="Register Screen">
       <p style="font-size: 0.85em; margin-top: 10px;"><em>2. <b>Staff Registration:</b> Secure onboarding for new employees.</em></p>
     </td>
     <td style="width: 25%; padding: 5px; text-align: center; border: none; vertical-align: top;">
@@ -32,7 +32,7 @@ The system implements a secure multi-user environment where each role (Admin vs.
 * **Secure Auth**: Integrated **JWT Authentication** and **BCrypt** password hashing for robust data protection.
 * **Admin Dashboard**: High-level overview with **Charts & Analytics** (Sales performance, unit availability, and project statistics).
 <p align="center">
-  <img src="screenshots/adminDashboard.jpg" width="850" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" alt="Admin Dashboard">
+  <img src="screenshots/adminDashboard.png" width="850" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" alt="Admin Dashboard">
   <br />
   <em>The Main Dashboard provides real-time insights into project availability and booking activity using Chart.js.</em>
 </p>
