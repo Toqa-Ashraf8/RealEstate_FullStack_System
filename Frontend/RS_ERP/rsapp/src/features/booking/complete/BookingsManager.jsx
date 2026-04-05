@@ -22,7 +22,6 @@ const CompleteBooking=(index)=>{
     dispatch(setReservationStatus(0))
     navigate('/complete_booking');
     dispatch(resetBookingForm());
-    
 }   
 useEffect(()=>{
     const Fetch=async()=>{

@@ -103,7 +103,7 @@ const SavedData=async()=>{
           UnitBooking:{...initialClientData,...InstallmentInformation,BookingDate}
          ,installments:[]
         };
-        console.log("parms",parms); 
+        
     }
     else{
         const parms={
@@ -111,14 +111,14 @@ const SavedData=async()=>{
             UnitBooking:{...initialClientData,...InstallmentInformation,BookingDate}
             ,installments:[]
         };
-        console.log("parms",parms); 
+        
     } 
    
-   /*  if (!bookingClient || !previousSavedClientData) {
+    if (!bookingClient || !previousSavedClientData) {
         toast.error("بيانات العميل غير مكتملة!");
         return;
-    }   */
-   /*  try {
+    }  
+  try {
         const result=await dispatch(bookingDetailRequest(parms)).unwrap();
         if(result.saved===true){
          toast.success("تم الحجز بنجاح!", {
@@ -138,7 +138,7 @@ const SavedData=async()=>{
             theme: "colored",
             position: "top-left",
         });
-    }   */
+    }   
 }
 
 const calcutlateDownpayment=()=>{

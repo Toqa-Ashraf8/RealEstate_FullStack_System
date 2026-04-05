@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchAllClients, fetchClientFullDetails } from "../../services/clientsProfileService";
+import { searchClients } from "../../services/bookingService";
 
 const initialState={
     clientData:[],
@@ -21,6 +22,9 @@ const clientsProfile=createSlice({
                 localStorage.setItem('bookedUnits', JSON.stringify(unitsData));
                 state.bookingData = clientData;
                 state.bookedUnitsData = unitsData;
+    })
+    .addCase(searchClients.fulfilled, (state, action) => {
+        state.clientData=action.payload;
     })
    }
 })

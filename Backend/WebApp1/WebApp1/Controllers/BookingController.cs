@@ -547,7 +547,41 @@ namespace WebApp1.Controllers
             } 
             if (dt.Rows.Count > 0)
             {
+               
                return new JsonResult(dt);
+            }
+            else
+            {
+                return new JsonResult(new DataTable());
+            }
+        }
+
+        [Route("SearchClients")]
+        [HttpPost]
+        public JsonResult SearchClients([FromBody] Search term)
+        {
+            DataTable dt = new DataTable();
+            List<string> conditions = new List<string>();
+            foreach (var field in term.Fields)
+            {
+                conditions.Add($"{field} LIKE @searchterm");
+            }
+            string whereClause = string.Join(" OR ", conditions);
+            string search = @"select * from Clients where " + whereClause;
+            using (SqlCommand cmd = new SqlCommand(search, conn))
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+                cmd.Parameters.Clear();
+                cmd.Parameters.AddWithValue("@searchterm", "%" + term.Term + "%");
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+                if (conn.State == ConnectionState.Open) conn.Close();
+
+            }
+            if (dt.Rows.Count > 0)
+            {
+
+                return new JsonResult(dt);
             }
             else
             {

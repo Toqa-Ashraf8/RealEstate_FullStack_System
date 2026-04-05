@@ -10,7 +10,8 @@ import {
     generateInstallments, 
     saveChecksImages, 
     saveInstallmentCheck, 
-    saveNationalIdImage 
+    saveNationalIdImage, 
+    searchBookingClients,
 } from '../../services/bookingService';
 
 const initialState = {
@@ -214,6 +215,10 @@ const bookingSlice = createSlice({
             .addCase(deleteBookingData.fulfilled, (state, action) => {
                 state.isDeletedBooking=action.payload;
             })
+            .addCase(searchBookingClients.fulfilled, (state, action) => {
+               state.reservedClients=action.payload;
+            })
+            
     }
 })
 export const {

@@ -25,7 +25,8 @@ import BookingsReport from '../../../assets/reports/BookingsReport';
 import { 
     deleteBookingData,
     fetchAllReservedClients, 
-    fetchReservedClientById 
+    fetchReservedClientById, 
+    searchBookingClients
 } from '../../../services/bookingService';
 import { toast } from 'react-toastify';
 
@@ -63,7 +64,7 @@ const printReport = async (index, id) => {
 const deleteBooking=async(index)=>{
   const selectedBookingClient=reservedClients[index]
  const reservedBookingId=reservedClients[index].BookingID; 
-   try {
+    try {
          const result= await dispatch(deleteBookingData(selectedBookingClient)).unwrap(); 
             toast.success("تم حذف الحجز وتحديث حالة الوحدة!", {
                 theme: "colored",
@@ -76,9 +77,21 @@ const deleteBooking=async(index)=>{
             theme: "colored",
             position: "top-left",
         }); 
- }  
+ }   
 } 
-console.log("reservedClients",reservedClients)
+const searchClients=(e)=>{
+    const searchValue = e.target.value;
+    if (searchValue === "") {
+         dispatch(fetchAllReservedClients()); 
+        return;
+    }
+    const searchData={
+        term:searchValue,
+        fields:["ClientName","unitName","ProjectName"]
+    }
+    dispatch(searchBookingClients(searchData));
+}
+
     return (
         <div className="booked_list_wrapper">      
           <div className="booked_list_header">
@@ -88,7 +101,11 @@ console.log("reservedClients",reservedClients)
                 </div>
                 <div className="booked_list_search_bar">
                     <Search size={18} />
-                    <input type="text" placeholder="بحث سريع عن عميل أو وحدة" />
+                    <input 
+                    type="text" 
+                    placeholder="بحث سريع عن عميل أو وحدة"
+                    onChange={(e)=>searchClients(e)}
+                     />
                 </div>
             </div>
 

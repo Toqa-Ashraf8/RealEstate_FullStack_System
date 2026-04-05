@@ -14,6 +14,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import { fetchAllClients, fetchClientFullDetails } from '../../services/clientsProfileService';
 import {useNavigate} from 'react-router-dom'
 import ClientDetails from './ClientDetails';
+import { searchClients } from '../../services/bookingService';
 const ClientsPage = () => {
     const dispatch=useDispatch();
     const {
@@ -36,6 +37,19 @@ const setSelectedClient=async(id)=>{
     }
 
 }
+const searchTerm=(e)=>{
+    const searchValue = e.target.value;
+    if (searchValue === "") {
+         dispatch(fetchAllClients()); 
+        return;
+    }
+    const searchData={
+        term:searchValue,
+        fields:["ClientName","ClientID"]
+    }
+    dispatch(searchClients(searchData));
+}
+
     if (clientData) { 
         return (
             <div className="erp-container animate-fade">
@@ -43,8 +57,12 @@ const setSelectedClient=async(id)=>{
                     <h2 className="section-title">إدارة ملفات العملاء</h2>
                     <div className="search-wrapper">
                         <Search size={18} className="search-icon"/>
-                        <input type="text" placeholder="بحث باسم العميل أو الكود..." 
-                        className="search-input"/>
+                        <input 
+                        type="text" 
+                        placeholder="بحث باسم العميل أو الكود" 
+                        className="search-input"
+                        onChange={(e)=>searchTerm(e)}
+                        />
                     </div>
                 </div>
 
