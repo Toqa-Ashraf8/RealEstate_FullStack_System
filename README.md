@@ -48,10 +48,10 @@ Integrated "Managerial Decision Engine" where managers can **Approve/Reject** cu
 
 ## Future Logic Enhancements & Roadmap
 To show my commitment to **Clean Code** and **Optimization**, I am planning:
-*   **Smart Rounding:** Custom algorithm for cleaner installment amounts (e.g., rounding to nearest 100 EGP).
-*   **Advanced Validations:** Preventing negative discount rates in the Negotiation Engine.
-*   **Data Archiving:** Automated cleanup of rejected logs to optimize database performance.
-
+* **Dynamic Price Validation:** Implementing a safe range for "Suggested Price" inputs to prevent negative discount rates and ensure logical pricing boundaries during negotiations.
+* **Negotiation Data Consistency:** Automating the cleanup of related records in `Rejected_Negotiation_Phases` whenever a negotiation is reset, preventing duplicate log entries for the same unit.
+* **Down Payment Safety Bounds:** Adding a validation layer to ensure the "Booking Amount" never exceeds the total "Agreed Price," preventing negative balances in installment schedules.
+* **Smart Installment Rounding:** Implementing a custom rounding algorithm (e.g., to the nearest 50 or 100 EGP) to ensure clean and professional payment schedules.
 
 ##  Database Architecture & Logic
 The system relies on a robust relational schema:
