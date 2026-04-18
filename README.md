@@ -17,7 +17,6 @@ Custom interfaces for **Admins** (Analytics & Approvals) and **Employees** (Sale
 
 <p align="center">
   <img src="screenshots/adminDashboard.png" width="45%" alt="Admin Dashboard" />
-  <img src="screenshots/adminShown.png" width="45%" alt="Admin View" />
 </p>
 
 ### 2. Project & Unit Management (Master-Detail)
