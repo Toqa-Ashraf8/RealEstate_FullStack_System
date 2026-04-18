@@ -35,8 +35,8 @@ This is the "Brain" of the system. Once a deal is approved:
 *   **Voucher Printing:** Generates professional PDF/Printable receipts for clients.
 
 <p align="center">
+  <img src="screenshots/Booking.png" width="45%" alt="Booking Schedule" />
   <img src="screenshots/Installments.png" width="45%" alt="Installment Schedule" />
-  <img src="screenshots/724_1x_shots_so.png" width="45%" alt="Printed Voucher" />
 </p>
 
 ### 4. Advanced Negotiation Workflow
