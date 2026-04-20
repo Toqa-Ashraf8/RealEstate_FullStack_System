@@ -16,10 +16,6 @@ namespace WebApp1.Models
         public string? PaymentType { get; set; }
         public string? CheckImage { get; set; }  
         public int? BookingID { get; set; }
-        //public int? ClientID { get; set; }
-        //public int? ProjectCode { get; set; }
-        //public int? UnitID { get; set; }
-      
-
+       
     }
 }

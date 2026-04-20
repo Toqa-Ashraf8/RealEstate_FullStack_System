@@ -103,7 +103,7 @@ const searchClients=(e)=>{
                     <Search size={18} />
                     <input 
                     type="text" 
-                    placeholder="بحث سريع عن عميل أو وحدة"
+                    placeholder="بحث عن عميل أو وحدة"
                     onChange={(e)=>searchClients(e)}
                      />
                 </div>

@@ -4,9 +4,8 @@ import { loginUser, registerUsers } from '../../services/authService';
 const initialState={
     user:{},
     token:sessionStorage.getItem('token'),
-    role: sessionStorage.getItem('userRole'),
-    userName:sessionStorage.getItem('name'),
-    isLoggedin:false
+    userDetails:JSON.parse(sessionStorage.getItem('user')) || {},
+    isLoggedin:!!sessionStorage.getItem('token')
 }
 const authSlice=createSlice({
     name:'auth',
@@ -18,12 +17,11 @@ const authSlice=createSlice({
         resetUserForm:(state,action)=>{
             state.user=initialState.user;
         },
-        confirmLoggingin:(state,action)=>{
-            state.isLoggedin=action.payload;
-            if(state.isLoggedin===true){
-              state.token="";
-              state.user=initialState.user;
-            }
+        logOut:(state,action)=>{
+           sessionStorage.clear();
+            state.token = null;
+            state.userDetails = {};
+            state.isLoggedin = false;
         }
        
     },
@@ -34,22 +32,25 @@ const authSlice=createSlice({
                 sessionStorage.setItem('token',action.payload.token) 
                 state.token=action.payload.token;
             }
-             state.role=action.payload.role;
-             sessionStorage.setItem('userRole', action.payload.role);
-             state.userName=action.payload.user;
-             sessionStorage.setItem('name',action.payload.user);
+            if(action.payload.user){
+                sessionStorage.setItem('user',JSON.stringify(action.payload.user));
+                state.userDetails=action.payload.user;
+            }
+            state.user={};
         })
         .addCase(loginUser.fulfilled,(state,action)=>{ 
-            state.token = action.payload.token;
-            state.role = action.payload.role;
-            state.userName=action.payload.user;
-            sessionStorage.setItem('token', action.payload.token);
-            sessionStorage.setItem('userRole', action.payload.role);
-            sessionStorage.setItem('name',action.payload.user);
-
+            if(action.payload.token){
+                sessionStorage.setItem('token',action.payload.token) 
+                state.token=action.payload.token;
+            }
+            if(action.payload.user){
+                sessionStorage.setItem('user',JSON.stringify(action.payload.user));
+                state.userDetails=action.payload.user;
+            }
+            state.user={};
         })
     }
 })
-export const{setUserData,resetUserForm,confirmLoggingin}=authSlice.actions;
+export const{setUserData,resetUserForm,logOut}=authSlice.actions;
 const authReducer=authSlice.reducer;
 export default authReducer;

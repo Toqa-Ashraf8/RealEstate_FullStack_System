@@ -9,8 +9,8 @@ import { toast } from 'react-toastify';
 import { setUserData } from '../../assets/redux/authSlice';
 
 const Login = () => {
-  const {user,token,role,userName}=useSelector((state)=>state.auth);
-  const {isLoading}=useSelector((state)=>state.auth);
+  const {user,token}=useSelector((state)=>state.auth);
+  const {isLoading}=useSelector((state)=>state.ui);
   const dispatch=useDispatch();
   const navigate=useNavigate();
 
@@ -21,10 +21,7 @@ const handleChangeValues=(e)=>{
 
   const handleLogin=async()=>{
         const result=await dispatch(loginUser(user)).unwrap();
-        const {token,role}=result;
-        if(token){
-          sessionStorage.setItem('token',token);
-          sessionStorage.setItem('userRole',role);
+        if(result.token){
           toast.success("تم تسجيل الدخول بنجاح! مرحبا بك",{
             theme:"colored",
             position:"top-left"
@@ -43,7 +40,7 @@ const handleChangeValues=(e)=>{
       >
         <div className="login-main-card">
           <div className="login-header">
-            <h3 className="login-title">تسجيل الدخول للمنظومة</h3>
+            <h3 className="login-title">تسجيل الدخول </h3>
            
           </div>
 
@@ -78,6 +75,7 @@ const handleChangeValues=(e)=>{
             <div style={{display:'flex',justifyContent:'center'}}>
             <button 
               className="login-submit-btn"
+              disabled={isLoading}
               onClick={()=>handleLogin()}
               >
                <LogIn size={22} /> دخول النظام

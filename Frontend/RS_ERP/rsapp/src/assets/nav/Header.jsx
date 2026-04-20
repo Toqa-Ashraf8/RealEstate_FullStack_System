@@ -7,14 +7,14 @@ import { useSelector } from 'react-redux';
 import HeaderActions from './HeaderActions';
 
 const Header = () => {
-  const {token ,role}=useSelector((state)=>state.auth);
+  const {token ,userDetails}=useSelector((state)=>state.auth);
   if (!token) return null;
   return (
     <div dir='rtl'>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
      <div className="container-fluid">
     <div className="navbar-brand" >
-      <span> <MdOutlineRealEstateAgent size={35} color='teal' /> </span>
+      <span> <MdOutlineRealEstateAgent size={35} color='black' /> </span>
     </div>
     <button
       className="navbar-toggler"
@@ -29,14 +29,14 @@ const Header = () => {
     </button>
     <div className="collapse navbar-collapse" id="navbarSupportedContent">
       <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-         { role==="Admin" && (
+         { userDetails.Role ==="Admin" && (
          <li className="nav-item">
           <Link className="nav-link" to="/dashboard">
             الرئيسية 
           </Link>
         </li>
         )}
-         { role==="Admin" && (
+         { userDetails.Role ==="Admin" && (
           <li className="nav-item">
           <Link className="nav-link" to="/addprojects">
             إضافة المشاريع
@@ -53,7 +53,7 @@ const Header = () => {
               إضافة العملاء     
           </Link>
         </li>
-        {role==="Admin" && 
+        {userDetails.Role ==="Admin" && 
           (<li className="nav-item">
           <Link className="nav-link" to="/negotiation_requests">
            طلبات الشراء

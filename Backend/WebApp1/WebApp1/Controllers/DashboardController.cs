@@ -69,7 +69,7 @@ namespace WebApp1.Controllers
             }).ToList();
             return new JsonResult(finalResult);
         
-    }
+         }
 
         [Route("GetProjectsCount")]
         [HttpGet]

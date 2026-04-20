@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { registerUsers } from '../../services/authService';
 
 const Register = () => {
-  const {user,userName}=useSelector((state)=>state.auth);
+  const {user}=useSelector((state)=>state.auth);
   const {isLoading}=useSelector((state)=>state.ui);
   const dispatch=useDispatch();
   const navigate=useNavigate();
@@ -39,7 +39,7 @@ const handleRegister=async()=>{
       });
      navigate('/projects');
     }
-    else if(result.isExisted===true){
+    else if(result.isExisted){
         toast.error("هذا البريد الإلكتروني موجود بالفعل , حاول مرة أخري", {
         theme: "colored",
         position: "top-left",
@@ -133,21 +133,17 @@ const handleRegister=async()=>{
               </div>
             </div> 
 
-            <div style={{display:'flex',
-                        justifyContent:'center',
-                        marginTop:'-15px',
-                        marginRight:'50px'}}>
-            <button 
-            className="auth-submit-btn"
-            disabled={isLoading}
-            onClick={()=>handleRegister()}
-            >
-             تسجيل الحساب في المنظومة
-            </button>
+           
+           <div className="button-container">
+              <button 
+                className="auth-submit-btn"
+                disabled={isLoading}
+                onClick={() => handleRegister()}
+              >
+                {isLoading ? 'جاري التسجيل...' : 'تسجيل الحساب في المنظومة'}
+              </button>
             </div>
-            
        </div>
-
           <div className="auth-footer">
             لديك حساب مفعل؟ 
             <span 
