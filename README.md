@@ -15,17 +15,8 @@ In many real estate agencies, operations like unit bookings and installment trac
 ### 1. Secure Access & Role-Based Dashboards (RBAC)
 Custom interfaces for **Admins** (Analytics & Approvals) and **Employees** (Sales & Client Entry).
 
-<p align="center">
-  <img src="screenshots/adminDashboard.png" width="45%" alt="Admin Dashboard" />
-</p>
-
 ### 2. Project & Unit Management (Master-Detail)
 Dynamic inventory system allowing Admins to manage massive projects and their individual units (Pricing, Status, Specs).
-
-<p align="center">
-  <img src="screenshots/projects.png" width="45%" alt="Projects Gallery" />
-  <img src="screenshots/units.png" width="45%" alt="Unit Inventory" />
-</p>
 
 ### 3. Automated Financial & Installment Engine 
 This is the "Brain" of the system. Once a deal is approved:
@@ -33,18 +24,8 @@ This is the "Brain" of the system. Once a deal is approved:
 *   **Status Tracking:** Real-time monitoring of (Due/Paid) installments.
 *   **Voucher Printing:** Generates professional PDF/Printable receipts for clients.
 
-<p align="center">
-  <img src="screenshots/Booking.png" width="45%" alt="Booking Schedule" />
-  <img src="screenshots/Installments.png" width="45%" alt="Installment Schedule" />
-</p>
-
 ### 4. Advanced Negotiation Workflow
 Integrated "Managerial Decision Engine" where managers can **Approve/Reject** custom price offers submitted by sales staff.
-
-<p align="center">
-  <img src="screenshots/843_1x_shots_so.png" width="45%" alt="Negotiation Inbox" />
-  <img src="screenshots/583_1x_shots_so.png" width="45%" alt="Decision Modal" />
-</p>
 
 ## Future Logic Enhancements & Roadmap
 To show my commitment to **Clean Code** and **Optimization**, I am planning:
