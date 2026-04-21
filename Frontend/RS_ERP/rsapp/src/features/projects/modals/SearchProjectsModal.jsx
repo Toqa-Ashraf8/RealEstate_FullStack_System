@@ -10,13 +10,15 @@ import {
   fetchProjectsList,
   fetchUnitsDetails 
 } from '../../../services/projectService.js';
+
 const SearchProjectsModal = () => {
   const {
     selectedProjectRowIndex,
     projectsList
-}= useSelector((state) => state.projects);
+  } = useSelector((state) => state.projects);
   const dispatch = useDispatch();
-useEffect(() => {
+
+ useEffect(() => {
    const fetchProjectsData =async  () => { 
     await dispatch(fetchProjectsList());
   }; 
@@ -37,47 +39,56 @@ useEffect(() => {
     <div dir='rtl'>
       <div className="modals">
         <div className="modalcnt_s">
-            <div className="hdr_s">
-                <div className='hrdtitles'>
-                      <span 
-                      style={{color:'#fff',
-                            cursor:'pointer',
-                            fontSize:'40px',
-                            marginTop:'-10px',
-                            marginRight:'15px'}}
-                      onClick={()=>dispatch(toggleSearchModal(false))}
-                      >&times;</span>
-                </div> 
-                <h3 className='hds_title'>المشاريع</h3>
-        </div>
-            <div className="bodys">
-                <div className='tbl_ss'>
-                    <table className='table table-striped tbl-srch'>
-                    <thead>
-                        <tr>
-                            <th>كود المشروع</th>
-                            <th>المشروع</th>
-                            <th>النوع</th>
-                            <th>الموقع</th>
-                            <th>عدد الوحدات</th>
-                            <th>الحالة</th>
-                            <th>الصورة</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {projectsList.length===0 ?<tr>
-                          <td colSpan={7} className="empty-msg">لا توجد بيانات لعرضها</td>
-                        </tr>:
-                        projectsList.map((project,i)=>
-                        <tr key={i} onClick={()=>fillClientForm(i)}>
+          <div className="hdr_s">
+            <div className='hrdtitles'>
+              <span 
+                style={{
+                  color: '#fff',
+                  cursor: 'pointer',
+                  fontSize: '32px',
+                  lineHeight: '1'
+                }}
+                onClick={() => dispatch(toggleSearchModal(false))}
+              >&times;</span>
+            </div> 
+            <h3 className='hds_title'>استعراض المشاريع</h3>
+          </div>
+
+          <div className="bodys">
+            <div className='tbl_ss'>
+              <table className='table table-hover tbl-srch'>
+                <thead>
+                  <tr>
+                    <th>كود المشروع</th>
+                    <th>المشروع</th>
+                    <th>النوع</th>
+                    <th>الموقع</th>
+                    <th>عدد الوحدات</th>
+                    <th>الحالة</th>
+                    <th>الصورة</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {projectsList.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="empty-msg" style={{padding: '40px'}}>لا توجد بيانات لعرضها</td>
+                    </tr>
+                  ) : (
+                    projectsList.map((project, i) => (
+                      <tr key={i} onClick={() => fillClientForm(i)}>
                         <td>{project.ProjectCode}</td>
-                        <td>{project.ProjectName}</td>
+                        <td style={{fontWeight: '700'}}>{project.ProjectName}</td>
                         <td>{project.ProjectType}</td>
                         <td>{project.Location}</td>
                         <td>{project.TotalUnits}</td>
-                        <td>{project.ProjectStatus}</td>
-                       <td>
-                                 {variables.PROJECT_IMAGES_URL + project.ProjectImage  ? (
+                        <td>
+                          <span className="badge bg-light text-dark" 
+                          style={{padding: '8px 12px', borderRadius: '8px'}}>
+                            {project.ProjectStatus}
+                          </span>
+                        </td>
+                        <td>
+                          {variables.PROJECT_IMAGES_URL + project.ProjectImage  ? (
                                  <div style={{width:'50px', height:'50px', margin:'auto'}}> 
                                  <img 
                                    src={variables.PROJECT_IMAGES_URL + project.ProjectImage} 
@@ -103,23 +114,23 @@ useEffect(() => {
                                    }}>
                                   <span style={{fontSize:'12px', color:'#999'}}>لا توجد صورة</span>
                                    </div>)}
-                                 </td>
-                        </tr>
-                        )
-                        }
-                        
-                        </tbody>
-                    </table>
-                </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
             </div>
-            <div className="footer_s">
-                <div style={{display:'flex',justifyContent:'flex-end'}}>
-                    <button 
-                    className='btn btn-danger btn_closes'
-                    onClick={()=>dispatch(toggleSearchModal(false))}
-                    >إغلاق</button>
-                </div>
+          </div>
+
+          <div className="footer_s">
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <button 
+                className='btn btn-danger btn_closes'
+                onClick={() => dispatch(toggleSearchModal(false))}
+              >إغلاق النافذة</button>
             </div>
+          </div>
         </div>
       </div>
     </div>

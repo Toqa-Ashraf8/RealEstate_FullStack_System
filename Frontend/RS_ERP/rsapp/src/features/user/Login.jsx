@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Lock, LogIn, ArrowLeftCircle } from 'lucide-react';
+import { Mail, Lock, LogIn } from 'lucide-react';
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,25 +9,30 @@ import { toast } from 'react-toastify';
 import { setUserData } from '../../assets/redux/authSlice';
 
 const Login = () => {
-  const {user,token}=useSelector((state)=>state.auth);
-  const {isLoading}=useSelector((state)=>state.ui);
-  const dispatch=useDispatch();
-  const navigate=useNavigate();
+  const {user} = useSelector((state) => state.auth);
+  const {isLoading} = useSelector((state) => state.ui);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-const handleChangeValues=(e)=>{
-  const {name,value}=e.target;
-  dispatch(setUserData({[name]:value}));
+const handleChangeValues = (e) => {
+  const {name, value} = e.target;
+  dispatch(setUserData({[name]: value}));
 }
 
-  const handleLogin=async()=>{
-        const result=await dispatch(loginUser(user)).unwrap();
+  const handleLogin = async () => {
+        const result = await dispatch(loginUser(user)).unwrap();
         if(result.token){
-          toast.success("تم تسجيل الدخول بنجاح! مرحبا بك",{
-            theme:"colored",
-            position:"top-left"
+          toast.success("تم تسجيل الدخول بنجاح! مرحبا بك", {
+            theme: "colored",
+            position: "top-left"
           })
           navigate('/addprojects');
         }
+  }
+  const handleKeyDown=(e)=>{
+    if(e.key==='Enter'){
+      handleLogin()
+    }
   }
 
   return (
@@ -40,11 +45,10 @@ const handleChangeValues=(e)=>{
       >
         <div className="login-main-card">
           <div className="login-header">
-            <h3 className="login-title">تسجيل الدخول </h3>
-           
+            <h3 className="login-title">تسجيل الدخول</h3>
           </div>
 
-          <div className="login-input-row">
+          <div className="login-input-row" onKeyDown={handleKeyDown}>
       
             <div className="login-input-group">
               <label className="login-label">
@@ -72,23 +76,24 @@ const handleChangeValues=(e)=>{
                 onChange={handleChangeValues} 
               />
             </div>
-            <div style={{display:'flex',justifyContent:'center'}}>
-            <button 
-              className="login-submit-btn"
-              disabled={isLoading}
-              onClick={()=>handleLogin()}
+            <div style={{display:'flex', justifyContent:'center'}}>
+              <button 
+                className="login-submit-btn"
+                disabled={isLoading}
+                onClick={() => handleLogin()}
               >
-               <LogIn size={22} /> دخول النظام
-            </button>
+                 <LogIn size={22} /> دخول النظام
+              </button>
             </div>
           </div>
 
           <div className="login-footer">
             ليس لديك صلاحية وصول؟ 
             <span 
-            className="login-link" 
-            onClick={()=>navigate('/register')}
-            >طلب إنشاء حساب
+              className="login-link" 
+              onClick={() => navigate('/register')}
+            >
+              طلب إنشاء حساب
             </span>
           </div>
         </div>

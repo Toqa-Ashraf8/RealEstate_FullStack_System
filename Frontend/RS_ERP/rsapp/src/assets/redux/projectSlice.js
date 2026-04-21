@@ -60,18 +60,19 @@ const projectSlice = createSlice({
             state.selectedUnit = { ...state.selectedUnit, ...action.payload };
         },
         prepareUnitModal: (state, action) => {
-            state.unitImageName = '';
+            state.unitFormMode=-1
+            state.unitImageName = "";
             state.selectedUnit = {};
             state.selectedUnit.serial = action.payload;
            
         },
-        setUnitEditingIndex:(state,action)=>{
-            state.unitFormMode = action.payload;
+       setUnitEditingIndex:(state,action)=>{
+            state.unitFormMode=action.payload;
                 if (action.payload !== -1) {
                     state.selectedUnit = state.unitsList[action.payload];
-                    state.unitImageName = state.unitsList[action.payload].unitImage;
+                    
                  }
-          },
+          }, 
         saveUnitToTable: (state, action) => {
             if (state.unitFormMode === -1) {
                 state.unitsList = [...state.unitsList, state.selectedUnit];
@@ -119,7 +120,9 @@ const projectSlice = createSlice({
             state.selectedProjectCode=state.projectsList[action.payload].ProjectCode;
         },
         SetRowIndexvalue:(state,action)=>{
-            state.selectedUnit=state.unitsList[action.payload];
+            state.unitFormMode=action.payload;
+            state.selectedUnit=state.unitsList[state.unitFormMode];
+            state.unitImageName = state.unitsList[action.payload].unitImage;
         } 
        
     },

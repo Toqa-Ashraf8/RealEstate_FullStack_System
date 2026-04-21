@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-    --primary-teal: #0d9488;
-    --primary-teal-hover: #0f766e;
-    --primary-teal-light: #f0fdfa;
+    --primary-blue: #1e40af;
+    --primary-hover: #1e3a8a;
+    --primary-light: #eff6ff;
     --text-main: #1e293b;
     --text-muted: #64748b;
     --border-color: #e2e8f0;
@@ -43,7 +43,6 @@
     font-size: 22px; 
     font-weight: 800;
     color: var(--text-main);
-    margin-bottom: 6px;
 }
 
 .login-input-row {
@@ -72,8 +71,8 @@
 }
 
 .login-label svg {
-    color: var(--primary-teal);
-    background: var(--primary-teal-light);
+    color: var(--primary-blue);
+    background: var(--primary-light);
     padding: 6px;
     border-radius: 8px;
     width: 30px;
@@ -95,8 +94,8 @@
 }
 
 .login-control:focus {
-    border-color: var(--primary-teal);
-    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.08);
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.08);
 }
 
 .login-submit-btn {
@@ -104,7 +103,7 @@
     max-width: 280px; 
     margin: 20px auto 0;
     padding: 14px;
-    background: var(--primary-teal);
+    background: var(--primary-blue);
     color: white;
     border: none;
     border-radius: 12px;
@@ -112,7 +111,7 @@
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.15);
+    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.15);
     font-family: 'Cairo', sans-serif;
     display: flex;
     align-items: center;
@@ -121,7 +120,7 @@
 }
 
 .login-submit-btn:hover:not(:disabled) {
-    background: var(--primary-teal-hover);
+    background: var(--primary-hover);
     transform: translateY(-1px);
 }
 
@@ -134,29 +133,17 @@
 }
 
 .login-link {
-    color: var(--primary-teal);
+    color: var(--primary-blue);
     cursor: pointer;
     margin-right: 5px;
     font-weight: 700;
 }
 
-
 @media (max-width: 500px) {
-    .login-main-card {
-        padding: 20px 15px;
-    }
-    
     .login-input-group {
         flex-direction: column; 
         align-items: flex-start;
         gap: 8px;
     }
-    
-    .login-label {
-        width: 100%;
-    }
-
-    .login-submit-btn {
-        max-width: 100%;
-    }
+    .login-label { width: 100%; }
 }

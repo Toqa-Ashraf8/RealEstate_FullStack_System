@@ -176,8 +176,7 @@ namespace WebApp1.Controllers
                     expires: DateTime.Now.AddHours(4),
                     signingCredentials: creds
                 );
-               
-
+              
                 return Ok(new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
