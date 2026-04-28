@@ -80,11 +80,12 @@ namespace WebApp1.Controllers
         public JsonResult UpsertClient([FromBody] Client cl)
         {
             bool nullData = false;
+            bool updated = false;
+            bool saved = false;
             int id = Convert.ToInt32(cl.ClientID);
             if (id == 0 &&string.IsNullOrEmpty(cl.ClientName) && string.IsNullOrEmpty(cl.PhoneNumber) && string.IsNullOrEmpty(cl.Notes)) 
             {
-                nullData = true;
-                return new JsonResult(new { id = 0, nullData =nullData });
+                return new JsonResult(new { id = 0, nullData =true });
             }
 
             if (id == 0 )
@@ -103,7 +104,7 @@ namespace WebApp1.Controllers
                         cmd.Parameters.AddWithValue("@Notes", cl.Notes);
                         id = Convert.ToInt32(cmd.ExecuteScalar());
                         if (conn.State == ConnectionState.Open) conn.Close();
-                        nullData = false;
+                        saved = true;
                     }
 
                 }
@@ -129,7 +130,7 @@ namespace WebApp1.Controllers
                         cmd.Parameters.AddWithValue("@Notes", cl.Notes);
                         cmd.Parameters.AddWithValue("@ClientID", id);
                         cmd.ExecuteNonQuery();
-                        nullData = false;
+                        updated = true;
 
                     }
 
@@ -188,20 +189,18 @@ namespace WebApp1.Controllers
                                     cmd.Parameters.AddWithValue("@checkedByAdmin", neg.checkedByAdmin);
                                     cmd.Parameters.AddWithValue("@Requester", neg.Requester);
                                     cmd.Parameters.AddWithValue("@Reserved", neg.Reserved);
-                                    cmd.ExecuteScalar();
-                                   
-                                    nullData = false;
+                                    cmd.ExecuteScalar(); 
                                 }
                               if (conn.State == ConnectionState.Open) conn.Close();  
                               
                         } 
                               
                         }
-                        catch (Exception) { throw; }
+                        catch (Exception ex) { return new JsonResult(new { error = ex.Message }); }
 
             }
             if (conn.State == ConnectionState.Open) conn.Close();
-            var data = new { id = id , nullData= nullData };
+            var data = new { id = id , nullData= nullData,saved=saved,updated=updated };
             return new JsonResult(data);
         }
         //Delete Clients and their negotiations

@@ -1,12 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
 .dashboard-wrapper {
     padding: 40px;
     direction: rtl;
     background: #fdfdfd;
     min-height: 100vh;
+    font-family: 'Cairo', sans-serif;
 }
 .custom-glass-header {
     background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
     border: 1px solid #eee;
     padding: 20px 30px;
     border-radius: 20px;
@@ -18,7 +19,7 @@
 }
 
 .badge-count {
-    background: #6c5ce7;
+    background: #1e40af;
     color: white;
     padding: 2px 12px;
     border-radius: 10px;
@@ -51,12 +52,14 @@
     background: white;
     border-radius: 25px;
     padding: 15px;
+     overflow-x: auto;
     box-shadow: 0 15px 35px rgba(0,0,0,0.03);
     border: 1px solid #f0f0f0;
 }
 
 .modern-table 
 { 
+     overflow-x: auto;
     width: 100%; 
     border-collapse: collapse; 
     font-weight: bold; 
@@ -150,7 +153,6 @@
     width: 100%; 
     height: 100%;
     background: rgba(0,0,0,0.2); 
-    backdrop-filter: blur(5px);
     display: flex; 
     justify-content: center; 
     align-items: center; 

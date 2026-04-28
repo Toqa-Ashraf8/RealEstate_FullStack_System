@@ -7,7 +7,7 @@ import Register from './features/user/Register';
 import Login from './features/user/Login';
 import DashboardPage from './features/dashboard/DashboardPage';
 import AddProjects from './features/projects/pages/AddProjects';
-import ProjectsCard from './features/projects/pages/ProjectsCard';
+import ProjectsReview from './features/projects/pages/ProjectsReview';
 import UnitsCard from './features/units/UnitsCard';
 import BookingsManager from './features/booking/complete/BookingsManager';
 import NegotiationRequests from './features/negotiations/pages/NegotiationRequests'
@@ -82,7 +82,7 @@ useEffect(() => {
               <Route path="/projects" 
               element={
                 <ProtectedRoute>
-                  <ProjectsCard/>
+                  <ProjectsReview/>
               </ProtectedRoute>
              }
               />

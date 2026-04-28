@@ -1,58 +1,53 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
 
-body {
-    font-family: 'Cairo', sans-serif;
-    background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
-    color: #1e293b;
+:root {
+    --primary-blue: #1e40af;
+    --text-dark: #1b2559;
+    --text-gray: #a3aed0;
+    --bg-soft: #f4f7fe;
+    --radius-standard: 14px;
 }
 
 .page-container {
-    padding: 20px;
+    padding: 30px;
+    background: var(--bg-soft);
+    min-height: 100vh;
 }
-
-
-.crm_header {
-    text-align: center;
-    margin: 20px 0 20px;
-}
-
-.crm_title {
-    font-size: 28px;
-    font-weight: 800;
-    color: #1e293b;
-    position: relative;
-    padding-bottom: 10px;
-}
-
 .btns_toc {
-    position: relative;
-    width: 85px;
-    float: right;
-    top:190px;
-    z-index: 1000;
+    position: fixed;
+    right: 20px;
+    top: 50%;
     transform: translateY(-50%);
     display: flex;
     flex-direction: column;
     gap: 15px;
     background: rgba(255, 255, 255, 0.9);
     padding: 15px;
-    border-radius: 25px;
+    border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.08);
     backdrop-filter: blur(10px);
-    z-index: 100;
+    z-index: 1000;
 }
 
+.crm_header {
+    text-align: right;
+    margin-bottom: 30px;
+    padding-right: 10px;
+    border-right: 4px solid var(--primary-blue);
+}
 
+.crm_title {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-dark);
+}
 .main_crm {
-    width: 85%; 
+    width: 90%;
     max-width: 1100px;
-    margin: 20px auto;
-    padding: 40px;
-    border-radius: 30px;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+    margin: 0 auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 25px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.03);
 }
 
 .crm_cnt {
@@ -70,14 +65,14 @@ body {
 .lbl_crm {
     font-weight: 700;
     font-size: 14px;
+    color: var(--text-dark);
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #475569;
 }
 
 .lbl_crm svg {
-    color: #4f46e5;
+    color: var(--primary-blue);
     background: #eff6ff;
     padding: 6px;
     border-radius: 10px;
@@ -85,150 +80,113 @@ body {
     height: 30px;
 }
 
-.crm_inp, .crm_select {
+.crm_inp, .crm_select, .userName_inp {
     width: 100% !important;
-    margin-right: 0 !important;
     padding: 12px 15px !important;
-    border-radius: 12px !important;
+    border-radius: var(--radius-standard) !important;
     border: 1.5px solid #e2e8f0 !important;
+    background: #f8fafc !important;
     transition: 0.3s !important;
+    font-family: 'Cairo', sans-serif;
+}
+.userName_inp{
+width: 30%!important;
 }
 
 .crm_inp:focus, .crm_select:focus {
-    border-color: #4f46e5 !important;
-    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1) !important;
+    border-color: var(--primary-blue) !important;
+    background: #fff !important;
+    box-shadow: 0 0 0 4px rgba(30, 64, 175, 0.05) !important;
     outline: none;
 }
-.userName_inp{
-    width: 200px!important;
-    margin-right: 0 !important;
-    padding: 12px 15px !important;
-    border-radius: 12px !important;
-    border: 1.5px solid #e2e8f0 !important;
-    transition: 0.3s !important;
-}
-.userName_inp:focus{
-    border-color: #4f46e5 !important;
-    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1) !important;
-    outline: none;
-}
-.data_user{
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-
 .data_crm:has(.crm_notes) {
     grid-column: span 2;
 }
 
 .crm_notes {
-    height: 80px !important;
+    height: 100px !important;
 }
 
+.data_user {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #e2e8f0;
+}
 
 .btns_bottomcrm {
-    width: 85%;
+    width: 90%;
     max-width: 1100px;
-    margin: 20px auto;
+    margin: 25px auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.btns_actions_left {
-    display: flex;
-    gap: 15px;
-}
-
-.btn_clientshow, .btn_nego {
+.btn_nego { 
+    background: #f59e0b; 
+    color: white; 
     padding: 12px 25px;
     border-radius: 15px;
     font-weight: 700;
     border: none;
     cursor: pointer;
-    transition: 0.3s;
-}
-
-.btn_nego { 
-    background: #f59e0b; 
-    color: white; 
-    box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3); 
-}
-.btn_clientshow { 
-    background: #4f46e5; 
-    color: white; 
-    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3); 
-}
-
-
-.btns_arrows {
-    display: flex;
-    gap: 10px;
-    background: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
-}
-
-
-.tbl_negotiation {
-   
-   width:85%;
-    margin: 40px auto;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-}
-
-.tbl_n th {
-    background: #1e293b !important;
-    color: #f8fafc !important;
-    text-align: center!important;
-    padding: 13px !important;
-    font-size: 14px;
-}
-
-.tbl_n td {
-    padding: 10px !important;
-    text-align: center;
-    background-color: #fff;
-    font-weight: 600;
-    font-size: 14px;
-    vertical-align: middle;
-    border-bottom: 1px solid #f1f5f9;
-}
-.events_col{
-    width: 130px;
+    box-shadow: 0 8px 20px rgba(245, 158, 11, 0.2);
 }
 .btns_dtls_n{
     display: flex;
-    justify-content: center;
-    gap: 20px;
     cursor: pointer;
+    justify-content: center;
+    gap:20px;
+}
+.btns_arrows {
+    display: flex;
+    gap: 8px;
+    background: white;
+    padding: 8px 15px;
+    border-radius: 18px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.tbl_negotiation {
+    width: 90%;
+    margin: 30px auto;
+    background: white;
+    border-radius: 20px;
+    overflow-x: auto;
+    display: block;   
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
 }
 
-.status_pills {
-    padding: 6px 12px;
-    border-radius: 10px;
-    font-size: 13px;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
+.tbl_n {
+    min-width: 800px; 
+    width: 100%;
 }
-.hourglass_{
- animation: spin-hourglass 2s linear infinite;
-  display: inline-block; 
-  color: #f39c12; 
+
+.tbl_n th {
+    background: #1b2559 !important;
+    color: #fff !important;
+    padding: 15px !important;
 }
-@keyframes spin-hourglass {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+.tbl_n td {
+    text-align: center;
+    padding: 12px !important;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+@media (max-width: 992px) {
+    .btns_toc {
+        position: static;
+        flex-direction: row;
+        transform: none;
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+    .crm_cnt { grid-template-columns: 1fr; }
+    .userName_inp{
+        width: 70%!important;
+    }
 }

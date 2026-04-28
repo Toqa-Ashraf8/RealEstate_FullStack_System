@@ -112,7 +112,6 @@ const AddProjects = () => {
       dispatch(toggleDeleteProjectModal(true));
     }
   }
-console.log("unitFormMode",unitFormMode)
   return (
     <div className="page-container">
       <div className="add-project-wrapper" dir="rtl">

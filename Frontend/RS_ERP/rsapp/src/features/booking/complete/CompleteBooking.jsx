@@ -64,7 +64,7 @@ const handleChange=(e)=>{
     const {name,value}=e.target;
     dispatch(setBookingClientData({[name]:value}));
 }
- 
+ console.log("bookingClient",bookingClient)
 const resetForm=()=>{
     dispatch(resetBookingForm());
     focusRef.current.focus();
@@ -113,21 +113,23 @@ const SavedData=async()=>{
         };
         
     } 
-   
-    if (!bookingClient || !previousSavedClientData) {
-        toast.error("بيانات العميل غير مكتملة!");
+   console.log("parms",parms)
+ /*    if (!bookingClient || !previousSavedClientData) {
+        toast.error("بيانات العميل غير مكتملة!",{
+            theme:'colored'
+        });
         return;
-    }  
-  try {
+    }   */
+  /* try {
         const result=await dispatch(bookingDetailRequest(parms)).unwrap();
-        if(result.saved===true){
+        if(result.saved){
          toast.success("تم الحجز بنجاح!", {
             theme: "colored",
             position: "top-left",
     });
         
     } 
-    if (result.updated===true){
+    if (result.updated){
      toast.success("تم تحديث البيانات بنجاح!", {
      theme: "colored",
      position: "top-left",
@@ -138,7 +140,7 @@ const SavedData=async()=>{
             theme: "colored",
             position: "top-left",
         });
-    }   
+    }    */
 }
 
 const calcutlateDownpayment=()=>{
@@ -184,7 +186,7 @@ const getinstallmentsData=(id)=>{
         dispatch(fillClientData(parsedData));
     }
  }, [dispatch]);
-console.log("previousSavedClientData",previousSavedClientData);
+
     return (
         <div className="final_page_wrapper">
             <div className="final_booking_container">
@@ -204,7 +206,7 @@ console.log("previousSavedClientData",previousSavedClientData);
                         <div className="final_circle_btn" title="طباعة"><LuPrinter  size={24} color="#1086b9" onClick={()=>window.print()} /></div>
                         <div className="final_circle_btn" title="حفظ"><RiSave3Fill size={24} color="#10b981" onClick={()=>SavedData()} /></div>
                         {reserved===1 && 
-                        <div className="final_circle_btn" title="جدول الاقساط"><NotepadText  size={24} color="#42025e" onClick={()=>getinstallmentsData(bookingClient.BookingID)}/></div>
+                        <div className="final_circle_btn" title="جدول الاقساط"><NotepadText  size={24} color="#42025e" onClick={()=>getinstallmentsData(InstallmentInformation?.BookingID)}/></div>
                         }
                         </div>                   
                           
@@ -270,7 +272,7 @@ console.log("previousSavedClientData",previousSavedClientData);
                                         name="NationalID"
                                         className="final_input_modern"
                                         ref={focusRef}
-                                        value={ previousSavedClientData?.NationalID || bookingClient.NationalID}  
+                                        value={ previousSavedClientData?.NationalID || bookingClient.NationalID || ""}  
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -291,17 +293,17 @@ console.log("previousSavedClientData",previousSavedClientData);
                                     type="text" 
                                     name="SecondaryPhone" 
                                     className="final_input_modern"
-                                    value={previousSavedClientData?.SecondaryPhone  || bookingClient.SecondaryPhone }
+                                    value={previousSavedClientData?.SecondaryPhone  || bookingClient.SecondaryPhone || "" }
                                     onChange={handleChange}
                                     />
                                 </div>
                                 <div className="final_field_group mt-3">
-                                    <label className="final_label"><MapPin size={18} /> العنوان بالتفصيل</label>
+                                    <label className="final_label"><MapPin size={18} /> العنوان </label>
                                     <input 
                                     type="text" 
                                     name="Address" 
                                     className="final_input_modern"
-                                    value={previousSavedClientData?.Address || bookingClient.Address}
+                                    value={previousSavedClientData?.Address || bookingClient.Address || ""}
                                     onChange={handleChange}
                                     />
                                 </div>
@@ -311,7 +313,7 @@ console.log("previousSavedClientData",previousSavedClientData);
                                     type="text" 
                                     name="Job" 
                                     className="final_input_modern"
-                                    value={previousSavedClientData?.Job || bookingClient.Job}
+                                    value={previousSavedClientData?.Job || bookingClient.Job || ""}
                                     onChange={handleChange}
                                     />
                                 </div>

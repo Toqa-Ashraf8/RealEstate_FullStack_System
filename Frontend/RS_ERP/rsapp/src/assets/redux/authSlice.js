@@ -36,7 +36,7 @@ const authSlice=createSlice({
                 sessionStorage.setItem('user',JSON.stringify(action.payload.user));
                 state.userDetails=action.payload.user;
             }
-            state.user={};
+       
         })
         .addCase(loginUser.fulfilled,(state,action)=>{ 
             if(action.payload.token){
@@ -47,7 +47,7 @@ const authSlice=createSlice({
                 sessionStorage.setItem('user',JSON.stringify(action.payload.user));
                 state.userDetails=action.payload.user;
             }
-            state.user={};
+        
         })
     }
 })

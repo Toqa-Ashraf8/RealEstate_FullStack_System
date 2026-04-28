@@ -72,6 +72,7 @@
     overflow-x: auto;  
     display: block;    
     white-space: nowrap; 
+    overflow-x: auto!important;
 }
 
 .tbl-srch {
@@ -79,6 +80,7 @@
     margin-bottom: 0;
     width: 100%;
     min-width: 900px; 
+   
 }
 
 .tbl-srch th {
@@ -96,6 +98,7 @@
     vertical-align: middle;
     color: #2b3674;
     border-bottom: 1px solid #f1f5f9;
+    
 }
 
 .tbl-srch tbody tr:hover {

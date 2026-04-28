@@ -47,15 +47,13 @@ namespace WebApp1.Controllers
                     using (SqlCommand cmd = new SqlCommand(sqlCheck, conn, transaction))
                     {
                         cmd.Parameters.AddWithValue("@Email", user.Email);
-                        using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                        int count = Convert.ToInt32(await cmd.ExecuteScalarAsync());
+                        if (count > 0)
                         {
-                            dt.Load(reader);
+                            return BadRequest(new { isExisted = true, error = "User is already existed" });
                         }
                     }
-                    if (dt.Rows.Count > 0)
-                    {
-                        return BadRequest(new { isExisted = true,error="User already exists!" });
-                    }
+                  
                     string sqlInsert = @"insert into Users (UserName,Email,Password,Role) 
                                     values(@UserName,@Email,@Password,@Role) 
                                     SELECT SCOPE_IDENTITY()";
@@ -104,8 +102,8 @@ namespace WebApp1.Controllers
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
-                    throw;
+                    await transaction.RollbackAsync();
+                    return StatusCode(500, "Internal Server Error");
                 }
                 finally
                 {

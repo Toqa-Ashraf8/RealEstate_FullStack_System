@@ -25,11 +25,16 @@ const acceptRequest = async () => {
     try {
     if (rejected === 0) {
       await dispatch(processNegotiationReview(acceptedrow)).unwrap();
-      toast.success("تم قبول الطلب!");
+      toast.success("تم قبول الطلب!",{
+        theme:'colored'
+      });
     } 
     else if (rejected === 1) {
       await dispatch(updateNegotiationStatus(dataSource)).unwrap();
-      toast.success("تم تحديث الطلب!");
+      toast.success("تم تحديث الطلب!",{
+        theme:'colored'
+      }
+      );
     }
     dispatch(toggleConfirmModal(false));
   } 

@@ -49,35 +49,38 @@ const payInstallment=(i)=>{
     dispatch(resetPaymentModal());
 }
 const saveAllData=async()=>{
-    let data = {};
-    if(previousSavedClientData){
-        data={
-        ClientExtraDetails:{...initialClientData,...previousSavedClientData},
-        UnitBooking:{...initialClientData,...InstallmentInformation,BookingDate, 
-        installments:installmentDetails.map(item => ({
-            ...item,
-            Paid: item.Paid ? 1 : 0 ,
-            PaymentType: item.PaymentType || "", 
-            CheckImage: item.CheckImage || ""
-        }))
-    }
-    }
-    }
-   
-   else{
-         data={
-            ClientExtraDetails:{...initialClientData,...bookingClient},
-            UnitBooking:{...initialClientData,...InstallmentInformation,BookingDate, 
-            installments:installmentDetails.map(item => ({
+  let data = {};
+
+if (previousSavedClientData) {
+    data = {
+        ClientExtraDetails: { ...initialClientData, ...previousSavedClientData },
+        UnitBooking: {
+            ...initialClientData, ...InstallmentInformation, BookingDate,
+            installments: installmentDetails.map(item => ({
                 ...item,
-                Paid: item.Paid ? 1 : 0 ,
-                PaymentType: item.PaymentType || "", 
+                Paid: item.Paid ? 1 : 0,
+                PaymentType: item.PaymentType || "",
                 CheckImage: item.CheckImage || ""
             }))
-            }
         }
-    } 
-      try {
+    };
+} else {
+    data = {
+        // هنا التأكد من وجود bookingClient
+        ClientExtraDetails: { ...initialClientData, ...bookingClient }, 
+        UnitBooking: {
+            ...initialClientData, ...InstallmentInformation, BookingDate,
+            installments: installmentDetails.map(item => ({
+                ...item,
+                Paid: item.Paid ? 1 : 0,
+                PaymentType: item.PaymentType || "",
+                CheckImage: item.CheckImage || ""
+            }))
+        }
+    };
+}
+    console.log("data",data)
+    /*   try {
            const result=await dispatch(bookingDetailRequest(data)).unwrap();
            if(result.savedBooking){
              toast.success("تم الحجز بنجاح!", {
@@ -102,7 +105,7 @@ const saveAllData=async()=>{
        }    
      if(reserved===0){
         await navigate('/booking');
-    }       
+    }       */ 
 }
 
 const handleEdit=(i)=>{
@@ -121,7 +124,7 @@ const handleEdit=(i)=>{
         }
         FetchClientData();
     }, [dispatch, InstallmentInformation]);
-console.log("previousSavedClientData",previousSavedClientData)
+
     return (
         <div className="mini_ins_wrapper"> 
         {isPaymentModalOpen && <PaymentTypeModal/>}

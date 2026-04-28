@@ -65,7 +65,7 @@ const AddClients = () => {
     units,
     projects
   }= useSelector((state) => state.clients);
-  const {userName}=useSelector((state)=>state.auth);
+  const {userDetails}=useSelector((state)=>state.auth);
   const {isLoading}=useSelector((state)=>state.ui);
   const dispatch = useDispatch();
   const nameRef = useRef();
@@ -97,22 +97,27 @@ const handleEditNegotiation=(index)=>{
 dispatch(editingNegotiationRow(index));
 }
 const handleSaveClient=async()=>{  
-const parms={...client,negotiations:negotiationsList.map(item=>({ ...item,Requester:userName}))}
-
-      try {
-     const result = await dispatch(saveClient(parms)).unwrap();
-     if(result.nullData===false){
-       toast.success("تم حفظ البيانات بنجاح ", {
-        theme: "colored",
-        position: "top-left",
-        }); 
+const parms={...client,negotiations:negotiationsList.map(item=>({ ...item,Requester:userDetails.UserName}))}
+       try {
+        const result = await dispatch(saveClient(parms)).unwrap();
+         if(result.saved){
+          toast.success("تم حفظ البيانات بنجاح ", {
+            theme: "colored",
+            position: "top-left",
+            }); 
+        }   
+         if(result.updated){
+          toast.success("تم تعديل البيانات بنجاح ", {
+            theme: "colored",
+            position: "top-left",
+            }); 
         }   
        } catch (error) {
          toast.error("حدث خطأ في الاتصال بالخادم", {
            theme: "colored",
            position: "top-center",
          });
-       }    
+       }     
 }
 
 const handlePreviousClient=()=>{
@@ -152,91 +157,61 @@ useEffect(()=>{
       {isDeleteClientModalOpen && <ClientsDeleteModal/>}
       {isSearchClientsModalOpen && <SearchClientsModal/>}
       {isDeleteNegotiationModalOpen && <DeleteNegotiationModal/>}
-    <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-    >
+  
       <div className="crm_header">
         <h2 className="crm_title">إضافة عملاء ومهتمين جدد</h2>
       </div>
-      <div className="btns_toc">
-         <button 
-          className="icon-btn"
-          disabled={isLoading}
-          onClick={() => handleResetForm()}
-          >
+    <div className="btns_toc">
+    <button className="icon-btn" disabled={isLoading} onClick={handleResetForm}>
         <span className="btn_c" title="تنظيف">
-          <AiOutlineClear size={22}color="#14213d"/>
-         </span>
-          </button>
+            <AiOutlineClear size={24} color="#14213d"/>
+        </span>
+    </button>
 
-        <button 
-          className="icon-btn"
-          disabled={isLoading}
-          onClick={() => prepareForm()}
-        >
+    <button className="icon-btn" disabled={isLoading} onClick={prepareForm}>
         <span className="btn_c" title="إضافة جديد">
-          <AiOutlineUserAdd size={22} color="#4f46e5"/>
-         </span>
-        </button>
+            <AiOutlineUserAdd size={24} color="#1e40af"/>
+        </span>
+    </button>
 
-         <button 
-          className="icon-btn"
-          disabled={isLoading}
-          onClick={()=>handleSaveClient()}
-        >
+    <button className="icon-btn" disabled={isLoading} onClick={handleSaveClient}>
         <span className="btn_c" title="حفظ">
-          <RiSave3Fill size={22} color="#10b981"/>
-         </span>
-        </button>
+            <RiSave3Fill size={24} color="#10b981"/>
+        </span>
+    </button>
 
-         <button 
-          className="icon-btn"
-          disabled={isLoading}
-          onClick={()=>dispatch(toggleDeleteClientModal(true))}
-        >
-        <span className="btn_c"  title="حذف">
-          <AiOutlineUserDelete size={22} color="#ef4444"/>
-         </span>
-        </button>
+    <button className="icon-btn" disabled={isLoading} onClick={() => dispatch(toggleDeleteClientModal(true))}>
+        <span className="btn_c" title="حذف">
+            <AiOutlineUserDelete size={24} color="#ef4444"/>
+        </span>
+    </button>
 
-         <button 
-          className="icon-btn"
-          disabled={isLoading}
-          onClick={()=>dispatch(toggleSearchClientsModal(true))}
-        >
-        <span className="btn_c"  title="بحث">
-          <LuUserRoundSearch size={22} color="#3b82f6"/>
-         </span>
-        </button>
-      </div>
-    <div className="main_crm">
+    <button className="icon-btn" disabled={isLoading} onClick={() => dispatch(toggleSearchClientsModal(true))}>
+        <span className="btn_c" title="بحث">
+            <LuUserRoundSearch size={24} color="#3b82f6"/>
+        </span>
+    </button>
+</div>
+    < motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} div className="main_crm">
        <div className="data_user">
       <label className="lbl_crm"><User size={18} />المسئول</label>
-      <input type="text" className="userName_inp" disabled value={userName} />
+      <input type="text" className="userName_inp" disabled value={userDetails.UserName} />
     </div>
   <div className="crm_cnt">
-    {/* كود العميل */}
     <div className="data_crm">
       <label className="lbl_crm"><Hash size={18} /> كود العميل</label>
-      <input type="text" className="crm_inp" name="ClientID" value={client.ClientID || 0} onChange={handleInputChange} ref={codeRef} />
+      <input type="text" className="crm_inp" name="ClientID" value={client.ClientID || 0}  ref={codeRef} />
     </div>
-
-    {/* إسم العميل */}
-    <div className="data_crm">
+     <div className="data_crm">
       <label className="lbl_crm"><User size={18} /> إسم العميل</label>
       <input type="text" className="crm_inp" name="ClientName" value={client.ClientName || ""} onChange={handleInputChange} autoComplete="off" ref={nameRef} />
     </div>
 
-    {/* رقم الموبايل */}
     <div className="data_crm">
       <label className="lbl_crm"><Phone size={18} /> رقم الموبايل</label>
       <input type="text" className="crm_inp" name="PhoneNumber" value={client.PhoneNumber || ""} onChange={handleInputChange} />
     </div>
 
-
-    {/* الحالة */}
     <div className="data_crm">
       <label className="lbl_crm"><ReceiptText size={18} /> الحالة</label>
       <select className="crm_select" name="ClientStatus" value={client.ClientStatus || ""} onChange={handleInputChange}>
@@ -247,14 +222,12 @@ useEffect(()=>{
         <option value="متابعة">متابعة</option>
       </select>
     </div>
-
-    {/* ملاحظات */}
     <div className="data_crm">
       <label className="lbl_crm"><NotebookPen size={18} /> ملاحظات</label>
       <textarea className="crm_inp crm_notes" name="Notes" value={client.Notes || ""} onChange={handleInputChange}></textarea>
     </div>
   </div>
-</div>
+</motion.div>
 
 
 <div className="btns_bottomcrm">
@@ -356,13 +329,13 @@ useEffect(()=>{
         {(neg.NegotiationStatus !== 'مقبول' && neg.NegotiationStatus !== 'مرفوض') && (
           <span style={{ display: 'flex', alignItems: 'center' }}>
             {neg.NegotiationStatus} <Hourglass size={18} className="hourglass_" style={{ marginRight: '5px' }} />
-          </span>
-        )}
-      </div>
-    </td>
-    <td>{neg.NegotiationDate ? neg.NegotiationDate.split('T')[0] : ""}</td>
-  </>
-) : ""}
+              </span>
+            )}
+          </div>
+        </td>
+          <td>{neg.NegotiationDate ? neg.NegotiationDate.split('T')[0] : ""}</td>
+        </>
+      ) : ""}
                 <td>
                   <div className="btns_dtls_n">
                 <span  title="تعديل" onClick={()=>handleEditNegotiation(index)}>
@@ -381,7 +354,7 @@ useEffect(()=>{
         </table>
       </div>
       }
-      </motion.div>
+     
     </div>
   );
 };

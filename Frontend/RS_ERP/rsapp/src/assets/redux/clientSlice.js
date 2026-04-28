@@ -23,7 +23,7 @@ const initialState = {
                  OriginalPrice:"",NegotiationPrice:"",DiscountAmount:"",
                  NegotiationStatus:"في انتظار موافقة الإدارة",
                  NegotiationDate:new Date().toISOString().split('T')[0],
-                 checkedByAdmin:0},
+                 checkedByAdmin:0,Reserved:0},
     negotiationsList:[], 
     units: [],
     totalUnitPrice:{},

@@ -66,13 +66,7 @@ const projectSlice = createSlice({
             state.selectedUnit.serial = action.payload;
            
         },
-       setUnitEditingIndex:(state,action)=>{
-            state.unitFormMode=action.payload;
-                if (action.payload !== -1) {
-                    state.selectedUnit = state.unitsList[action.payload];
-                    
-                 }
-          }, 
+       
         saveUnitToTable: (state, action) => {
             if (state.unitFormMode === -1) {
                 state.unitsList = [...state.unitsList, state.selectedUnit];
@@ -164,7 +158,6 @@ export const {
     resetProjectForm, 
     setUnitData, 
     prepareUnitModal,
-    setUnitEditingIndex, 
     saveUnitToTable, 
     showDeleteUnitModal,
     deleteUnitFromList,

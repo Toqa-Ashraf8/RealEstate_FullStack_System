@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import "./NegotiationModal.css";
-import {Building2,Ungroup}from 'lucide-react'
+import { Building2, Ungroup, Hash, DollarSign, Percent, X } from 'lucide-react';
 import { useDispatch, useSelector } from "react-redux";
 import { 
   calculateDiscount,  
@@ -11,59 +11,55 @@ import {
 import { fetchPriceByUnit, fetchProjects, fetchUnitsByProject } from "../../../services/clientService"; 
 
 const NegotiationModal = () => {
-const {negotiation,projects,units}= useSelector((state) => state.clients);
-const {isLoading}=useSelector((state)=>state.ui);
-const dispatch = useDispatch();
-const negotiationPriceRef=useRef();
+  const { negotiation, projects, units } = useSelector((state) => state.clients);
+  const dispatch = useDispatch();
+  const negotiationPriceRef = useRef();
 
-const handleInputsChange=(e)=>{
-    const{name,value}=e.target;
-     if (e.target.name === "ProjectCode") {
-      const selectedProject = projects.find(u => u.ProjectCode === parseInt(e.target.value));
-      if (e.target.value !== "-1") dispatch(fetchUnitsByProject(e.target.value));
-      dispatch(setNegotiationData({ProjectName:selectedProject.ProjectName}));
+  const handleInputsChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "ProjectCode") {
+      const selectedProject = projects.find(u => u.ProjectCode === parseInt(value));
+      if (value !== "-1") dispatch(fetchUnitsByProject(value));
+      if (selectedProject) dispatch(setNegotiationData({ ProjectName: selectedProject.ProjectName }));
     }
-     if(e.target.name === "UnitID"){
-        const selectedUnit = units.find(u => u.UnitID === parseInt(e.target.value));
-        if (e.target.value !== "-1") dispatch(fetchPriceByUnit(e.target.value));
-         dispatch(setNegotiationData({unitName:selectedUnit.unitName}));
-         negotiationPriceRef.current.focus();
-      }
-    dispatch(setNegotiationData({[name]:value}));
-}
-
-const addNewNegotiation=()=>{
-  dispatch(saveNegotiationToTable())
-}
-
- useEffect(()=>{
-    negotiationPriceRef.current.focus();
-    if(negotiation.ProjectCode!==-1 && negotiation.ProjectCode){
-        dispatch(fetchProjects());
-        dispatch(fetchUnitsByProject(negotiation.ProjectCode));
+    if (name === "UnitID") {
+      const selectedUnit = units.find(u => u.UnitID === parseInt(value));
+      if (value !== "-1") dispatch(fetchPriceByUnit(value));
+      if (selectedUnit) dispatch(setNegotiationData({ unitName: selectedUnit.unitName }));
+      setTimeout(() => negotiationPriceRef.current?.focus(), 100);
     }
- },[dispatch])
+    dispatch(setNegotiationData({ [name]: value }));
+  }
+
+  const addNewNegotiation = () => {
+    dispatch(saveNegotiationToTable());
+  }
+
+  useEffect(() => {
+    dispatch(fetchProjects());
+    if (negotiation.ProjectCode !== -1 && negotiation.ProjectCode) {
+      dispatch(fetchUnitsByProject(negotiation.ProjectCode));
+    }
+  }, [dispatch]);
 
   return (
-    <div dir="rtl">
+  <div dir="rtl">
       <div className="modaln">
         <div className="modalcnt_n">
           <div className="headern">
             <div className="mdl_titles">
-              <span className="close_b"  
-              onClick={()=>dispatch(toggleNegotiationModal(false))}>
-                <span>&times;</span>
-              </span>
               <h4 className="units_title">إرسال طلب تفاوض</h4>
+              <span className="close_b" onClick={()=>dispatch(toggleNegotiationModal(false))}>
+                &times;
+              </span>
             </div>
           </div>
+          
           <div className="bodyn">
             <div className="row">
-                <div className="project-unit-section col-5">
-                 <div className="data_projectname" style={{display:'flex'}}>
-                      <label className="data_lbl" style={{width:'150px!important'}}>
-                      إسم المشروع
-                      </label>
+                <div className="project-unit-section col-lg-5">
+                  <div className="data_field">
+                      <label className="data_lbl">إسم المشروع</label>
                       <select 
                       className="crm_select select-project" 
                       name="ProjectCode" 
@@ -72,22 +68,16 @@ const addNewNegotiation=()=>{
                       >
                         <option value="-1">-إختر-</option>
                         {projects.map((project) => 
-                        <option key={project.ProjectCode} 
-                        value={project.ProjectCode}> {project.ProjectName}
-                          <input 
-                          value={project.ProjectName} 
-                          name="ProjectName"
-                          onChange={handleInputsChange}
-                          disabled/>
+                        <option key={project.ProjectCode} value={project.ProjectCode}> 
+                            {project.ProjectName}
                         </option>
                         )}
                       </select>
                   </div> 
-                  <div>
-                 </div>
+
                    {negotiation.ProjectCode && negotiation.ProjectCode !== "-1" && (
-                    <div className="data-unitname" style={{display:'flex',gap:'40px'}}>
-                      <label className="lbl_crm"> الوحدة</label>
+                    <div className="data_field mt-3">
+                      <label className="data_lbl">الوحدة</label>
                       <select 
                       className="crm_select select-unit" 
                       name="UnitID" 
@@ -102,10 +92,9 @@ const addNewNegotiation=()=>{
                       </select>
                     </div>
                   )}
-                  <div></div>
               </div>
 
-              <div className="col-7">
+              <div className="col-lg-7 d-flex flex-column gap-3 mt-lg-0 mt-4">
                 <div className="input-group-modern data_cntu">
                   <label className="data_lbl">كود الطلب</label>
                   <input
@@ -114,7 +103,6 @@ const addNewNegotiation=()=>{
                     disabled
                     name="serialCode"
                     value={negotiation.serialCode || ""}
-                    onChange={handleInputsChange}
                   />
                 </div>
 
@@ -124,31 +112,29 @@ const addNewNegotiation=()=>{
                     type="text"
                     className="form-control-modern"
                     disabled
-                    autoComplete="off"
                     name="OriginalPrice"
                     value={negotiation.OriginalPrice || ""}
-                    onChange={handleInputsChange}
                   />
                 </div>
+
                  <div className="input-group-modern data_cntu">
                   <label className="data_lbl">السعر المقترح</label>
                   <input
                     type="text"
                     className="form-control-modern"
-                    autoComplete="off"
-                     ref={negotiationPriceRef}
+                    ref={negotiationPriceRef}
                     name="NegotiationPrice"
                     value={negotiation.NegotiationPrice || ""}
                     onChange={handleInputsChange}
                     onBlur={() => dispatch(calculateDiscount())}
                   />
                 </div>
+
                  <div className="input-group-modern data_cntu">
                   <label className="data_lbl">قيمة الخصم %</label>
                   <input
                     type="text"
                     className="form-control-modern"
-                    autoComplete="off"
                     name="DiscountAmount"
                     value={negotiation.DiscountAmount || ""}
                     onChange={handleInputsChange}
@@ -157,22 +143,11 @@ const addNewNegotiation=()=>{
               </div>      
             </div>
           </div>
+
           <div className="footern">
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginLeft: "45px",
-              }}
-            >
-              <button className="btn btn-primary btn_addu"
-              style={{marginRight:'20px'}}
-              onClick={()=>addNewNegotiation()}
-              >إضافة</button>
-              <button 
-              className="btn btn-danger"
-              onClick={()=>dispatch(toggleNegotiationModal(false))}
-              >إلغاء</button>
+            <div className="d-flex w-100 justify-content-between">
+              <button className="btn btn-primary px-5" onClick={()=>addNewNegotiation()}>إضافة</button>
+              <button className="btn btn-danger px-5" onClick={()=>dispatch(toggleNegotiationModal(false))}>إلغاء</button>
             </div>
           </div>
         </div>
