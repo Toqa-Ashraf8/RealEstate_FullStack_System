@@ -41,7 +41,6 @@ const InstallmentsSchedule = () => {
         isPaymentModalOpen,
         reserved,
         BookingDate,
-        previousSavedClientData
     } = useSelector((state) => state.booking);
 const payInstallment=(i)=>{
     dispatch(setPendingPayment({ index: i, isEdit: 0 }));
@@ -49,27 +48,12 @@ const payInstallment=(i)=>{
     dispatch(resetPaymentModal());
 }
 const saveAllData=async()=>{
-  let data = {};
-
-if (previousSavedClientData) {
-    data = {
-        ClientExtraDetails: { ...initialClientData, ...previousSavedClientData },
-        UnitBooking: {
-            ...initialClientData, ...InstallmentInformation, BookingDate,
-            installments: installmentDetails.map(item => ({
-                ...item,
-                Paid: item.Paid ? 1 : 0,
-                PaymentType: item.PaymentType || "",
-                CheckImage: item.CheckImage || ""
-            }))
-        }
-    };
-} else {
-    data = {
-        // هنا التأكد من وجود bookingClient
+   const data = {
         ClientExtraDetails: { ...initialClientData, ...bookingClient }, 
         UnitBooking: {
-            ...initialClientData, ...InstallmentInformation, BookingDate,
+            ...initialClientData, 
+            ...InstallmentInformation, 
+            BookingDate,
             installments: installmentDetails.map(item => ({
                 ...item,
                 Paid: item.Paid ? 1 : 0,
@@ -77,10 +61,8 @@ if (previousSavedClientData) {
                 CheckImage: item.CheckImage || ""
             }))
         }
-    };
 }
-    console.log("data",data)
-    /*   try {
+       try {
            const result=await dispatch(bookingDetailRequest(data)).unwrap();
            if(result.savedBooking){
              toast.success("تم الحجز بنجاح!", {
@@ -105,7 +87,7 @@ if (previousSavedClientData) {
        }    
      if(reserved===0){
         await navigate('/booking');
-    }       */ 
+    }       
 }
 
 const handleEdit=(i)=>{

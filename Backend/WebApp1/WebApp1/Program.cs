@@ -35,7 +35,7 @@ c.SerializerSettings.ContractResolver = new DefaultContractResolver());
 builder.Services.AddDbContext<DataContext>(options =>
         options.UseSqlServer(
         builder.Configuration.GetConnectionString("connT")
-    )
+        )
 );
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
@@ -66,8 +66,6 @@ builder.Services.AddAuthentication(options =>
         };
  });
 builder.Services.AddAuthorization();
-
-
 
 var app = builder.Build();
 

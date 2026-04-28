@@ -57,14 +57,12 @@ const CompleteBooking = () => {
         nationalIdImage,
         checkImage,
         BookingDate,
-        previousSavedClientData
     }=useSelector((state)=>state.booking);
   
 const handleChange=(e)=>{
     const {name,value}=e.target;
     dispatch(setBookingClientData({[name]:value}));
 }
- console.log("bookingClient",bookingClient)
 const resetForm=()=>{
     dispatch(resetBookingForm());
     focusRef.current.focus();
@@ -97,50 +95,37 @@ const handleChangeinstallment=(e)=>{
     
 };
 const SavedData=async()=>{
-    if(previousSavedClientData){
-         const parms={
-          ClientExtraDetails:{...initialClientData,...previousSavedClientData},
-          UnitBooking:{...initialClientData,...InstallmentInformation,BookingDate}
-         ,installments:[]
-        };
-        
-    }
-    else{
-        const parms={
+   const parms={
             ClientExtraDetails:{...initialClientData,...bookingClient},
             UnitBooking:{...initialClientData,...InstallmentInformation,BookingDate}
             ,installments:[]
-        };
-        
-    } 
-   console.log("parms",parms)
- /*    if (!bookingClient || !previousSavedClientData) {
+    }; 
+   if (!bookingClient) {
         toast.error("بيانات العميل غير مكتملة!",{
             theme:'colored'
         });
         return;
-    }   */
-  /* try {
+    }   
+   try {
         const result=await dispatch(bookingDetailRequest(parms)).unwrap();
-        if(result.saved){
+         if(result.savedBooking){
          toast.success("تم الحجز بنجاح!", {
-            theme: "colored",
-            position: "top-left",
-    });
-        
-    } 
-    if (result.updated){
-     toast.success("تم تحديث البيانات بنجاح!", {
-     theme: "colored",
-     position: "top-left",
-    });
-    }
+           theme: "colored",
+           position: "top-left",
+        });
+         }
+    else if(result.updatedBooking){
+        toast.success("تم تحديث البيانات بنجاح!", {
+        theme: "colored",
+        position: "top-left",
+        });
+        }
     } catch (error) {
          toast.error("حدث خطأ في الاتصال بالخادم!", {
             theme: "colored",
             position: "top-left",
         });
-    }    */
+    }    
 }
 
 const calcutlateDownpayment=()=>{
@@ -175,17 +160,14 @@ const getinstallmentsData=(id)=>{
          navigate('/installments_schedule');
     }
 }
-   useEffect(() => {
-    if (focusRef.current) 
-    {
-     focusRef.current.focus();
-    } 
-     const savedData = localStorage.getItem('activeBookingClient');
+  useEffect(() => {
+  if (focusRef.current) focusRef.current.focus();
+   const savedData = localStorage.getItem('activeBookingClient');
      if (savedData) {
         const parsedData = JSON.parse(savedData);
         dispatch(fillClientData(parsedData));
     }
- }, [dispatch]);
+}, [dispatch]);
 
     return (
         <div className="final_page_wrapper">
@@ -272,7 +254,7 @@ const getinstallmentsData=(id)=>{
                                         name="NationalID"
                                         className="final_input_modern"
                                         ref={focusRef}
-                                        value={ previousSavedClientData?.NationalID || bookingClient.NationalID || ""}  
+                                        value={bookingClient.NationalID ||  ""}  
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -293,7 +275,7 @@ const getinstallmentsData=(id)=>{
                                     type="text" 
                                     name="SecondaryPhone" 
                                     className="final_input_modern"
-                                    value={previousSavedClientData?.SecondaryPhone  || bookingClient.SecondaryPhone || "" }
+                                    value={bookingClient.SecondaryPhone ||   "" }
                                     onChange={handleChange}
                                     />
                                 </div>
@@ -303,7 +285,7 @@ const getinstallmentsData=(id)=>{
                                     type="text" 
                                     name="Address" 
                                     className="final_input_modern"
-                                    value={previousSavedClientData?.Address || bookingClient.Address || ""}
+                                    value={bookingClient.Address ||  ""}
                                     onChange={handleChange}
                                     />
                                 </div>
@@ -313,7 +295,7 @@ const getinstallmentsData=(id)=>{
                                     type="text" 
                                     name="Job" 
                                     className="final_input_modern"
-                                    value={previousSavedClientData?.Job || bookingClient.Job || ""}
+                                    value={bookingClient.Job || ""}
                                     onChange={handleChange}
                                     />
                                 </div>
@@ -321,9 +303,7 @@ const getinstallmentsData=(id)=>{
                             <div className="col-lg-4">
                            <div className="final_image_preview_big">
                           {(() => {
-                          const imgName = nationalIdImage || 
-                                          previousSavedClientData?.NationalIdImagePath || 
-                                          bookingClient?.NationalIdImagePath;
+                          const imgName = nationalIdImage || bookingClient?.NationalIdImagePath;  
                             if (imgName && imgName !== "null") {
                             return (
                                 <img 

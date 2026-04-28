@@ -4,146 +4,154 @@ import {
     ArrowRight, 
     User, 
     CreditCard, 
-    ExternalLink, 
     Home, 
     Calendar, 
     Phone, 
     MapPin, 
     Hash, 
-    Image as ImageIcon 
+    Image as ImageIcon,
+    FileText,
+    CheckCircle2,
+    Clock
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { variables } from '../../assets/variables';
+
 const ClientDetails = () => {
-    const {bookingData,bookedUnitsData}=useSelector((state)=>state.clientsProfile);
+    const { bookingData, bookedUnitsData } = useSelector((state) => state.clientsProfile);
     const navigate = useNavigate();
     const [openUnitIndex, setOpenUnitIndex] = useState(null);
 
     return (
-        <div className="erp-container animate-fade">
-            <div className="erp-header">
-                <button className="btn-back" onClick={() => navigate('/clientpage')}>
-                    <ArrowRight size={18} /> العودة للقائمة
+        <div className="details-page-container animate-fade">
+            <div className="details-nav-header">
+                <button className="back-link-btn" onClick={() => navigate('/clientpage')}>
+                    <ArrowRight size={18} /> العودة لقاعدة البيانات
                 </button>
-                <h3 className="section-title">ملف العميل الكامل</h3>
+                <div className="page-identity">
+                    <FileText size={20} className="text-primary" />
+                    <h2>الملف التحليلي للعميل</h2>
+                </div>
             </div>
 
-          
-            <div className="erp-card">
-                <div className="card-header">
-                    <User size={18} /> معلومات الهوية والوثائق
+            <div className="info-card-main">
+                <div className="card-section-title">
+                    <User size={18} /> بيانات الهوية والاتصال
+                </div>    
+                {bookingData && bookingData.map((c, idx) => (
+                    <div className="details-layout-grid" key={idx}>
+                        <div className="data-fields-side">
+                            <div className="inputs-modern-grid">
+                                <div className="field-group">
+                                    <label><Hash size={13}/> كود العميل</label>
+                                    <div className="static-value">{c.ClientID}</div>
+                                </div>
+                                <div className="field-group">
+                                    <label><User size={13}/> الاسم بالكامل</label>
+                                    <div className="static-value bold">{c.ClientName}</div>
+                                </div>
+                                <div className="field-group">
+                                    <label><FileText size={13}/> الرقم القومي</label>
+                                    <div className="static-value">{c.NationalID}</div>
+                                </div>
+                                <div className="field-group">
+                                    <label><Phone size={13}/> رقم الهاتف (1)</label>
+                                    <div className="static-value">{c.PhoneNumber}</div>
+                                </div>
+                                <div className="field-group">
+                                    <label><Phone size={13}/> رقم الهاتف (2)</label>
+                                    <div className="static-value">{c.SecondaryPhone || '---'}</div>
+                                </div>
+                                <div className="field-group full-span">
+                                    <label><MapPin size={13}/> عنوان المراسلات</label>
+                                    <div className="static-value">{c.Address}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="id-preview-side">
+                            <label className="preview-label">
+                                <ImageIcon size={14} /> نسخة مستند الهوية
+                            </label>
+                            <div className="id-photo-frame">
+                                <img 
+                                    src={variables.NATIONAL_ID_IMAGES_URL + c.NationalIdImagePath} 
+                                    alt="National ID" 
+                                    className="img-fluid" 
+                                />
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+            <div className="info-card-main">
+                <div className="card-section-title">
+                    <Home size={18} /> الوحدات السكنية المحجوزة
                 </div>
                 
-                <div className="details-main-layout">
-                {bookingData.map((c)=>
-                <>
-                    <div className="info-section">
-                        <div className="inputs-grid">
-                            <div className="input-group">
-                                <label><Hash size={13}/> كود العميل</label>
-                                <input type="text" value={c.ClientID} readOnly />
-                            </div>
-                            <div className="input-group">
-                                <label><User size={13}/> الاسم بالكامل</label>
-                                <input type="text" value={c.ClientName} readOnly />
-                            </div>
-                            <div className="input-group">
-                                <label>الرقم القومي</label>
-                                <input type="text" value={c.NationalID} readOnly />
-                            </div>
-                            <div className="input-group">
-                                <label><Phone size={13}/>1 رقم الهاتف</label>
-                                <input type="text" value={c.PhoneNumber} readOnly />
-                            </div>
-                            <div className="input-group">
-                                <label><Phone size={13}/>2 رقم الهاتف</label>
-                                <input type="text" value={c.SecondaryPhone} readOnly />
-                            </div>
-                            <div className="input-group full-width">
-                                <label><MapPin size={13}/> العنوان</label>
-                                <input type="text" value={c.Address} readOnly />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="id-card-preview-container">
-                        <label className="id-card-label">
-                            <ImageIcon size={14} /> صورة البطاقة الشخصية
-                        </label>
-                        <div className="id-card-frame">
-                            <img src={variables.NATIONAL_ID_IMAGES_URL+c.NationalIdImagePath} 
-                            alt="" className="id-card-image" />
-                            
-                        </div>
-                    </div>
-                   
-                    </>
-                    )}               
-                   </div>
-               
-            </div>
-
-            <div className="erp-card">
-                <div className="card-header">
-                    <Home size={18} /> الوحدات المحجوزة
-                </div>
-                <div className="table-wrapper">
-                    <table className="custom-erp-table">
+                <div className="responsive-table-holder">
+                    <table className="units-data-table">
                         <thead>
                             <tr>
-                                <th>اسم الوحدة</th>
+                                <th>الوحدة</th>
                                 <th>المشروع</th>
-                                <th>تاريخ الحجز</th>
-                                <th style={{ textAlign: 'center' }}>الأقساط</th>
+                                <th>تاريخ التعاقد</th>
+                                <th className="text-center">خطة السداد</th>
                             </tr>
                         </thead>
                         <tbody>
                             {bookedUnitsData && bookedUnitsData.map((unit, index) => (
                                 <React.Fragment key={index}>
-                                    <tr>
-                                        <td><span className="client-name-text">{unit.unitName}</span></td>
-                                        <td>{unit.ProjectName}</td>
-                                         <td>{unit.BookingDate.split('T')[0]}</td> 
-                                        <td style={{ textAlign: 'center' }}>
-                                            <button className="btn-tiny" 
-                                            onClick={() => setOpenUnitIndex(openUnitIndex === index ? null : index)}>
-                                                <CreditCard size={14} /> {openUnitIndex === index ? "إخفاء" : "عرض"}
+                                    <tr className={openUnitIndex === index ? 'row-active' : ''}>
+                                        <td><span className="unit-tag">{unit.unitName}</span></td>
+                                        <td><span className="project-text">{unit.ProjectName}</span></td>
+                                        <td>{unit.BookingDate?.split('T')[0]}</td> 
+                                        <td className="text-center">
+                                            <button 
+                                                className={`toggle-details-btn ${openUnitIndex === index ? 'active' : ''}`}
+                                                onClick={() => setOpenUnitIndex(openUnitIndex === index ? null : index)}
+                                            >
+                                                <CreditCard size={14} /> 
+                                                {openUnitIndex === index ? "إغلاق الأقساط" : "عرض الأقساط"}
                                             </button>
                                         </td>
                                     </tr>
 
                                     {openUnitIndex === index && (
-                                        <tr className="animate-slide">
-                                            <td colSpan="4" className="installments-wrapper">
-                                                <div className="mini-table-wrapper">
-                                                    <h5 className="mini-table-header">
-                                                        <Calendar size={14} /> جدول دفعات السداد
+                                        <tr className="installments-row-container">
+                                            <td colSpan="4">
+                                                <div className="installments-nested-card">
+                                                    <h5 className="nested-header">
+                                                        <Calendar size={15} /> دفعات السداد المستحقة
                                                     </h5>
-                                                    <table className="mini-table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>م</th>
-                                                                <th>التاريخ</th>
-                                                                <th>القيمة</th>
-                                                                <th>الحالة</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {unit.Installments.map((inst, i) => (
-                                                                <tr key={i}>
-                                                                    <td>{i + 1}</td>
-                                                                    <td>{inst.DueDate.split('T')[0]}</td>
-                                                                    <td>{inst.MonthlyAmount.toLocaleString()} ج.م</td>
-                                                                    <td>
-                                                                        <span className={`status-text ${inst.Paid ? 'مدفوع' : 'متأخر'}`}>
-                                                                            {inst.Paid ? 'مدفوع' : 'مستحق'}
-                                                                        </span>
-                                                                    </td>
+                                                    <div className="mini-responsive-table">
+                                                        <table className="installments-table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>#</th>
+                                                                    <th>تاريخ الاستحقاق</th>
+                                                                    <th>القيمة</th>
+                                                                    <th>الحالة</th>
                                                                 </tr>
-                                                            ))}
-                                                        </tbody>
-                                                    </table>
+                                                            </thead>
+                                                            <tbody>
+                                                                {unit.Installments.map((inst, i) => (
+                                                                    <tr key={i}>
+                                                                        <td>{i + 1}</td>
+                                                                        <td>{inst.DueDate.split('T')[0]}</td>
+                                                                        <td className="amount-text">{inst.MonthlyAmount.toLocaleString()} ج.م</td>
+                                                                        <td>
+                                                                            <span className={`status-pill ${inst.Paid ? 'paid' : 'pending'}`}>
+                                                                                {inst.Paid ? <CheckCircle2 size={12}/> : <Clock size={12}/>}
+                                                                                {inst.Paid ? 'تم الدفع' : 'قيد الانتظار'}
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                ))}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>

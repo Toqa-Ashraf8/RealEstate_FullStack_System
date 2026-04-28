@@ -14,33 +14,21 @@ import {
     searchBookingClients,
 } from '../../services/bookingService';
 
+
 const initialState = {
-    bookingClient: {
-        NationalID: "",
-        NationalIdImagePath: "",
-        SecondaryPhone: "",
-        Address: "",
-        Job:"",
-    }, 
+   bookingClient: {
+        NationalID: "", NationalIdImagePath: "", SecondaryPhone: "", Address: "", Job: "",
+    },
     initialClientData:{},
     InstallmentInformation: { 
-        BookingID:0,        
-        TotalAmount: 0, 
-        ReservationAmount: 0,
-        DownPayment: 0, 
-        FirstInstallmentDate: "", 
-        PaymentMethod: "-1",
-        CheckImagePath:"",
-        InstallmentYears: "-1" , 
-        Reserved:1
+        BookingID: 0, TotalAmount: 0, ReservationAmount: 0, DownPayment: 0, 
+        FirstInstallmentDate: "", PaymentMethod: "-1", CheckImagePath: "",
+        InstallmentYears: "-1", Reserved: 1
     },
     paymentType:{
         PaymentType:"",
         CheckImage:""
     },
-    previousSavedClientData: (localStorage.getItem('activeClientData') && localStorage.getItem('activeClientData') !== "undefined") 
-    ? JSON.parse(localStorage.getItem('activeClientData')) 
-    : {},
     reservedClients:[],
     installmentDetails:[],
     nationalIdImage: "",
@@ -75,6 +63,7 @@ const bookingSlice = createSlice({
             state.InstallmentInformation = initialState.InstallmentInformation;
             state.checkImage = "",
             state.nationalIdImage = "";
+           
         },
         //حساب قيمة المقدم قبل الحجز
         caluclateDownPayment: (state, action) => {
@@ -83,8 +72,9 @@ const bookingSlice = createSlice({
                 state.InstallmentInformation.TotalAmount = negoiationPrice;
                 const balance = 
                 state.InstallmentInformation.TotalAmount - state.InstallmentInformation.ReservationAmount;
-                state.InstallmentInformation.DownPayment = balance * 0.25;
+                state.InstallmentInformation.DownPayment = balance * 0.25; 
             }
+           
         },
         //حساب قيمة المقدم بقيمة الحجز من الداتا بيز
         calculateNewDownPayment:(state,action)=>{
@@ -178,15 +168,29 @@ const bookingSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fillClientData.fulfilled, (state, action) => {
-              state.initialClientData= action.payload.dt[0];
-              const clientInformation=action.payload.clientData[0] || {};
-              if(action.payload.isExist===true){
-                localStorage.setItem('activeClientData',JSON.stringify(clientInformation));
-                state.previousSavedClientData=clientInformation;
-              }
-              else{
-                state.previousSavedClientData={};
-              }
+             state.initialClientData = action.payload.dt[0];
+             const clientInformation = action.payload.clientData[0] || {};
+    
+              if(action.payload.isExist === true){
+                state.bookingClient = {
+                NationalID: clientInformation.NationalID || "",
+                NationalIdImagePath: clientInformation.NationalIdImagePath || "",
+                SecondaryPhone: clientInformation.SecondaryPhone || "",
+                Address: clientInformation.Address || "",
+                Job: clientInformation.Job || "",
+             };
+             state.InstallmentInformation={
+                BookingID:clientInformation.BookingID || 0,
+                TotalAmount:clientInformation.NegotiationPrice || 0,
+                ReservationAmount:clientInformation.ReservationAmount || 0 ,
+                DownPayment:clientInformation.DownPayment || 0 ,
+                FirstInstallmentDate:clientInformation.FirstInstallmentDate || "",
+                PaymentMethod:clientInformation.PaymentMethod || "-1" ,
+                CheckImagePath:clientInformation.CheckImagePath || "",
+                InstallmentYears:clientInformation.InstallmentYears || "-1",
+                Reserved:clientInformation.Reserved || "1"
+             }
+            }
             })         
             .addCase(saveNationalIdImage.fulfilled, (state, action) => {
                 state.nationalIdImage = action.payload;
@@ -211,6 +215,7 @@ const bookingSlice = createSlice({
                 state.bookingClient=action.payload.clientdt[0];
                 state.initialClientData=action.payload.clientdt[0];
                 state.installmentDetails=action.payload.installmentdt;
+               
             })  
             .addCase(deleteBookingData.fulfilled, (state, action) => {
                 state.isDeletedBooking=action.payload;

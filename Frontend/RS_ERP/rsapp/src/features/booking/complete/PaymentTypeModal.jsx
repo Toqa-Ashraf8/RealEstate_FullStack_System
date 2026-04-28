@@ -35,6 +35,7 @@ const handleChangeImage=async(e)=>{
 const confirmReversal=()=>{
   dispatch(confirmpaidStatus());
 }
+console.log("PaymentType",paymentType)
   return (
    <div className="payment_modal_overlay" dir="rtl">
   <div className="payment_modal_card">
@@ -53,7 +54,6 @@ const confirmReversal=()=>{
 
     <div className="payment_modal_body">
       <div className="modal_grid_layout">
-        {/* الجانب الأيمن: المدخلات */}
         <div className="inputs_side">
           <div className="modern_input_group">
             <label>طريقة الدفع</label>
@@ -63,7 +63,7 @@ const confirmReversal=()=>{
                 value={paymentType?.PaymentType || ""}
                 onChange={handleChange}
               >
-                <option value="-1">إختر الطريقة...</option>
+                <option value="-1">إختر الطريقة</option>
                 <option value="كاش">دفع نقدي (كاش)</option>
                 <option value="شيك">شيك بنكي</option>
               </select>
@@ -76,6 +76,7 @@ const confirmReversal=()=>{
               <input 
                 type="file" 
                 id="check-file"
+                name="CheckImage"
                 onChange={handleChangeImage}
               />
               <label htmlFor="check-file" className="file_upload_label">
@@ -86,7 +87,6 @@ const confirmReversal=()=>{
           </div>
         </div>
 
-        {/* الجانب الأيسر: المعاينة */}
         <div className="preview_side">
           <div className="image_preview_box">
             {(installmentCheckImageName || paymentType?.CheckImage) ? (
@@ -113,8 +113,7 @@ const confirmReversal=()=>{
        <button className="confirm_btn" onClick={() => confirmReversal()}>
         <CheckCircle size={18} />
         تأكيد
-      </button>
-      
+      </button> 
     </footer>
   </div>
 </div>
