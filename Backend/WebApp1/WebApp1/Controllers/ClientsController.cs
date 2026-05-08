@@ -195,7 +195,7 @@ namespace WebApp1.Controllers
         {
             bool deleted = false;
             await conn.OpenAsync();
-            using ( SqlTransaction transaction = conn.BeginTransaction())
+            using ( SqlTransaction transaction = (SqlTransaction) await conn.BeginTransactionAsync())
             {
                 try
                 {
@@ -289,7 +289,7 @@ namespace WebApp1.Controllers
                 
             }
             else {  isnull = true; } 
-            var negotiations_f = _context.Negotiations.Where(n => n.ClientID == first_clientId).ToList();
+            var negotiations_f = await _context.Negotiations.Where(n => n.ClientID == first_clientId).ToListAsync();
             var data = new { dt = dt, negotiations_f = negotiations_f , isnull = isnull };
             return Ok(data);
         }

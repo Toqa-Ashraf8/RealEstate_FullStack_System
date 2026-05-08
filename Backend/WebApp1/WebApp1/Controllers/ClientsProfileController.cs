@@ -27,25 +27,23 @@ namespace WebApp1.Controllers
         }
         [Route("GetAllClients")]
         [HttpGet]
-        public JsonResult GetAllClients()
+        public async Task<IActionResult> GetAllClients()
         {
             DataTable dt = new DataTable();
             string sql = "select * from Clients";
             SqlDataAdapter da=new SqlDataAdapter(sql, conn);
-            if (conn.State == ConnectionState.Closed) conn.Open();
             da.Fill(dt);
-            if (conn.State == ConnectionState.Open) conn.Close();
-            return new JsonResult(dt);
+            return Ok(dt);
         }
         [Route("GetClientDetails")]
         [HttpPost]
-        public JsonResult GetClientDetails(int clientid)
+        public async Task<IActionResult> GetClientDetails(int clientid)
         {
             DataTable bookingdt = new DataTable();
             DataTable dt = new DataTable();
             var units_installments = new List<UnitInstallments>();
 
-            if (conn.State == ConnectionState.Closed) conn.Open();
+            await conn.OpenAsync();
             string sqld = @"select * from ClientFullDetails where ClientID=@ClientID";
             using (SqlCommand cmd = new SqlCommand(sqld, conn))
             {
@@ -98,13 +96,13 @@ namespace WebApp1.Controllers
                     }
                 }
             }
-            if (conn.State == ConnectionState.Open) conn.Close();
             var data = new
             {
                 clientData = bookingdt,
                 bookedUnitsData = units_installments
             };
-            return new JsonResult(data);
+            await conn.CloseAsync();
+            return Ok(data);
         }
 
 

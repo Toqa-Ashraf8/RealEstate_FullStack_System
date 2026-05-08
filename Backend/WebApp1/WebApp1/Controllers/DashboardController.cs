@@ -22,25 +22,22 @@ namespace WebApp1.Controllers
         }
         [Route("GetProjectsUnitsStats")]
         [HttpGet]
-        public JsonResult GetProjectsUnitsStats()
+        public async Task<IActionResult> GetProjectsUnitsStats()
         {
-
             DataTable dt = new DataTable();
             string sql= @"SELECT p.ProjectName, COUNT(u.UnitID) as TotalUnitsCount
                          FROM Projects p
                          LEFT JOIN Units u ON p.ProjectCode = u.ProjectCode
                          GROUP BY p.ProjectName";
-            if (conn.State == ConnectionState.Closed) conn.Open();
             SqlDataAdapter da = new SqlDataAdapter(sql, conn);
             da.Fill(dt);
-            if (conn.State == ConnectionState.Open) conn.Close();
-            return new JsonResult(dt);
+            return Ok(dt);
 
         }
 
         [Route("GetDailyStats")]
         [HttpGet]
-        public JsonResult GetDailyStats()
+        public async Task<IActionResult> GetDailyStats()
         {
           
             DataTable dt = new DataTable();
@@ -51,14 +48,10 @@ namespace WebApp1.Controllers
                             WHERE YEAR(BookingDate) = YEAR(GETDATE())
                             GROUP BY MONTH(BookingDate)";
 
-     
-            if (conn.State == ConnectionState.Closed) conn.Open();
             SqlDataAdapter da = new SqlDataAdapter(sqls, conn);
             da.Fill(dt);
-            if (conn.State == ConnectionState.Open) conn.Close();
             var finalResult = Enumerable.Range(1, 12).Select(i => {
                 var row = dt.AsEnumerable().FirstOrDefault(r => Convert.ToInt32(r["MonthNumber"]) == i);
-
                 return new
                 {
                     MonthName = CultureInfo.GetCultureInfo("ar-EG").DateTimeFormat.GetMonthName(i),
@@ -67,13 +60,13 @@ namespace WebApp1.Controllers
                     MonthNumber = i
                 };
             }).ToList();
-            return new JsonResult(finalResult);
+            return Ok(finalResult);
         
          }
 
         [Route("GetProjectsCount")]
         [HttpGet]
-        public JsonResult GetProjectsCount()
+        public async Task<IActionResult> GetProjectsCount()
         {
             DataTable dt = new DataTable();
             int projectCount;
@@ -88,13 +81,13 @@ namespace WebApp1.Controllers
             {
                 projectCount = 0;
             }
-            return new JsonResult(projectCount);
+            return Ok(projectCount);
            
         }
 
         [Route("GetClientsCount")]
         [HttpGet]
-        public JsonResult GetClientsCount()
+        public async Task<IActionResult> GetClientsCount()
         {
             DataTable dt = new DataTable();
             int count;
@@ -109,13 +102,13 @@ namespace WebApp1.Controllers
             {
                 count = 0;
             }
-            return new JsonResult(count);
+            return Ok(count);
 
         }
 
         [Route("GetNegotiationsCount")]
         [HttpGet]
-        public JsonResult GetNegotiationsCount()
+        public async Task<IActionResult> GetNegotiationsCount()
         {
             DataTable dt = new DataTable();
             int negotiationCount;
@@ -130,13 +123,13 @@ namespace WebApp1.Controllers
             {
                 negotiationCount = 0;
             }
-            return new JsonResult(negotiationCount);
+            return Ok(negotiationCount);
 
         }
 
         [Route("GetReservedUnits")]
         [HttpGet]
-        public JsonResult GetReservedUnits()
+        public async Task<IActionResult> GetReservedUnits()
         {
             DataTable dt = new DataTable();
             int unitsCount;
@@ -151,12 +144,12 @@ namespace WebApp1.Controllers
             {
                 unitsCount = 0;
             }
-            return new JsonResult(unitsCount);
+            return Ok(unitsCount);
         }
 
         [Route("SetAvailableUnits")]
         [HttpGet]
-        public JsonResult SetAvailableUnits()
+        public async Task<IActionResult> SetAvailableUnits()
         {
             DataTable dt = new DataTable();
             int availableUnits;
@@ -171,7 +164,7 @@ namespace WebApp1.Controllers
             {
                 availableUnits = 0;
             }
-            return new JsonResult(availableUnits);
+            return Ok(availableUnits);
         }
     }
 }
